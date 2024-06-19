@@ -16,7 +16,7 @@ Here I list some of the crates I found useful
 
 ## Contributing
 Feel free to contribute in any way you can! <br />
-I even accept donations if you want to contribute but cannot code :^)
+I even accept [donations](https://github.com/sponsors/ArjixWasTaken) if you want to contribute but cannot code :^)
 
 
 ## Attributions

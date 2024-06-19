@@ -1,13 +1,14 @@
 #![allow(unused)]
 
-mod enums;
-mod types;
-
 use std::env;
 use std::error::Error;
+
 use futures_util::StreamExt;
 use tokio::net::{TcpListener, TcpStream};
 use tokio_util::codec::{Decoder, Encoder, Framed};
+
+mod enums;
+mod types;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {

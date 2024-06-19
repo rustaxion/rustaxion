@@ -3,16 +3,22 @@
 use std::env;
 use std::error::Error;
 
-use futures_util::StreamExt;
-use tokio::net::{TcpListener, TcpStream};
+use anyhow::Context;
+use tokio::{
+    net::{TcpListener, TcpStream},
+    task::futures,
+};
+use tokio_stream::StreamExt;
 use tokio_util::codec::{Decoder, Encoder, Framed};
+use types::packet::Packet;
 
 mod enums;
-mod types;
 mod proto;
+mod server;
+mod types;
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn Error>> {
+async fn main() -> anyhow::Result<()> {
     let addr = env::args()
         .nth(1)
         .unwrap_or_else(|| "127.0.0.1:6969".to_string());
@@ -30,16 +36,21 @@ async fn main() -> Result<(), Box<dyn Error>> {
     }
 }
 
-async fn process(stream: TcpStream) -> Result<(), Box<dyn Error>> {
+async fn process(stream: TcpStream) -> anyhow::Result<()> {
+    use futures_util::sink::SinkExt;
+
     let mut transport = Framed::new(stream, types::PacketGlue);
+    let write_buf = transport.write_buffer_mut();
 
     while let Some(request) = transport.next().await {
-        match request {
-            Ok(packet) => {
-                println!("{:?}", packet)
-            }
-            Err(e) => return Err(e.into()),
-        }
+        let packet = request.context("Failed to parse an incoming packet.")?;
+        let response = server::handle(packet.clone())?;
+        let response_packet = Into::<Packet>::into(response);
+
+        println!("Req: {:?}\nRes: {:?}", packet, response_packet);
+
+        transport.send(response_packet);
+        break;
     }
 
     Ok(())

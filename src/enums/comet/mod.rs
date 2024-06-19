@@ -4,12 +4,12 @@ use comet_gate::CometGate;
 use comet_login::CometLogin;
 use comet_scene::CometScene;
 
-mod comet_gate;
-mod comet_login;
-mod comet_scene;
+pub mod comet_gate;
+pub mod comet_login;
+pub mod comet_scene;
 
 #[repr(i8)]
-#[derive(Debug, FromEnumToRepr, TryFromReprToEnum, Copy, Clone)]
+#[derive(Debug, FromEnumToRepr, TryFromReprToEnum, Copy, Clone, PartialEq)]
 pub enum MainCmd {
     Time = 1,
     Login = 2,
@@ -17,7 +17,7 @@ pub enum MainCmd {
     Game = 5,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub enum ParaCmd {
     CometGate(CometGate),
     CometLogin(CometLogin),
@@ -35,9 +35,8 @@ impl ParaCmd {
 
     pub fn from_value(main_cmd: &MainCmd, value: u8) -> Result<Self, u8> {
         Ok(match main_cmd {
-            MainCmd::Time => Self::CometGate(CometGate::try_from(value)?),
+            MainCmd::Time | MainCmd::Select => Self::CometGate(CometGate::try_from(value)?),
             MainCmd::Login => Self::CometLogin(CometLogin::try_from(value)?),
-            MainCmd::Select => Self::CometGate(CometGate::try_from(value)?),
             MainCmd::Game => Self::CometScene(CometScene::try_from(value)?),
         })
     }

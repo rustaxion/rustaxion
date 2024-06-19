@@ -4,11 +4,13 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+anyhow = { version = "1.0.86", features = ["std", "backtrace"] }
+tokio-stream = { version = "0.1.15", features = ["tokio-util"] }
+tokio-util = { version = "0.7.11", features = ["full"] }
 tokio = { version = "1.38.0", features = ["full"] }
-tokio-util = { version = "0.7.11", features = ["codec"] }
-futures-util = "0.3.30"
-byteorder = "1.5.0"
 enum-repr-derive = "0.2.0"
+futures-util = { version = "0.3.30", features = ["sink"] }
+byteorder = "1.5.0"
 prost = "0.12.6"
 
 [build-dependencies]

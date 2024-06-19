@@ -8,13 +8,13 @@ use crate::enums::comet::{MainCmd, ParaCmd};
 
 pub struct PacketGlue;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Packet {
-    pkg_len: i32,
-    main_cmd: MainCmd,
-    para_cmd: ParaCmd,
-    data_len: i16,
-    data: Vec<u8>,
+    pub pkg_len: i32,      // 4 bytes
+    pub main_cmd: MainCmd, // 1 byte
+    pub para_cmd: ParaCmd, // 1 byte
+    pub data_len: i16,     // 2 bytes
+    pub data: Vec<u8>,     // ?? bytes
 }
 
 impl Encoder<Packet> for PacketGlue {
@@ -47,10 +47,20 @@ impl Decoder for PacketGlue {
         let pkg_len = ReadBytesExt::read_i32::<LittleEndian>(&mut reader)?;
 
         let main_cmd = MainCmd::try_from(ReadBytesExt::read_i8(&mut reader)?);
-        let Ok(main_cmd) = main_cmd else { return Err(io::Error::new(io::ErrorKind::InvalidInput, format!("{} is not valid for MainCmd", main_cmd.unwrap_err()))) };
+        let Ok(main_cmd) = main_cmd else {
+            return Err(io::Error::new(
+                io::ErrorKind::InvalidInput,
+                format!("{} is not valid for MainCmd", main_cmd.unwrap_err()),
+            ));
+        };
 
         let para_cmd = ParaCmd::from_value(&main_cmd, ReadBytesExt::read_u8(&mut reader)?);
-        let Ok(para_cmd) = para_cmd else { return Err(io::Error::new(io::ErrorKind::InvalidInput, format!("{} is not valid for ParaCmd", para_cmd.unwrap_err()))) };
+        let Ok(para_cmd) = para_cmd else {
+            return Err(io::Error::new(
+                io::ErrorKind::InvalidInput,
+                format!("{} is not valid for ParaCmd", para_cmd.unwrap_err()),
+            ));
+        };
 
         let data_len = ReadBytesExt::read_i16::<LittleEndian>(&mut reader)?;
 
@@ -58,7 +68,13 @@ impl Decoder for PacketGlue {
         let read_len = Read::read_to_end(&mut reader, &mut data)?;
 
         if data_len != read_len as i16 {
-            return Err(io::Error::new(io::ErrorKind::UnexpectedEof, format!("Unexpected data length, expected {} bytes, got {}", data_len, read_len)));
+            return Err(io::Error::new(
+                io::ErrorKind::UnexpectedEof,
+                format!(
+                    "Unexpected data length, expected {} bytes, got {}",
+                    data_len, read_len
+                ),
+            ));
         }
 
         Ok(Some(Packet {

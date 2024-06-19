@@ -9,3 +9,8 @@ tokio-util = { version = "0.7.11", features = ["codec"] }
 futures-util = "0.3.30"
 byteorder = "1.5.0"
 enum-repr-derive = "0.2.0"
+prost = "0.12.6"
+
+[build-dependencies]
+prost-build = "0.12.6"
+protobuf-src = "2.0.1"

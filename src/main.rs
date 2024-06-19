@@ -9,6 +9,7 @@ use tokio_util::codec::{Decoder, Encoder, Framed};
 
 mod enums;
 mod types;
+mod proto;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {

@@ -4,7 +4,7 @@ use tokio::io;
 use tokio_util::bytes::{Buf, BufMut, BytesMut};
 use tokio_util::codec::{Decoder, Encoder};
 
-use crate::types::comet::{MainCmd, ParaCmd};
+use crate::enums::comet::{MainCmd, ParaCmd};
 
 pub struct PacketGlue;
 

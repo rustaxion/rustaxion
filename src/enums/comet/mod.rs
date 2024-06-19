@@ -26,7 +26,7 @@ pub enum ParaCmd {
 
 impl ParaCmd {
     pub fn get_value(&self) -> u8 {
-        match self.clone() {
+        match self {
             ParaCmd::CometGate(num) => u8::from(num.clone()),
             ParaCmd::CometLogin(num) => u8::from(num.clone()),
             ParaCmd::CometScene(num) => u8::from(num.clone()),

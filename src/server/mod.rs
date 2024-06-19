@@ -1,16 +1,16 @@
 use crate::{
     enums::comet::MainCmd,
-    types::{packet::Packet, response::Response},
+    types::{packet::Packet, response::Response, session::SessionData},
 };
 
 mod gate;
 mod login;
 mod scene;
 
-pub fn handle(packet: Packet) -> anyhow::Result<Response> {
+pub fn handle(session: &mut SessionData, packet: Packet) -> anyhow::Result<Response> {
     match packet.main_cmd {
-        MainCmd::Time | MainCmd::Select => gate::handle(packet),
-        MainCmd::Login => login::handle(packet),
-        MainCmd::Game => scene::handle(packet),
+        MainCmd::Time | MainCmd::Select => gate::handle(session, packet),
+        MainCmd::Login => login::handle(session, packet),
+        MainCmd::Game => scene::handle(session, packet),
     }
 }

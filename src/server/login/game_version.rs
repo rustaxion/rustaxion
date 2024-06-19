@@ -4,11 +4,11 @@ use prost::Message;
 use crate::{
     enums::comet::{comet_login::CometLogin, MainCmd, ParaCmd},
     proto::comet_login::{ReqGameVersion, RetGameVersion},
-    types::response::Response,
+    types::{response::Response, session::SessionData},
 };
 
 #[rustfmt::skip]
-pub fn handle(buffer: Vec<u8>) -> anyhow::Result<Response> {
+pub fn handle(session: &mut SessionData, buffer: Vec<u8>) -> anyhow::Result<Response> {
     let req = ReqGameVersion::decode(buffer.as_slice()).context("Failed to decode ReqGameVersion.")?;
     let ret = RetGameVersion {
         version: "0.1.0".to_string(),

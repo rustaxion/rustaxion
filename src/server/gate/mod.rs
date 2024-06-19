@@ -1,12 +1,13 @@
 use crate::{
     enums::comet::{comet_gate::CometGate, MainCmd, ParaCmd},
-    types::{packet::Packet, response::Response},
+    types::{packet::Packet, response::Response, session::SessionData},
 };
 
 mod ntf_game_time;
 
 #[rustfmt::skip]
 pub fn handle(
+    session: &mut SessionData,
     Packet {
         main_cmd,
         para_cmd,

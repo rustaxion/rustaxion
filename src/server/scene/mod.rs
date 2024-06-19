@@ -1,10 +1,11 @@
 use crate::{
     enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd},
-    types::{packet::Packet, response::Response},
+    types::{packet::Packet, response::Response, session::SessionData},
 };
 
 #[rustfmt::skip]
 pub fn handle(
+    session: &mut SessionData,
     Packet {
         main_cmd,
         para_cmd,

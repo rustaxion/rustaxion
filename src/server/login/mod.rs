@@ -1,12 +1,14 @@
 use crate::{
     enums::comet::{comet_login::CometLogin, MainCmd, ParaCmd},
-    types::{packet::Packet, response::Response},
+    types::{packet::Packet, response::Response, session::SessionData},
 };
 
 mod game_version;
+mod third_party_login;
 
 #[rustfmt::skip]
 pub fn handle(
+    session: &mut SessionData,
     Packet {
         main_cmd,
         para_cmd,
@@ -25,10 +27,10 @@ pub fn handle(
         CometLogin::RequestFindPassword => todo!(),
         CometLogin::RequestQuickToken => todo!(),
         CometLogin::RequestQuickLogin => todo!(),
-        CometLogin::RequestThirdLogin => todo!(),
+        CometLogin::RequestThirdLogin => third_party_login::handle(session, data),
         CometLogin::RequestBindAccount => todo!(),
         CometLogin::RequestAnnouncement => todo!(),
-        CometLogin::RequestGameVersion => game_version::handle(data),
+        CometLogin::RequestGameVersion => game_version::handle(session, data),
         CometLogin::RequestBiliLogin => todo!(),
 
         // NOTE(arjix): When given a client-side param, what should we do?

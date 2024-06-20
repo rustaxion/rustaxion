@@ -64,18 +64,8 @@ impl Decoder for PacketGlue {
 
         let data_len = ReadBytesExt::read_i16::<LittleEndian>(&mut reader)?;
 
-        let mut data = vec![];
-        let read_len = Read::read_to_end(&mut reader, &mut data)?;
-
-        if data_len != read_len as i16 {
-            return Err(io::Error::new(
-                io::ErrorKind::UnexpectedEof,
-                format!(
-                    "Unexpected data length, expected {} bytes, got {}",
-                    data_len, read_len
-                ),
-            ));
-        }
+        let mut data = Vec::<u8>::with_capacity(data_len as usize);
+        Read::read_exact(&mut reader, &mut data)?;
 
         Ok(Some(Packet {
             pkg_len,

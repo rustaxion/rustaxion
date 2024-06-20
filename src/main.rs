@@ -1,6 +1,7 @@
 #![allow(unused)]
 
 use std::error::Error;
+use std::net::SocketAddr;
 use std::panic;
 use std::{backtrace::Backtrace, env};
 
@@ -9,7 +10,6 @@ use tokio::{
     net::{TcpListener, TcpStream},
     task::futures,
 };
-use tokio_stream::StreamExt;
 use tokio_util::codec::{Decoder, Encoder, Framed};
 use types::{packet::Packet, session::SessionData};
 
@@ -34,29 +34,32 @@ async fn main() -> anyhow::Result<()> {
     println!("Listening on: {}", addr);
 
     loop {
-        let (stream, _) = server.accept().await?;
+        let (stream, addr) = server.accept().await?;
         tokio::spawn(async move {
-            if let Err(e) = process(stream).await {
+            if let Err(e) = process(stream, addr).await {
                 println!("failed to process connection; error = {}", e);
             }
         });
     }
 }
 
-async fn process(stream: TcpStream) -> anyhow::Result<()> {
+async fn process(stream: TcpStream, addr: SocketAddr) -> anyhow::Result<()> {
     use futures_util::sink::SinkExt;
 
     let mut session = SessionData {};
     let mut transport = Framed::new(stream, types::PacketGlue);
 
-    while let Some(request) = transport.next().await {
+    while let Some(request) = tokio_stream::StreamExt::next(&mut transport).await {
         let packet = request.context("Failed to parse an incoming packet.")?;
+        println!("Req: {:?}", packet);
+
         let response = server::handle(&mut session, packet.clone())?;
         let response_packet = Into::<Packet>::into(response);
 
-        println!("Req: {:?}\nRes: {:?}", packet, response_packet);
+        transport.feed(response_packet.clone()).await?;
+        transport.flush().await?;
 
-        transport.send(response_packet);
+        println!("Replied: {:?}", response_packet);
         break;
     }
 

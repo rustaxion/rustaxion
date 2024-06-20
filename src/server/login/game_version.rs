@@ -8,7 +8,7 @@ use crate::{
 };
 
 #[rustfmt::skip]
-pub fn handle(session: &mut SessionData, buffer: Vec<u8>) -> anyhow::Result<Response> {
+pub fn handle(session: &mut SessionData, buffer: Vec<u8>) -> anyhow::Result<Vec<Response>> {
     let req = ReqGameVersion::decode(buffer.as_slice()).context("Failed to decode ReqGameVersion.")?;
     let ret = RetGameVersion {
         version: "0.1.0".to_string(),
@@ -17,9 +17,9 @@ pub fn handle(session: &mut SessionData, buffer: Vec<u8>) -> anyhow::Result<Resp
         announcement_content: "".to_string(),
     };
 
-    Ok(Response {
+    Ok(vec![Response {
         main_cmd: MainCmd::Login,
         para_cmd: ParaCmd::CometLogin(CometLogin::ReturnGameVersion),
         body: ret.encode_to_vec()
-    })
+    }])
 }

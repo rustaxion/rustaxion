@@ -40,7 +40,7 @@ impl Decoder for PacketGlue {
         use byteorder::{LittleEndian, ReadBytesExt};
 
         let mut reader = src.reader();
-        let mut reader = reader.get_mut();
+        let reader = reader.get_mut();
 
         let mut reader = Cursor::new(reader);
 
@@ -65,7 +65,7 @@ impl Decoder for PacketGlue {
         let data_len = ReadBytesExt::read_i16::<LittleEndian>(&mut reader)?;
 
         let mut data = Vec::<u8>::with_capacity(data_len as usize);
-        Read::read_exact(&mut reader, &mut data)?;
+        Read::read_to_end(&mut reader, &mut data)?;
 
         Ok(Some(Packet {
             pkg_len,

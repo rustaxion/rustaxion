@@ -6,6 +6,7 @@ use std::panic;
 use std::{backtrace::Backtrace, env};
 
 use anyhow::Context;
+use futures_util::future;
 use tokio::{
     net::{TcpListener, TcpStream},
     task::futures,
@@ -51,16 +52,12 @@ async fn process(stream: TcpStream, addr: SocketAddr) -> anyhow::Result<()> {
 
     while let Some(request) = tokio_stream::StreamExt::next(&mut transport).await {
         let packet = request.context("Failed to parse an incoming packet.")?;
-        println!("Req: {:?}", packet);
+        let responses = server::handle(&mut session, packet.clone())?;
 
-        let response = server::handle(&mut session, packet.clone())?;
-        let response_packet = Into::<Packet>::into(response);
-
-        transport.feed(response_packet.clone()).await?;
-        transport.flush().await?;
-
-        println!("Replied: {:?}", response_packet);
-        break;
+        for resp in responses {
+            let packet = Into::<Packet>::into(resp);
+            transport.send(packet).await?;
+        }
     }
 
     Ok(())

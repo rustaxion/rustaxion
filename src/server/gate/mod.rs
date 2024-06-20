@@ -3,7 +3,7 @@ use crate::{
     types::{packet::Packet, response::Response, session::SessionData},
 };
 
-mod ntf_game_time;
+mod login_gate_verify;
 
 #[rustfmt::skip]
 pub fn handle(
@@ -14,7 +14,7 @@ pub fn handle(
         data,
         ..
     }: Packet,
-) -> anyhow::Result<Response> {
+) -> anyhow::Result<Vec<Response>> {
     assert!(main_cmd == MainCmd::Time || main_cmd == MainCmd::Select);
     let ParaCmd::CometGate(para_cmd) = para_cmd else {
         anyhow::bail!("How did we get here?")
@@ -23,7 +23,7 @@ pub fn handle(
     match para_cmd {
         CometGate::NtfGameTime => todo!(),
         CometGate::RequestUserGameTime => todo!(),
-        CometGate::LoginGateVerify => todo!(),
+        CometGate::LoginGateVerify => login_gate_verify::handle(session, data),
         CometGate::SelectUserInfoList => todo!(),
         CometGate::CreateCharacter => todo!(),
         CometGate::EnterGame => todo!(),

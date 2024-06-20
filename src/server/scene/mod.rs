@@ -12,7 +12,7 @@ pub fn handle(
         data,
         ..
     }: Packet,
-) -> anyhow::Result<Response> {
+) -> anyhow::Result<Vec<Response>> {
     assert_eq!(main_cmd, MainCmd::Game);
     let ParaCmd::CometScene(para_cmd) = para_cmd else {
         anyhow::bail!("How did we get here?")

@@ -5,7 +5,7 @@ use prost::Message;
 
 use crate::{
     enums::comet::{comet_gate::CometGate, MainCmd, ParaCmd},
-    proto::comet_gate::{LoginGateVerify, NtfGameTime},
+    proto::comet_gate::{LoginGateVerify, NotifyGameTime},
     types::{response::Response, session::SessionData},
 };
 
@@ -15,13 +15,13 @@ pub fn handle(session: &mut SessionData, buffer: Vec<u8>) -> anyhow::Result<Vec<
     let mut responses = Vec::<Response>::with_capacity(2);
 
     let now = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH)?;
-    let time = NtfGameTime {
+    let time = NotifyGameTime {
         gametime: u32::try_from(now.as_secs())?,
     };
 
     responses.push(Response {
         main_cmd: MainCmd::Time,
-        para_cmd: ParaCmd::CometGate(CometGate::NtfGameTime),
+        para_cmd: ParaCmd::CometGate(CometGate::NotifyGameTime),
         body: time.encode_to_vec()
     });
 

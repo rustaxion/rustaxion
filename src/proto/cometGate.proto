@@ -1,7 +1,7 @@
 syntax = "proto2";
 package cometGate;
 
-message Ntf_GameTime {
+message Notify_GameTime {
     required uint32 gametime = 1;
 }
 

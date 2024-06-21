@@ -101,11 +101,11 @@ message SpecialEventData {
   repeated SpecialEventOneData list = 4;
 }
 
-message Ntf_RechangeUpdate {
+message Notify_RechangeUpdate {
   required uint32 value = 1;
 }
 
-message Ntf_Event_NewReleaseUpdate {
+message Notify_Event_NewReleaseUpdate {
   required uint32 type = 1;
   required uint32 index = 2;
   required uint32 value = 3;
@@ -402,19 +402,19 @@ message Req_PreRank_End {
   required uint32 type = 2;
 }
 
-message Ntf_Social_DelFriend {
+message Notify_Social_DelFriend {
   required uint64 charId = 1;
 }
 
-message Ntf_Social_AddFriendRequest {
+message Notify_Social_AddFriendRequest {
   required FriendBaseInfo info = 1;
 }
 
-message Ntf_Social_DisposeFriendRequest {
+message Notify_Social_DisposeFriendRequest {
   required FriendBaseInfo info = 1;
 }
 
-message Ntf_Social_FriendPublicDynamic {
+message Notify_Social_FriendPublicDynamic {
   required uint64 friendId = 1;
   required DynamicData data = 2;
 }
@@ -702,7 +702,7 @@ message Ret_GameError {
   required uint32 msgId = 2;
 }
 
-message Ntf_CharacterFullData {
+message Notify_CharacterFullData {
   required CharacterFullData data = 1;
 }
 
@@ -812,7 +812,7 @@ message Ret_ActivityFinish {
   optional SettleData settleData = 2;
 }
 
-message Ntf_ActivityChange {
+message Notify_ActivityChange {
 }
 
 message SummonItemData {
@@ -863,7 +863,7 @@ message Req_DelMail {
 message Ret_DelMail {
 }
 
-message Ntf_NewMail {
+message Notify_NewMail {
   required MailData data = 1;
 }
 
@@ -954,7 +954,7 @@ message Ret_Social_DelDynamics {
   required uint32 index = 1;
 }
 
-message Ntf_Social_FriendStatus {
+message Notify_Social_FriendStatus {
   required uint64 friendId = 1;
   required uint32 statusType = 2;
   required uint32 statusParam = 3;
@@ -1041,11 +1041,11 @@ message Ret_ChangeTheme {
   required uint32 id = 1;
 }
 
-message Ntf_UpdateInfo {
+message Notify_UpdateInfo {
   required SettleData settleData = 1;
 }
 
-message Ntf_DelInfo {
+message Notify_DelInfo {
   required uint32 curCharacterId = 1;
   required uint32 curThemeId = 2;
   required ItemData delInfo = 3;
@@ -1114,7 +1114,7 @@ message PVPPlayerInfo {
   required uint32 rankLevel = 4;
 }
 
-message Ntf_PVP_MatchSuccess {
+message Notify_PVP_MatchSuccess {
   required uint64 roomId = 1;
   repeated PVPPlayerInfo list = 2;
 }
@@ -1126,22 +1126,22 @@ message Req_PVP_MatchConfim {
 message Ret_PVP_MatchConfim {
 }
 
-message Ntf_PVP_MatchConfim {
+message Notify_PVP_MatchConfim {
   required uint64 charId = 1;
 }
 
-message Ntf_PVP_StartLoading {
+message Notify_PVP_StartLoading {
 }
 
 message Req_PVP_FinishLoading {
   required uint64 roomId = 1;
 }
 
-message Ntf_PVP_FinishLoading {
+message Notify_PVP_FinishLoading {
   required uint64 charId = 1;
 }
 
-message Ntf_PVP_StartGame {
+message Notify_PVP_StartGame {
   required uint32 songId = 1;
 }
 
@@ -1155,7 +1155,7 @@ message PVPScoreInfo {
   required uint32 score = 2;
 }
 
-message Ntf_PVP_SyncScore {
+message Notify_PVP_SyncScore {
   repeated PVPScoreInfo list = 1;
 }
 
@@ -1163,14 +1163,14 @@ message Req_PVP_UseSkill {
   required uint64 roomId = 1;
 }
 
-message Ntf_PVP_UseSkill {
+message Notify_PVP_UseSkill {
 }
 
 message Req_PVP_FinishGame {
   required uint64 roomId = 1;
 }
 
-message Ntf_PVP_FinishGame {
+message Notify_PVP_FinishGame {
 }
 
 message Req_PVP_CurState {
@@ -1367,15 +1367,15 @@ message Ret_Team_Logs {
   repeated TeamLogOneData logList = 1;
 }
 
-message Ntf_Team_Change {
+message Notify_Team_Change {
   required uint32 teamId = 1;
   optional string teamName = 2 [default=""];
 }
 
-message Ntf_Team_InfoChange {
+message Notify_Team_InfoChange {
 }
 
-message Ntf_Team_ApplyChange {
+message Notify_Team_ApplyChange {
   required uint32 applyCount = 1;
 }
 
@@ -1403,7 +1403,7 @@ message Ret_Team_BuyItem {
   required TeamShopData shop = 1;
 }
 
-message Ntf_Team_BuffList {
+message Notify_Team_BuffList {
   repeated BuffData buffList = 1;
 }
 

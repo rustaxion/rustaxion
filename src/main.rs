@@ -7,12 +7,15 @@ use std::panic;
 use std::{backtrace::Backtrace, env};
 
 use anyhow::Context;
-use futures_util::future;
+use futures_util::{future, StreamExt};
+use prost::bytes::BytesMut;
+use tokio::io::AsyncWriteExt;
 use tokio::{
     net::{TcpListener, TcpStream},
     task::futures,
 };
 use tokio_util::codec::{Decoder, Encoder, Framed};
+use types::packet::PacketDecodeError;
 use types::{packet::Packet, session::SessionData};
 
 mod enums;
@@ -23,12 +26,7 @@ mod types;
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt::init();
-
-    panic::set_hook(Box::new(|info| {
-        let stacktrace = Backtrace::force_capture();
-        println!("Got panic. @info:{}\n@stackTrace:{}", info, stacktrace);
-        std::process::abort();
-    }));
+    color_backtrace::install();
 
     let addr = env::args()
         .nth(1)
@@ -50,10 +48,10 @@ async fn main() -> anyhow::Result<()> {
 async fn process(stream: TcpStream, addr: SocketAddr) -> anyhow::Result<()> {
     use futures_util::sink::SinkExt;
 
-    let mut transport = Framed::new(stream, types::PacketGlue);
+    let mut transport = Framed::new(stream, types::packet::PacketGlue);
     let mut session = SessionData {};
 
-    while let Some(request) = tokio_stream::StreamExt::next(&mut transport).await {
+    while let Some(request) = transport.next().await {
         let packet = request.context("Failed to parse an incoming packet.")?;
         println!("Req {:?}", packet);
 

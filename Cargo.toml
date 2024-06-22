@@ -13,6 +13,8 @@ path = "src/client.rs"
 
 [dependencies]
 anyhow = { version = "1.0.86", features = ["std", "backtrace"] }
+thiserror = "1.0"
+color-backtrace = "0.6.1"
 tokio-stream = { version = "0.1.15", features = ["tokio-util"] }
 tokio-util = { version = "0.7.11", features = ["full"] }
 tokio = { version = "1.38.0", features = ["full"] }

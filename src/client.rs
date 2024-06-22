@@ -36,53 +36,13 @@ async fn main() -> anyhow::Result<()> {
         body: req.encode_to_vec(),
     });
 
-    let mut dst = BytesMut::new();
-    dst.extend_from_slice(packet.pkg_len.to_le_bytes().as_slice());
-    dst.put_u8(i8::from(packet.main_cmd.clone()) as u8);
-    dst.put_u8(packet.para_cmd.get_value());
-    dst.extend_from_slice(packet.data_len.to_le_bytes().as_slice());
-
-    dst.extend_from_slice(packet.data.as_slice());
-
-    stream.write_buf(&mut dst).await?;
+    stream.write_all(packet.encode()?.as_slice()).await?;
     stream.flush().await?;
 
     let mut response: Vec<u8> = vec![];
     stream.read_to_end(&mut response).await?;
 
-    let bytes = BytesMut::from(response.as_slice());
-    let mut reader = bytes.reader();
-    let reader = reader.get_mut();
-
-    let mut reader = Cursor::new(reader);
-
-    let pkg_len = ReadBytesExt::read_i32::<LittleEndian>(&mut reader)?;
-
-    let main_cmd = MainCmd::try_from(ReadBytesExt::read_i8(&mut reader)?);
-    let Ok(main_cmd) = main_cmd else {
-        panic!();
-    };
-
-    let para_cmd = ParaCmd::from_value(&main_cmd, ReadBytesExt::read_u8(&mut reader)?);
-    let Ok(para_cmd) = para_cmd else { panic!() };
-
-    let data_len = ReadBytesExt::read_u16::<LittleEndian>(&mut reader)?;
-    let mut data = vec![0; data_len as usize];
-
-    std::io::Read::read_exact(&mut reader, &mut data)?;
-    assert_eq!(
-        pkg_len as usize,
-        PACKET_HEADER_SIZE - std::mem::size_of::<i32>() + data.len()
-    );
-
-    let response = Packet {
-        pkg_len,
-        main_cmd,
-        para_cmd,
-        data_len,
-        data,
-    };
-
+    let response = Packet::decode(&mut BytesMut::from(response.as_slice()))?;
     println!("{:?}", response);
 
     Ok(())

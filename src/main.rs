@@ -1,5 +1,6 @@
 #![allow(unused)]
 
+use std::collections::VecDeque;
 use std::error::Error;
 use std::net::SocketAddr;
 use std::panic;
@@ -21,6 +22,8 @@ mod types;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
+    tracing_subscriber::fmt::init();
+
     panic::set_hook(Box::new(|info| {
         let stacktrace = Backtrace::force_capture();
         println!("Got panic. @info:{}\n@stackTrace:{}", info, stacktrace);
@@ -47,15 +50,18 @@ async fn main() -> anyhow::Result<()> {
 async fn process(stream: TcpStream, addr: SocketAddr) -> anyhow::Result<()> {
     use futures_util::sink::SinkExt;
 
-    let mut session = SessionData {};
     let mut transport = Framed::new(stream, types::PacketGlue);
+    let mut session = SessionData {};
 
     while let Some(request) = tokio_stream::StreamExt::next(&mut transport).await {
         let packet = request.context("Failed to parse an incoming packet.")?;
-        let responses = server::handle(&mut session, packet.clone())?;
+        println!("Req {:?}", packet);
+
+        let responses = server::handle(&mut session, packet)?;
 
         for resp in responses {
             let packet = Into::<Packet>::into(resp);
+            println!("Resp {:?}", packet);
             transport.send(packet).await?;
         }
     }

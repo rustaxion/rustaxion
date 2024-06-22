@@ -2,9 +2,9 @@ use prost::Message;
 
 use crate::enums::comet::{MainCmd, ParaCmd};
 
-use super::packet::Packet;
+use super::packet::{Packet, PACKET_HEADER_SIZE};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Response {
     pub main_cmd: MainCmd,
     pub para_cmd: ParaCmd,
@@ -14,18 +14,13 @@ pub struct Response {
 #[rustfmt::skip]
 impl Into<Packet> for Response {
     fn into(self) -> Packet {
-        let pkg_len: i32 =
-            (/* u32 */ 32 / 8) +
-            (/* i8 */ 8/8) +
-            (/* u8 */ 8/8) +
-            (/* i16 */ 16 / 8) +
-            (/* ?? */ self.body.len() as i32);
+        let pkg_len = (PACKET_HEADER_SIZE + self.body.len()) as i32;
 
         Packet {
             pkg_len,
             main_cmd: self.main_cmd,
             para_cmd: self.para_cmd,
-            data_len: self.body.len() as i16,
+            data_len: self.body.len() as u16,
             data: self.body
         }
     }

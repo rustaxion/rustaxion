@@ -1,6 +1,7 @@
 use std::io::{Cursor, Read};
+use std::mem::size_of;
 
-use tokio::io;
+use tokio::io::{self, AsyncReadExt};
 use tokio_util::bytes::{Buf, BufMut, BytesMut};
 use tokio_util::codec::{Decoder, Encoder};
 
@@ -10,12 +11,18 @@ pub struct PacketGlue;
 
 #[derive(Debug, Clone)]
 pub struct Packet {
-    pub pkg_len: i32,      // 4 bytes
-    pub main_cmd: MainCmd, // 1 byte
-    pub para_cmd: ParaCmd, // 1 byte
-    pub data_len: i16,     // 2 bytes
-    pub data: Vec<u8>,     // ?? bytes
+    pub pkg_len: i32,
+    pub main_cmd: MainCmd,
+    pub para_cmd: ParaCmd,
+    pub data_len: u16,
+    pub data: Vec<u8>,
 }
+
+pub const PACKET_HEADER_SIZE: usize =
+    /* pkg_len */ std::mem::size_of::<i32>() + 
+    /* main_cmd */ std::mem::size_of::<i8>() + 
+    /* para_cmd */ std::mem::size_of::<u8>() + 
+    /* data_len */ std::mem::size_of::<u16>();
 
 impl Encoder<Packet> for PacketGlue {
     type Error = io::Error;
@@ -62,10 +69,11 @@ impl Decoder for PacketGlue {
             ));
         };
 
-        let data_len = ReadBytesExt::read_i16::<LittleEndian>(&mut reader)?;
+        let data_len = ReadBytesExt::read_u16::<LittleEndian>(&mut reader)?;
+        let mut data = vec![0; data_len as usize];
 
-        let mut data = Vec::<u8>::with_capacity(data_len as usize);
-        Read::read_to_end(&mut reader, &mut data)?;
+        std::io::Read::read_exact(&mut reader, &mut data)?;
+        assert_eq!(pkg_len as usize, PACKET_HEADER_SIZE - std::mem::size_of::<i32>() + data.len());
 
         Ok(Some(Packet {
             pkg_len,

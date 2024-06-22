@@ -1,3 +1,5 @@
+#![allow(unused)]
+
 use crate::{
     enums::comet::{comet_login::CometLogin, MainCmd, ParaCmd},
     proto::comet_login::{LanguageType, PlatformType, ReqGameVersion},
@@ -5,13 +7,16 @@ use crate::{
 };
 use byteorder::{LittleEndian, ReadBytesExt};
 use prost::{bytes::Buf, Message};
-use std::io::{Cursor, Read};
+use std::{
+    alloc::GlobalAlloc,
+    io::{Cursor, Read},
+};
 use tokio::{
     io::{AsyncReadExt, AsyncWriteExt},
     net::TcpStream,
 };
 use tokio_util::bytes::{BufMut, BytesMut};
-use types::packet::Packet;
+use types::packet::{Packet, PACKET_HEADER_SIZE};
 
 mod enums;
 mod proto;
@@ -39,7 +44,7 @@ async fn main() -> anyhow::Result<()> {
 
     dst.extend_from_slice(packet.data.as_slice());
 
-    stream.write(dst.to_vec().as_slice()).await?;
+    stream.write_buf(&mut dst).await?;
     stream.flush().await?;
 
     let mut response: Vec<u8> = vec![];
@@ -61,10 +66,14 @@ async fn main() -> anyhow::Result<()> {
     let para_cmd = ParaCmd::from_value(&main_cmd, ReadBytesExt::read_u8(&mut reader)?);
     let Ok(para_cmd) = para_cmd else { panic!() };
 
-    let data_len = ReadBytesExt::read_i16::<LittleEndian>(&mut reader)?;
+    let data_len = ReadBytesExt::read_u16::<LittleEndian>(&mut reader)?;
+    let mut data = vec![0; data_len as usize];
 
-    let mut data = Vec::<u8>::with_capacity(data_len as usize);
-    Read::read_to_end(&mut reader, &mut data)?;
+    std::io::Read::read_exact(&mut reader, &mut data)?;
+    assert_eq!(
+        pkg_len as usize,
+        PACKET_HEADER_SIZE - std::mem::size_of::<i32>() + data.len()
+    );
 
     let response = Packet {
         pkg_len,

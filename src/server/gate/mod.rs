@@ -21,7 +21,7 @@ pub fn handle(
     };
 
     match para_cmd {
-        CometGate::NtfGameTime => todo!(),
+        CometGate::NotifyGameTime => todo!(),
         CometGate::RequestUserGameTime => todo!(),
         CometGate::LoginGateVerify => login_gate_verify::handle(session, data),
         CometGate::SelectUserInfoList => todo!(),

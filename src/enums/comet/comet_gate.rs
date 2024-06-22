@@ -3,7 +3,7 @@ use enum_repr_derive::{FromEnumToRepr, TryFromReprToEnum};
 #[repr(u8)]
 #[derive(Debug, FromEnumToRepr, TryFromReprToEnum, Copy, Clone)]
 pub enum CometGate {
-    NtfGameTime = 1,
+    NotifyGameTime = 1,
     RequestUserGameTime = 2,
     ResponseUserGameTime = 3,
     LoginGateError = 4,

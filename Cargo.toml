@@ -25,6 +25,7 @@ prost = "0.12.6"
 md5 = "0.7.0"
 tracing = { git = "https://github.com/tokio-rs/tracing", rev = "382ee01dc1cf428c071cad1e3f2e6c6427e70f87" }
 tracing-subscriber = { git = "https://github.com/tokio-rs/tracing", rev = "382ee01dc1cf428c071cad1e3f2e6c6427e70f87" }
+indent = "0.1.1"
 
 [build-dependencies]
 prost-build = "0.12.6"

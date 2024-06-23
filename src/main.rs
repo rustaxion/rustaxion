@@ -39,7 +39,7 @@ async fn main() -> anyhow::Result<()> {
         let (stream, addr) = server.accept().await?;
         tokio::spawn(async move {
             if let Err(e) = process(stream, addr).await {
-                println!("failed to process connection; error = {}", e);
+                eprintln!("\nError: {}", indent::indent_by(4, format!("{:?}", e)));
             }
         });
     }
@@ -53,13 +53,13 @@ async fn process(stream: TcpStream, addr: SocketAddr) -> anyhow::Result<()> {
 
     while let Some(request) = transport.next().await {
         let packet = request.context("Failed to parse an incoming packet.")?;
-        println!("Req {:?}", packet);
+        eprintln!("Req {:?}", packet);
 
         let responses = server::handle(&mut session, packet)?;
 
         for resp in responses {
             let packet = Into::<Packet>::into(resp);
-            println!("Resp {:?}", packet);
+            eprintln!("Resp {:?}", packet);
             transport.send(packet).await?;
         }
     }

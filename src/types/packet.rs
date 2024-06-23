@@ -1,4 +1,4 @@
-use std::io::{Cursor, Read, Write};
+use std::io::{BufRead, Cursor, Read, Write};
 use thiserror::Error;
 use std::mem::size_of;
 
@@ -50,7 +50,7 @@ impl Packet {
     pub fn decode(buffer: &mut BytesMut) -> anyhow::Result<Self> {
         use byteorder::{LittleEndian, BigEndian, ReadBytesExt};
 
-        let mut cursor = Cursor::new(buffer);
+        let mut cursor = buffer.reader();
 
         let pkg_len = cursor.read_i32::<LittleEndian>()?;
         if pkg_len == 0 {
@@ -68,7 +68,9 @@ impl Packet {
         let data_len = cursor.read_u16::<LittleEndian>()?;
         let mut data = vec![0u8; data_len as usize];
 
-        let bytes_read = cursor.read_exact(&mut data).context("Failed to Packet::data")?;
+        if data_len > 0 {
+            let bytes_read = cursor.read_exact(&mut data).context("Failed to Packet::data")?;
+        }
 
         Ok(Packet {
             pkg_len,
@@ -84,7 +86,7 @@ impl Encoder<Packet> for PacketGlue {
     type Error = anyhow::Error;
 
     fn encode(&mut self, item: Packet, dst: &mut BytesMut) -> anyhow::Result<()> {
-        dst.writer().write_all(item.encode()?.as_slice());
+        dst.writer().write(item.encode()?.as_slice());
 
         Ok(())
     }
@@ -116,7 +118,6 @@ impl Decoder for PacketGlue {
                 _ => {}
             };
 
-            eprintln!("{:#?}", error);
             return Err(error);
         }
     }

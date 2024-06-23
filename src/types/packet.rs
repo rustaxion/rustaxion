@@ -20,7 +20,6 @@ pub struct Packet {
 }
 
 pub const PACKET_HEADER_SIZE: usize =
-    /* pkg_len */ std::mem::size_of::<i32>() + 
     /* main_cmd */ std::mem::size_of::<i8>() + 
     /* para_cmd */ std::mem::size_of::<u8>() + 
     /* data_len */ std::mem::size_of::<u16>();
@@ -52,12 +51,13 @@ impl Packet {
 
         let mut cursor = buffer.reader();
 
-        let pkg_len = cursor.read_i32::<LittleEndian>()?;
+        let rest1 = cursor.get_ref().len();
+        let pkg_len = cursor.read_i32::<LittleEndian>().unwrap_or(0);
         if pkg_len == 0 {
             return Err(PacketDecodeError::NoDataToRead.into());
         }
 
-        let mut pkg = BytesMut::zeroed(pkg_len as usize - std::mem::size_of::<i32>());
+        let mut pkg = vec![0u8; pkg_len as usize];
         cursor.read_exact(&mut pkg).context(format!("Failed to read {} bytes", pkg_len))?;
 
         let mut cursor = Cursor::new(pkg);
@@ -69,7 +69,7 @@ impl Packet {
         let mut data = vec![0u8; data_len as usize];
 
         if data_len > 0 {
-            let bytes_read = cursor.read_exact(&mut data).context("Failed to Packet::data")?;
+            cursor.read_exact(&mut data).context("Failed to read Packet::data")?;
         }
 
         Ok(Packet {

@@ -6,6 +6,7 @@ use crate::{
     types::response::Response,
 };
 use byteorder::{LittleEndian, ReadBytesExt};
+use futures_util::{SinkExt, StreamExt};
 use prost::{bytes::Buf, Message};
 use std::{
     alloc::GlobalAlloc,
@@ -15,8 +16,11 @@ use tokio::{
     io::{AsyncReadExt, AsyncWriteExt},
     net::TcpStream,
 };
-use tokio_util::bytes::{BufMut, BytesMut};
-use types::packet::{Packet, PACKET_HEADER_SIZE};
+use tokio_util::{
+    bytes::{BufMut, BytesMut},
+    codec::Framed,
+};
+use types::packet::Packet;
 
 mod enums;
 mod proto;
@@ -25,6 +29,8 @@ mod types;
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let mut stream = TcpStream::connect("127.0.0.1:6969").await?;
+    let mut transport = Framed::new(stream, types::packet::PacketGlue);
+
     let req = ReqGameVersion {
         r#type: PlatformType::Android as i32,
         language: LanguageType::DefaultLanguage as i32,
@@ -36,14 +42,12 @@ async fn main() -> anyhow::Result<()> {
         body: req.encode_to_vec(),
     });
 
-    stream.write_all(packet.encode()?.as_slice()).await?;
-    stream.flush().await?;
+    transport.send(packet).await?;
 
-    let mut response: Vec<u8> = vec![];
-    stream.read_to_end(&mut response).await?;
-
-    let response = Packet::decode(&mut BytesMut::from(response.as_slice()))?;
+    let response = transport.next().await;
     println!("{:?}", response);
+
+    transport.close().await?;
 
     Ok(())
 }

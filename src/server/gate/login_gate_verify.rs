@@ -5,7 +5,7 @@ use prost::Message;
 
 use crate::{
     enums::comet::{comet_gate::CometGate, MainCmd, ParaCmd},
-    proto::comet_gate::{LoginGateVerify, NotifyGameTime},
+    proto::comet_gate::{LoginGateVerify, NotifyGameTime, SelectUserInfo, SelectUserInfoList},
     types::{response::Response, session::SessionData},
 };
 
@@ -25,34 +25,15 @@ pub fn handle(session: &mut SessionData, buffer: Vec<u8>) -> anyhow::Result<Vec<
         body: time.encode_to_vec()
     });
 
-    /*
-    var data = Serializer.Deserialize<cometGate.LoginGateVerify>(new MemoryStream(msgContent));
-    var accId = data.accId;
-
-    var account = Server.Database.GetAccount(accId);
-    if (account == null)
-        return;
-
-    account.sessionId = (uint)sessionId;
-    Server.Database.UpdateAccount(account);
-
-    var userInfoList = new cometGate.SelectUserInfoList();
-
-    if (account.charId != 0)
-    {
-        userInfoList.userList.Add(new cometGate.SelectUserInfo { charId = (uint)account.charId, accStates = 0, });
-    }
-
-    ServerLogger.LogInfo($"LoginGateVerify: [{((userInfoList.userList.Count > 0) ? ("{ charId: " + account.charId + ", accStates: 0 }") : "")}]");
-    Index.Instance.GatePackageQueue.Enqueue(
-        new Index.GamePackage()
-        {
-            MainCmd = (uint)cometGate.MainCmd.MainCmd_Select,
-            ParaCmd = (uint)cometGate.ParaCmd.ParaCmd_SelectUserInfoList,
-            Data = Index.ObjectToByteArray(userInfoList),
-        }
-    );
-    */
+    let user_info = SelectUserInfoList {
+        user_list: vec![]
+    };
+    
+    responses.push(Response {
+        main_cmd: MainCmd::Select,
+        para_cmd: ParaCmd::CometGate(CometGate::SelectUserInfoList),
+        body: user_info.encode_to_vec()
+    });
 
     Ok(responses)
 }

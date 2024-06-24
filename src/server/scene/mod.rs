@@ -6,6 +6,7 @@ use crate::{
 #[rustfmt::skip]
 pub fn handle(
     session: &mut SessionData,
+    db: sea_orm::DatabaseConnection,
     Packet {
         main_cmd,
         para_cmd,

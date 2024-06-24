@@ -7,10 +7,14 @@ mod gate;
 mod login;
 mod scene;
 
-pub fn handle(session: &mut SessionData, packet: Packet) -> anyhow::Result<Vec<Response>> {
+pub fn handle(
+    session: &mut SessionData,
+    db: sea_orm::DatabaseConnection,
+    packet: Packet,
+) -> anyhow::Result<Vec<Response>> {
     match packet.main_cmd {
-        MainCmd::Time | MainCmd::Select => gate::handle(session, packet),
-        MainCmd::Login => login::handle(session, packet),
-        MainCmd::Game => scene::handle(session, packet),
+        MainCmd::Time | MainCmd::Select => gate::handle(session, db, packet),
+        MainCmd::Login => login::handle(session, db, packet),
+        MainCmd::Game => scene::handle(session, db, packet),
     }
 }

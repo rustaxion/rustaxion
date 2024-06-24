@@ -1,31 +1,77 @@
-[package]
-name = "rustaxion"
+[workspace.package]
 version = "0.1.0"
+authors = ["ArjixWasTaken <me@arjix.dev>"]
+description = ""
 edition = "2021"
 
-[[bin]]
-name = "server"
-path = "src/main.rs"
+[workspace]
+members = [".", "sql/entities", "sql/migrations"]
 
-[[bin]]
-name = "client"
-path = "src/client.rs"
+[workspace.dependencies]
+sea-orm = { version = "0.12", features = [
+    "sqlx-sqlite",
+    "runtime-tokio-rustls",
+    "macros",
+] }
 
-[dependencies]
+sea-orm-migration = { version = "0.12.0", features = [
+    "runtime-tokio-rustls",
+    "sqlx-sqlite",
+] }
+
+tracing = { git = "https://github.com/tokio-rs/tracing", rev = "382ee01dc1cf428c071cad1e3f2e6c6427e70f87" }
+tracing-subscriber = { git = "https://github.com/tokio-rs/tracing", rev = "382ee01dc1cf428c071cad1e3f2e6c6427e70f87" }
+
+tokio = { version = "1.38.0", features = ["full"] }
+tokio-stream = { version = "0.1.15", features = ["tokio-util"] }
+tokio-util = { version = "0.7.11", features = ["full"] }
+futures-util = { version = "0.3.30", features = ["sink"] }
+tokio-test = "0.4.4"
+
+entities = { path = "sql/entities" }
+migrations = { path = "sql/migrations" }
+
 anyhow = { version = "1.0.86", features = ["std", "backtrace"] }
 thiserror = "1.0"
 color-backtrace = "0.6.1"
-tokio-stream = { version = "0.1.15", features = ["tokio-util"] }
-tokio-util = { version = "0.7.11", features = ["full"] }
-tokio = { version = "1.38.0", features = ["full"] }
+
 enum-repr-derive = "0.2.0"
-futures-util = { version = "0.3.30", features = ["sink"] }
 byteorder = "1.5.0"
 prost = "0.12.6"
 md5 = "0.7.0"
-tracing = { git = "https://github.com/tokio-rs/tracing", rev = "382ee01dc1cf428c071cad1e3f2e6c6427e70f87" }
-tracing-subscriber = { git = "https://github.com/tokio-rs/tracing", rev = "382ee01dc1cf428c071cad1e3f2e6c6427e70f87" }
+
 indent = "0.1.1"
+dotenvy = "0.15.7"
+
+[package]
+name = "rustaxion"
+version.workspace = true
+authors.workspace = true
+description.workspace = true
+edition.workspace = true
+
+[dependencies]
+sea-orm.workspace = true
+entities.workspace = true
+migrations.workspace = true
+
+tracing.workspace = true
+tracing-subscriber.workspace = true
+tokio.workspace = true
+tokio-stream.workspace = true
+tokio-util.workspace = true
+futures-util.workspace = true
+tokio-test.workspace = true
+anyhow.workspace = true
+thiserror.workspace = true
+color-backtrace.workspace = true
+enum-repr-derive.workspace = true
+byteorder.workspace = true
+prost.workspace = true
+md5.workspace = true
+indent.workspace = true
+dotenvy.workspace = true
+
 
 [build-dependencies]
 prost-build = "0.12.6"

@@ -1,0 +1,13 @@
+[package]
+name = "migrations"
+edition.workspace = true
+version.workspace = true
+authors.workspace = true
+description.workspace = true
+
+[lib]
+name = "migrations"
+path = "src/lib.rs"
+
+[dependencies]
+sea-orm-migration.workspace = true

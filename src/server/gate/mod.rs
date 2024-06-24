@@ -1,3 +1,5 @@
+use tokio::sync::Mutex;
+
 use crate::{
     enums::comet::{comet_gate::CometGate, MainCmd, ParaCmd},
     types::{packet::Packet, response::Response, session::SessionData},
@@ -8,6 +10,7 @@ mod login_gate_verify;
 #[rustfmt::skip]
 pub fn handle(
     session: &mut SessionData,
+    db: sea_orm::DatabaseConnection,
     Packet {
         main_cmd,
         para_cmd,
@@ -23,7 +26,7 @@ pub fn handle(
     match para_cmd {
         CometGate::NotifyGameTime => todo!(),
         CometGate::RequestUserGameTime => todo!(),
-        CometGate::LoginGateVerify => login_gate_verify::handle(session, data),
+        CometGate::LoginGateVerify => login_gate_verify::handle(session, db, data),
         CometGate::SelectUserInfoList => todo!(),
         CometGate::CreateCharacter => todo!(),
         CometGate::EnterGame => todo!(),

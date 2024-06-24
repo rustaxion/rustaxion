@@ -8,8 +8,9 @@ fn main() {
         &[
             "src/proto/cometGate.proto",
             "src/proto/cometLogin.proto",
-            "src/proto/cometScene.proto"
+            "src/proto/cometScene.proto",
         ],
-        &["src/"]
-    ).unwrap();
+        &["src/"],
+    )
+    .unwrap();
 }

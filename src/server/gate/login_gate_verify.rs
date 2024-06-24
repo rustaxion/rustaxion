@@ -1,7 +1,8 @@
-use std::time::SystemTime;
+use std::{sync::Arc, time::SystemTime};
 
 use anyhow::Context;
 use prost::Message;
+use tokio::sync::Mutex;
 
 use crate::{
     enums::comet::{comet_gate::CometGate, MainCmd, ParaCmd},
@@ -10,7 +11,7 @@ use crate::{
 };
 
 #[rustfmt::skip]
-pub fn handle(session: &mut SessionData, buffer: Vec<u8>) -> anyhow::Result<Vec<Response>> {
+pub fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, buffer: Vec<u8>) -> anyhow::Result<Vec<Response>> {
     let req = LoginGateVerify::decode(buffer.as_slice()).context("Failed to decode LoginGateVerify.")?;
     let mut responses = Vec::<Response>::with_capacity(2);
 

@@ -8,7 +8,7 @@ mod game_version;
 mod third_party_login;
 
 #[rustfmt::skip]
-pub fn handle(
+pub async fn handle(
     session: &mut SessionData,
     db: sea_orm::DatabaseConnection,
     Packet {
@@ -29,10 +29,10 @@ pub fn handle(
         CometLogin::RequestFindPassword => todo!(),
         CometLogin::RequestQuickToken => todo!(),
         CometLogin::RequestQuickLogin => todo!(),
-        CometLogin::RequestThirdLogin => third_party_login::handle(session, db, data),
+        CometLogin::RequestThirdLogin => third_party_login::handle(session, db, data).await,
         CometLogin::RequestBindAccount => todo!(),
         CometLogin::RequestAnnouncement => todo!(),
-        CometLogin::RequestGameVersion => game_version::handle(session, db, data),
+        CometLogin::RequestGameVersion => game_version::handle(session, db, data).await,
         CometLogin::RequestBiliLogin => todo!(),
 
         // NOTE(arjix): When given a client-side param, what should we do?

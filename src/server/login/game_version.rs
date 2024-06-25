@@ -8,7 +8,7 @@ use crate::{
 };
 
 #[rustfmt::skip]
-pub fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, buffer: Vec<u8>) -> anyhow::Result<Vec<Response>> {
+pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, buffer: Vec<u8>) -> anyhow::Result<Vec<Response>> {
     let req = ReqGameVersion::decode(buffer.as_slice()).context("Failed to decode ReqGameVersion.")?;
     let ret = RetGameVersion {
         version: "0.1.0".to_string(),

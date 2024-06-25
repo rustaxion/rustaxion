@@ -32,8 +32,6 @@ mod server;
 mod types;
 mod database;
 
-// #[cfg(test)]
-// mod tests;
 
 #[allow(non_snake_case)]
 #[tokio::main(flavor = "current_thread")]
@@ -78,7 +76,7 @@ async fn process(
         let packet = request.context("Failed to parse an incoming packet.")?;
         eprintln!("Req {:?}", packet);
 
-        let responses = server::handle(&mut session, db.clone(), packet)?;
+        let responses = server::handle(&mut session, db.clone(), packet).await?;
 
         for resp in responses {
             let packet = Into::<Packet>::into(resp);

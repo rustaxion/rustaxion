@@ -10,7 +10,7 @@ use crate::{
 };
 
 #[rustfmt::skip]
-pub fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, buffer: Vec<u8>) -> anyhow::Result<Vec<Response>> {
+pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, buffer: Vec<u8>) -> anyhow::Result<Vec<Response>> {
     let req = ReqThirdLogin::decode(buffer.as_slice()).context("Failed to decode ReqThirdLogin.")?;
     let token = format!("{:x}", md5::compute(req.open_id + "6031"));
 

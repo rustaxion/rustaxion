@@ -1,8 +1,11 @@
 use std::{sync::Arc, time::SystemTime};
 
+use tokio::sync::Mutex;
 use anyhow::Context;
 use prost::Message;
-use tokio::sync::Mutex;
+
+use sea_orm::{entity::*, error::*, query::*, DbConn, FromQueryResult};
+use entities::account;
 
 use crate::{
     enums::comet::{comet_gate::CometGate, MainCmd, ParaCmd},
@@ -11,7 +14,7 @@ use crate::{
 };
 
 #[rustfmt::skip]
-pub fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, buffer: Vec<u8>) -> anyhow::Result<Vec<Response>> {
+pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, buffer: Vec<u8>) -> anyhow::Result<Vec<Response>> {
     let req = LoginGateVerify::decode(buffer.as_slice()).context("Failed to decode LoginGateVerify.")?;
     let mut responses = Vec::<Response>::with_capacity(2);
 
@@ -25,6 +28,9 @@ pub fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, buffer
         para_cmd: ParaCmd::CometGate(CometGate::NotifyGameTime),
         body: time.encode_to_vec()
     });
+
+    let user = account::Entity::find_by_id(req.acc_id).one(&db).await?;
+    // TODO(arjix): Make player entity.
 
     let user_info = SelectUserInfoList {
         user_list: vec![]

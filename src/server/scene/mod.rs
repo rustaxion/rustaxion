@@ -4,7 +4,7 @@ use crate::{
 };
 
 #[rustfmt::skip]
-pub fn handle(
+pub async fn handle(
     session: &mut SessionData,
     db: sea_orm::DatabaseConnection,
     Packet {

@@ -8,7 +8,7 @@ use crate::{
 mod login_gate_verify;
 
 #[rustfmt::skip]
-pub fn handle(
+pub async fn handle(
     session: &mut SessionData,
     db: sea_orm::DatabaseConnection,
     Packet {
@@ -26,7 +26,7 @@ pub fn handle(
     match para_cmd {
         CometGate::NotifyGameTime => todo!(),
         CometGate::RequestUserGameTime => todo!(),
-        CometGate::LoginGateVerify => login_gate_verify::handle(session, db, data),
+        CometGate::LoginGateVerify => login_gate_verify::handle(session, db, data).await,
         CometGate::SelectUserInfoList => todo!(),
         CometGate::CreateCharacter => todo!(),
         CometGate::EnterGame => todo!(),

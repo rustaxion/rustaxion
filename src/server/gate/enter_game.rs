@@ -9,7 +9,12 @@ use crate::database::entities::prelude::*;
 
 use crate::database::helpers::get_character_full_data;
 use crate::enums::comet::comet_scene::CometScene;
-use crate::proto::comet_scene::{ CharData, CharacterFullData, CharacterList };
+use crate::proto::comet_scene::{
+    CharData,
+    CharacterFullData,
+    CharacterList,
+    NotifyCharacterFullData,
+};
 use crate::{
     enums::comet::{ comet_gate::CometGate, MainCmd, ParaCmd },
     proto::comet_gate::EnterGame,
@@ -36,6 +41,6 @@ pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, 
     Ok(vec![Response {
         main_cmd: MainCmd::Game,
         para_cmd: ParaCmd::CometScene(CometScene::NotifyCharacterFullData),
-        body: full_data.encode_to_vec(),
+        body: NotifyCharacterFullData { data: full_data }.encode_to_vec(),
     }])
 }

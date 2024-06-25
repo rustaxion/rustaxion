@@ -10,7 +10,7 @@ use crate::database::entities::{ player, prelude::* };
 use crate::database::helpers::get_character_full_data;
 use crate::enums::comet::comet_gate::CometGate;
 use crate::proto::comet_gate::{ SelectUserInfo, SelectUserInfoList };
-use crate::proto::comet_scene::{ ThemeData, ThemeList };
+use crate::proto::comet_scene::{ NotifyCharacterFullData, ThemeData, ThemeList };
 use crate::{
     enums::comet::{ comet_scene::CometScene, MainCmd, ParaCmd },
     proto::{
@@ -63,7 +63,7 @@ pub async fn handle(
     responses.push(Response {
         main_cmd: MainCmd::Game,
         para_cmd: ParaCmd::CometScene(CometScene::NotifyCharacterFullData),
-        body: full_data.encode_to_vec(),
+        body: (NotifyCharacterFullData { data: full_data.clone() }).encode_to_vec(),
     });
 
     let players = Player::find_by_id(full_data.base_info.acc_id).all(&db).await?;

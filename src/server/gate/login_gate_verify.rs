@@ -1,16 +1,16 @@
-use std::{sync::Arc, time::SystemTime};
+use std::time::SystemTime;
 
 use tokio::sync::Mutex;
 use anyhow::Context;
 use prost::Message;
 
-use sea_orm::{entity::*, error::*, query::*, DbConn, FromQueryResult};
-use entities::account;
+use sea_orm::{ entity::*, error::*, query::*, DbConn, FromQueryResult };
+use crate::database::entities::prelude::*;
 
 use crate::{
-    enums::comet::{comet_gate::CometGate, MainCmd, ParaCmd},
-    proto::comet_gate::{LoginGateVerify, NotifyGameTime, SelectUserInfo, SelectUserInfoList},
-    types::{response::Response, session::SessionData},
+    enums::comet::{ comet_gate::CometGate, MainCmd, ParaCmd },
+    proto::comet_gate::{ LoginGateVerify, NotifyGameTime, SelectUserInfo, SelectUserInfoList },
+    types::{ response::Response, session::SessionData },
 };
 
 #[rustfmt::skip]
@@ -19,21 +19,27 @@ pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, 
     let mut responses = Vec::<Response>::with_capacity(2);
 
     let now = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH)?;
-    let time = NotifyGameTime {
-        gametime: u32::try_from(now.as_secs())?,
-    };
-
     responses.push(Response {
         main_cmd: MainCmd::Time,
         para_cmd: ParaCmd::CometGate(CometGate::NotifyGameTime),
-        body: time.encode_to_vec()
+        body: NotifyGameTime { gametime: u32::try_from(now.as_secs())? }.encode_to_vec()
     });
 
-    let user = account::Entity::find_by_id(req.acc_id).one(&db).await?;
-    // TODO(arjix): Make player entity.
+    let user = Account::find_by_id(req.acc_id as i32).one(&db).await?;
+    session.account_id = user.clone().map(|x| x.id);
+    anyhow::ensure!(user.is_some());
+
+    let user = user.unwrap();
+    let players = Player::find_by_id(user.id).all(&db).await?;
 
     let user_info = SelectUserInfoList {
-        user_list: vec![]
+        user_list: players
+            .iter()
+            .map(|p| SelectUserInfo {
+                char_id: p.account_id as u64,
+                acc_states: 0
+            })
+            .collect::<Vec<_>>()
     };
     
     responses.push(Response {

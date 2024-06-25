@@ -1,7 +1,9 @@
 use crate::{
-    enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd},
-    types::{packet::Packet, response::Response, session::SessionData},
+    enums::comet::{ comet_scene::CometScene, MainCmd, ParaCmd },
+    types::{ packet::Packet, response::Response, session::SessionData },
 };
+
+mod change_language;
 
 #[rustfmt::skip]
 pub async fn handle(
@@ -52,7 +54,7 @@ pub async fn handle(
         CometScene::RequestSummon => todo!(),
         CometScene::RequestSummonWeekReward => todo!(),
         CometScene::RequestSummonShopBuy => todo!(),
-        CometScene::RequestChangeLanguage => todo!(),
+        CometScene::RequestChangeLanguage => change_language::handle(session, db, data).await,
         CometScene::RequestSocialSearchPlayer => todo!(),
         CometScene::RequestSocialPlayerProfile => todo!(),
         CometScene::RequestSocialSendAddFriendRequest => todo!(),

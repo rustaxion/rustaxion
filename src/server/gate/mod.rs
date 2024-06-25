@@ -1,11 +1,12 @@
 use tokio::sync::Mutex;
 
 use crate::{
-    enums::comet::{comet_gate::CometGate, MainCmd, ParaCmd},
-    types::{packet::Packet, response::Response, session::SessionData},
+    enums::comet::{ comet_gate::CometGate, MainCmd, ParaCmd },
+    types::{ packet::Packet, response::Response, session::SessionData },
 };
 
 mod login_gate_verify;
+mod create_character;
 
 #[rustfmt::skip]
 pub async fn handle(
@@ -28,7 +29,7 @@ pub async fn handle(
         CometGate::RequestUserGameTime => todo!(),
         CometGate::LoginGateVerify => login_gate_verify::handle(session, db, data).await,
         CometGate::SelectUserInfoList => todo!(),
-        CometGate::CreateCharacter => todo!(),
+        CometGate::CreateCharacter => create_character::handle(session, db, data).await,
         CometGate::EnterGame => todo!(),
 
         // NOTE(arjix): When given a client-side param, what should we do?

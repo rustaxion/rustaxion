@@ -26,7 +26,7 @@ impl MigrationTrait for Migration {
 }
 
 #[derive(DeriveIden)]
-enum Account {
+pub enum Account {
     Table,
     Id,
     SteamId,

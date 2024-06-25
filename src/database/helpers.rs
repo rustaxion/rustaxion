@@ -3,6 +3,7 @@ use crate::database::entities::{ player, prelude::* };
 
 use crate::proto::comet_scene::{
     AnnouncementData,
+    AnnouncementOneData,
     ArcadeData,
     ArcadeDiffList,
     CharacterFullData,
@@ -14,6 +15,7 @@ use crate::proto::comet_scene::{
     PlayerVipInfo,
     ScoreList,
     SocialData,
+    SongData,
     SongList,
     TeamData,
     ThemeList,
@@ -85,10 +87,17 @@ pub async fn get_player_currency_info(
     })
 }
 
-#[rustfmt::skip]
 pub async fn get_announcements(db: &DatabaseConnection) -> anyhow::Result<AnnouncementData> {
     // TODO: Populate this using data from the database.
-    Ok(AnnouncementData { list: vec![], pic_list: vec![] })
+    Ok(AnnouncementData {
+        list: vec![AnnouncementOneData {
+            title: "Operation Announcement".to_string(),
+            content: "<b><color=#ffa500ff>《音灵INVAXION》Closing notice</color></b>\n\t\t  \n\n　　It's been a long wait, guardians of the sound.\n\t\t  \n　　Welcome to the<color=#ffa500ff>《音灵INVAXION》</color> world.".to_string(),
+            pic_id: 0,
+            tag: 1,
+        }],
+        pic_list: vec![],
+    })
 }
 
 #[rustfmt::skip]
@@ -118,8 +127,23 @@ pub async fn get_player_song_list(
 ) -> anyhow::Result<SongList> {
     // TODO: Populate this using data from the database.
 
+    let list = vec![
+        80031, 80008, 80011, 80012,
+        80010, 80034, 80007, 80015,
+        80013, 80009, 80014, 80019,
+        80020, 80018, 63122, 63123,
+        63204, 62005, 62006, 63103,
+        69008, 68008, 68108, 80002,
+        64005, 69018, 68002, 68001,
+        82005, 82006, 82007, 82011,
+        65102, 68106, 64003, 62021,
+        65036
+    ].iter()
+     .map(|id| SongData { song_id: *id })
+     .collect::<Vec<_>>();
+
     Ok(SongList {
-        list: Vec::with_capacity(0),
+        list,
         favorite_list: Vec::with_capacity(0),
     })
 }

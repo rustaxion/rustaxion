@@ -69,7 +69,6 @@ async fn process(
         eprintln!("-> {:?}::{:?}", packet.main_cmd, packet.para_cmd);
 
         let responses = server::handle(&mut session, db.clone(), packet).await?;
-        eprintln!("-- {:?}", session);
 
         for resp in responses {
             let packet = Into::<Packet>::into(resp);

@@ -8,10 +8,12 @@ use sea_orm::{ entity::*, error::*, query::*, DbConn, FromQueryResult };
 use crate::database::entities::{ player, prelude::* };
 
 use crate::database::helpers::get_character_full_data;
-use crate::proto::comet_scene::{ AnnouncementData, CharData, CharacterFullData, CharacterList };
 use crate::{
-    enums::comet::{ comet_gate::CometGate, MainCmd, ParaCmd },
-    proto::comet_gate::CreateCharacter,
+    enums::comet::{ comet_scene::CometScene, MainCmd, ParaCmd },
+    proto::{
+        comet_gate::CreateCharacter,
+        comet_scene::{ AnnouncementData, CharData, CharacterFullData, CharacterList },
+    },
     types::{ response::Response, session::SessionData },
 };
 
@@ -26,9 +28,9 @@ pub async fn handle(
         "Failed to decode CreateCharacter."
     )?;
 
-    let payload = player::ActiveModel {
+    Player::insert(player::ActiveModel {
         account_id: ActiveValue::Set(session.account_id.unwrap()),
-        character_id: ActiveValue::Set(session.account_id.unwrap() as i64),
+        character_id: ActiveValue::Set((session.account_id.unwrap() as i64) + 40000000000),
         head_id: ActiveValue::Set(req.select_char_id as i32),
         title_id: ActiveValue::Set(10001),
         name: ActiveValue::Set(req.name),
@@ -37,9 +39,8 @@ pub async fn handle(
         selected_character_id: ActiveValue::Set(req.select_char_id as i32),
         selected_theme_id: ActiveValue::Set(1),
         ..Default::default()
-    };
+    }).exec(&db).await?;
 
-    Player::insert(payload).exec(&db).await?;
     let mut full_data: CharacterFullData = get_character_full_data(
         session.account_id.unwrap(),
         &db
@@ -54,12 +55,10 @@ pub async fn handle(
         }],
     };
 
-    eprintln!("{:#?}", full_data);
-
     Ok(
         vec![Response {
             main_cmd: MainCmd::Game,
-            para_cmd: ParaCmd::CometGate(CometGate::NotifyGameTime),
+            para_cmd: ParaCmd::CometScene(CometScene::NotifyCharacterFullData),
             body: full_data.encode_to_vec(),
         }]
     )

@@ -1,4 +1,3 @@
-extern crate sea_orm_migration;
 pub use sea_orm_migration::prelude::*;
 
 mod m001_account;

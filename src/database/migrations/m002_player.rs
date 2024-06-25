@@ -1,7 +1,7 @@
 extern crate sea_orm_migration;
 use sea_orm_migration::prelude::*;
 
-use crate::m001_account::Account;
+use super::m001_account::Account;
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;
@@ -13,12 +13,17 @@ impl MigrationTrait for Migration {
             Table::create()
                 .table(Player::Table)
                 .if_not_exists()
-                .col(ColumnDef::new(Player::AccountId).integer())
-                .col(ColumnDef::new(Player::SessionId).big_integer().not_null())
-                .col(ColumnDef::new(Player::CharacterId).string_len(10).not_null())
+                .col(
+                    ColumnDef::new(Player::AccountId)
+                        .integer()
+                        .primary_key()
+                        .auto_increment()
+                        .not_null()
+                )
+                .col(ColumnDef::new(Player::CharacterId).big_integer().not_null())
                 .col(ColumnDef::new(Player::Name).string_len(50).not_null())
-                .col(ColumnDef::new(Player::Language).small_unsigned().not_null())
-                .col(ColumnDef::new(Player::Country).small_unsigned().not_null())
+                .col(ColumnDef::new(Player::Language).small_integer().not_null())
+                .col(ColumnDef::new(Player::Country).small_integer().not_null())
                 .col(ColumnDef::new(Player::SelectedCharacterId).integer().not_null())
                 .col(ColumnDef::new(Player::SelectedThemeId).integer().not_null())
                 .col(ColumnDef::new(Player::HeadId).integer().not_null())
@@ -58,7 +63,6 @@ impl MigrationTrait for Migration {
 pub enum Player {
     Table,
     AccountId,
-    SessionId,
     CharacterId,
     Name,
     Language,

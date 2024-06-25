@@ -1,24 +1,52 @@
+use std::env;
+
 use anyhow::Context;
 use prost::Message;
 
+use sea_orm::{ entity::*, error::*, query::*, DbConn, FromQueryResult };
+use crate::database::entities::{ account, prelude::* };
+
 use crate::{
-    enums::comet::{comet_login::CometLogin, MainCmd, ParaCmd},
+    enums::comet::{ comet_login::CometLogin, MainCmd, ParaCmd },
     proto::comet_login::{
-        GatewayServerData, ReqGameVersion, ReqThirdLogin, RetGameVersion, RetThirdLogin,
+        GatewayServerData,
+        ReqGameVersion,
+        ReqThirdLogin,
+        RetGameVersion,
+        RetThirdLogin,
     },
-    types::{response::Response, session::SessionData},
+    types::{ response::Response, session::SessionData },
 };
 
 #[rustfmt::skip]
 pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, buffer: Vec<u8>) -> anyhow::Result<Vec<Response>> {
     let req = ReqThirdLogin::decode(buffer.as_slice()).context("Failed to decode ReqThirdLogin.")?;
-    let token = format!("{:x}", md5::compute(req.open_id + "6031"));
+    let token = format!("{:x}", md5::compute(req.clone().open_id + "6031"));
+
+    let user = Account::find().filter(account::Column::Token.eq(&token)).one(&db).await?;
+    let mut acc_id = user.clone().map(|x| x.id);
+    if user.is_none() {
+        let insert = Account::insert(account::ActiveModel {
+            token: ActiveValue::Set(token.clone()),
+            steam_id: ActiveValue::Set(req.open_id),
+            ..Default::default()
+        }).exec(&db).await?;
+
+        acc_id = Some(insert.last_insert_id);
+    }
+
+    session.account_id = acc_id;
+    anyhow::ensure!(acc_id.is_some());
+    let acc_id = acc_id.unwrap();
+
+    let gate_ip = env::var("HOST").unwrap_or("127.0.0.1".to_string());
+    let gate_port: u32 = env::var("PORT").unwrap_or("6969".to_string()).parse()?;
 
     let ret = RetThirdLogin {
         data: GatewayServerData {
-            gate_ip: "127.0.0.1".to_string(),
-            gate_port: 6969,
-            acc_id: 10,
+            gate_ip,
+            gate_port,
+            acc_id,
             token,
         }
     };

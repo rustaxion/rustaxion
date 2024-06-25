@@ -1,13 +1,11 @@
-[workspace.package]
+[package]
+name = "rustaxion"
 version = "0.1.0"
 authors = ["ArjixWasTaken <me@arjix.dev>"]
 description = ""
 edition = "2021"
 
-[workspace]
-members = [".", "sql/entities", "sql/migrations"]
-
-[workspace.dependencies]
+[dependencies]
 sea-orm = { version = "0.12", features = [
     "sqlx-sqlite",
     "runtime-tokio-rustls",
@@ -28,9 +26,6 @@ tokio-util = { version = "0.7.11", features = ["full"] }
 futures-util = { version = "0.3.30", features = ["sink"] }
 tokio-test = "0.4.4"
 
-entities = { path = "sql/entities" }
-migrations = { path = "sql/migrations" }
-
 anyhow = { version = "1.0.86", features = ["std", "backtrace"] }
 thiserror = "1.0"
 color-backtrace = "0.6.1"
@@ -42,35 +37,6 @@ md5 = "0.7.0"
 
 indent = "0.1.1"
 dotenvy = "0.15.7"
-
-[package]
-name = "rustaxion"
-version.workspace = true
-authors.workspace = true
-description.workspace = true
-edition.workspace = true
-
-[dependencies]
-sea-orm.workspace = true
-entities.workspace = true
-migrations.workspace = true
-
-tracing.workspace = true
-tracing-subscriber.workspace = true
-tokio.workspace = true
-tokio-stream.workspace = true
-tokio-util.workspace = true
-futures-util.workspace = true
-tokio-test.workspace = true
-anyhow.workspace = true
-thiserror.workspace = true
-color-backtrace.workspace = true
-enum-repr-derive.workspace = true
-byteorder.workspace = true
-prost.workspace = true
-md5.workspace = true
-indent.workspace = true
-dotenvy.workspace = true
 lazy_static = "1.5.0"
 
 

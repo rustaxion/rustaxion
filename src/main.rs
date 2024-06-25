@@ -1,15 +1,5 @@
 #![allow(unused)]
 
-extern crate anyhow;
-extern crate dotenvy;
-extern crate tokio;
-extern crate prost;
-extern crate tokio_util;
-extern crate futures_util;
-extern crate sea_orm;
-extern crate entities;
-extern crate migrations;
-
 use anyhow::Context;
 use dotenvy::dotenv;
 use futures_util::{ future, StreamExt };
@@ -32,7 +22,6 @@ mod server;
 mod types;
 mod database;
 
-
 #[allow(non_snake_case)]
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> anyhow::Result<()> {
@@ -51,9 +40,12 @@ async fn main() -> anyhow::Result<()> {
     let server = TcpListener::bind(&addr).await?;
     println!("Listening on: tcp://{}", addr);
 
+    let mut last_session_id = 0;
+
     loop {
         let (stream, addr) = server.accept().await?;
         let db = db.clone();
+
         tokio::spawn(async move {
             if let Err(e) = process(stream, addr, db).await {
                 eprintln!("\nError: {}", indent::indent_by(4, format!("{:?}", e)));
@@ -70,17 +62,18 @@ async fn process(
     use futures_util::sink::SinkExt;
 
     let mut transport = Framed::new(stream, types::packet::PacketGlue);
-    let mut session = SessionData {};
+    let mut session = SessionData::new();
 
     while let Some(request) = transport.next().await {
         let packet = request.context("Failed to parse an incoming packet.")?;
-        eprintln!("Req {:?}", packet);
+        eprintln!("-> {:?}::{:?}", packet.main_cmd, packet.para_cmd);
 
         let responses = server::handle(&mut session, db.clone(), packet).await?;
+        eprintln!("-- {:?}", session);
 
         for resp in responses {
             let packet = Into::<Packet>::into(resp);
-            eprintln!("Resp {:?}", packet);
+            eprintln!("<- {:?}::{:?}", packet.main_cmd, packet.para_cmd);
             transport.send(packet).await?;
         }
     }

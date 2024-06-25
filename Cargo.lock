@@ -544,13 +544,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "entities"
-version = "0.1.0"
-dependencies = [
- "sea-orm",
-]
-
-[[package]]
 name = "enum-repr-derive"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1021,13 +1014,6 @@ name = "memchr"
 version = "2.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "78ca9ab1a0babb1e7d5695e3530886289c18cf2f87ec19a575a0abdce112e3a3"
-
-[[package]]
-name = "migrations"
-version = "0.1.0"
-dependencies = [
- "sea-orm-migration",
-]
 
 [[package]]
 name = "minimal-lexical"
@@ -1651,17 +1637,16 @@ dependencies = [
  "byteorder",
  "color-backtrace",
  "dotenvy",
- "entities",
  "enum-repr-derive",
  "futures-util",
  "indent",
  "lazy_static",
  "md5",
- "migrations",
  "prost",
  "prost-build",
  "protobuf-src",
  "sea-orm",
+ "sea-orm-migration",
  "thiserror",
  "tokio",
  "tokio-stream",

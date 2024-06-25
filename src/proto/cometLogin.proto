@@ -28,7 +28,7 @@ message GatewayServerData {
   required string gateIP = 1;
   required uint32 gatePort = 2;
   required string token = 3;
-  required uint32 accId = 4;
+  required int32 accId = 4;
 }
 
 message Req_RegAccount {

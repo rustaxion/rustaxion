@@ -18,6 +18,7 @@ use crate::proto::comet_scene::{
     SongData,
     SongList,
     TeamData,
+    ThemeData,
     ThemeList,
     TitleData,
 };
@@ -180,9 +181,7 @@ pub async fn get_player_theme_list(
 ) -> anyhow::Result<ThemeList> {
     // TODO: Populate this using data from the database.
 
-    Ok(ThemeList {
-        list: Vec::with_capacity(0),
-    })
+    Ok(ThemeList { list: vec![ThemeData { theme_id: 1 }] })
 }
 
 #[rustfmt::skip]

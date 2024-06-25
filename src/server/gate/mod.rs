@@ -7,6 +7,7 @@ use crate::{
 
 mod login_gate_verify;
 mod create_character;
+mod enter_game;
 
 #[rustfmt::skip]
 pub async fn handle(
@@ -30,7 +31,7 @@ pub async fn handle(
         CometGate::LoginGateVerify => login_gate_verify::handle(session, db, data).await,
         CometGate::SelectUserInfoList => todo!(),
         CometGate::CreateCharacter => create_character::handle(session, db, data).await,
-        CometGate::EnterGame => todo!(),
+        CometGate::EnterGame => enter_game::handle(session, db, data).await,
 
         // NOTE(arjix): When given a client-side param, what should we do?
         _ => unreachable!()

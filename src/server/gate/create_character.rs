@@ -8,6 +8,9 @@ use sea_orm::{ entity::*, error::*, query::*, DbConn, FromQueryResult };
 use crate::database::entities::{ player, prelude::* };
 
 use crate::database::helpers::get_character_full_data;
+use crate::enums::comet::comet_gate::CometGate;
+use crate::proto::comet_gate::{ SelectUserInfo, SelectUserInfoList };
+use crate::proto::comet_scene::{ ThemeData, ThemeList };
 use crate::{
     enums::comet::{ comet_scene::CometScene, MainCmd, ParaCmd },
     proto::{
@@ -27,6 +30,8 @@ pub async fn handle(
     let req = CreateCharacter::decode(buffer.as_slice()).context(
         "Failed to decode CreateCharacter."
     )?;
+
+    let mut responses = Vec::<Response>::with_capacity(2);
 
     Player::insert(player::ActiveModel {
         account_id: ActiveValue::Set(session.account_id.unwrap()),
@@ -55,11 +60,29 @@ pub async fn handle(
         }],
     };
 
-    Ok(
-        vec![Response {
-            main_cmd: MainCmd::Game,
-            para_cmd: ParaCmd::CometScene(CometScene::NotifyCharacterFullData),
-            body: full_data.encode_to_vec(),
-        }]
-    )
+    responses.push(Response {
+        main_cmd: MainCmd::Game,
+        para_cmd: ParaCmd::CometScene(CometScene::NotifyCharacterFullData),
+        body: full_data.encode_to_vec(),
+    });
+
+    let players = Player::find_by_id(full_data.base_info.acc_id).all(&db).await?;
+
+    let user_info = SelectUserInfoList {
+        user_list: players
+            .iter()
+            .map(|p| SelectUserInfo {
+                char_id: p.account_id as u64,
+                acc_states: 0,
+            })
+            .collect::<Vec<_>>(),
+    };
+
+    responses.push(Response {
+        main_cmd: MainCmd::Select,
+        para_cmd: ParaCmd::CometGate(CometGate::SelectUserInfoList),
+        body: user_info.encode_to_vec(),
+    });
+
+    Ok(responses)
 }

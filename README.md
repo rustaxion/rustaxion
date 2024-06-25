@@ -8,7 +8,7 @@ If you are looking for a working solution, try out my [server emulator](https://
 
 ## Technologies
 Here I list some of the crates I found useful
-- tokio's [runtime](https://github.com/tokio-rs/tokio) as well as its helpers to run a TCP nice server.
+- tokio's [runtime](https://github.com/tokio-rs/tokio) as well as its helpers to run a nice TCP server.
 - tokio's [prost](https://github.com/tokio-rs/prost) is used to encode/decode protobuf messages.
 - [enum-repr-derive](https://github.com/ssalonen/enum-repr-derive) to encode/decode enums outside of protobuf.
 - [anyhow](https://github.com/dtolnay/anyhow) to make error handling more convenient

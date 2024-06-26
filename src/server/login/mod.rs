@@ -1,8 +1,7 @@
 use crate::{
-    enums::comet::{comet_login::CometLogin, MainCmd, ParaCmd},
-    types::{packet::Packet, response::Response, session::SessionData},
+    enums::comet::{ comet_login::CometLogin, MainCmd, ParaCmd },
+    types::{ packet::Packet, response::Response, session::SessionData },
 };
-use tokio::sync::Mutex;
 
 mod game_version;
 mod third_party_login;

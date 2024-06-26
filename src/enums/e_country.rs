@@ -1,3 +1,4 @@
+#[allow(unused)]
 pub enum ECountry {
     Null = 0,
     China = 1,

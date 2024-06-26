@@ -1,12 +1,11 @@
-use std::io::{BufRead, Cursor, Read, Write};
+use std::io::{ Cursor, Read, Write };
 use thiserror::Error;
-use std::mem::size_of;
 
 use anyhow::Context;
-use tokio_util::bytes::{Buf, BufMut, BytesMut};
-use tokio_util::codec::{Decoder, Encoder};
+use tokio_util::bytes::{ Buf, BufMut, BytesMut };
+use tokio_util::codec::{ Decoder, Encoder };
 
-use crate::enums::comet::{MainCmd, ParaCmd};
+use crate::enums::comet::{ MainCmd, ParaCmd };
 
 pub struct PacketGlue;
 
@@ -20,8 +19,8 @@ pub struct Packet {
 }
 
 pub const PACKET_HEADER_SIZE: usize =
-    /* main_cmd */ std::mem::size_of::<i8>() + 
-    /* para_cmd */ std::mem::size_of::<u8>() + 
+    /* main_cmd */ std::mem::size_of::<i8>() +
+    /* para_cmd */ std::mem::size_of::<u8>() +
     /* data_len */ std::mem::size_of::<u16>();
 
 #[derive(Error, Debug)]
@@ -32,10 +31,13 @@ pub enum PacketDecodeError {
 
 impl Packet {
     pub fn encode(&self) -> anyhow::Result<Vec<u8>> {
-        use byteorder::{LittleEndian, BigEndian, WriteBytesExt};
+        use byteorder::{ LittleEndian, WriteBytesExt };
 
-        anyhow::ensure!(self.pkg_len >= PACKET_HEADER_SIZE as i32, "Can't encode a partial packet.");
-        let mut writer = Vec::with_capacity(self.pkg_len as usize + std::mem::size_of::<i32>());
+        anyhow::ensure!(
+            self.pkg_len >= (PACKET_HEADER_SIZE as i32),
+            "Can't encode a partial packet."
+        );
+        let mut writer = Vec::with_capacity((self.pkg_len as usize) + std::mem::size_of::<i32>());
 
         writer.write_i32::<LittleEndian>(self.pkg_len)?;
         writer.write_u8(i8::from(self.main_cmd.clone()) as u8)?;
@@ -47,11 +49,10 @@ impl Packet {
     }
 
     pub fn decode(buffer: &mut BytesMut) -> anyhow::Result<Self> {
-        use byteorder::{LittleEndian, BigEndian, ReadBytesExt};
+        use byteorder::{ LittleEndian, ReadBytesExt };
 
         let mut cursor = buffer.reader();
 
-        let rest1 = cursor.get_ref().len();
         let pkg_len = cursor.read_i32::<LittleEndian>().unwrap_or(0);
         if pkg_len == 0 {
             return Err(PacketDecodeError::NoDataToRead.into());
@@ -62,8 +63,12 @@ impl Packet {
 
         let mut cursor = Cursor::new(pkg);
 
-        let Ok(main_cmd) = MainCmd::try_from(cursor.read_i8()?) else { anyhow::bail!("Invalid main_cmd.") };
-        let Ok(para_cmd) = ParaCmd::from_value(&main_cmd, cursor.read_u8()?) else { anyhow::bail!("Invalid para_cmd.") };
+        let Ok(main_cmd) = MainCmd::try_from(cursor.read_i8()?) else {
+            anyhow::bail!("Invalid main_cmd.")
+        };
+        let Ok(para_cmd) = ParaCmd::from_value(&main_cmd, cursor.read_u8()?) else {
+            anyhow::bail!("Invalid para_cmd.")
+        };
 
         let data_len = cursor.read_u16::<LittleEndian>()?;
         let mut data = vec![0u8; data_len as usize];
@@ -77,7 +82,7 @@ impl Packet {
             main_cmd,
             para_cmd,
             data_len,
-            data
+            data,
         })
     }
 }
@@ -86,7 +91,7 @@ impl Encoder<Packet> for PacketGlue {
     type Error = anyhow::Error;
 
     fn encode(&mut self, item: Packet, dst: &mut BytesMut) -> anyhow::Result<()> {
-        dst.writer().write(item.encode()?.as_slice());
+        let _ = dst.writer().write(item.encode()?.as_slice());
 
         Ok(())
     }
@@ -114,9 +119,9 @@ impl Decoder for PacketGlue {
                     match io_error.kind() {
                         _ => {}
                     }
-                },
+                }
                 _ => {}
-            };
+            }
 
             return Err(error);
         }

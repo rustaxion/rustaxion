@@ -68,12 +68,12 @@ pub async fn get_player_currency_info(
     })
 }
 
-pub async fn get_announcements(db: &DatabaseConnection) -> anyhow::Result<AnnouncementData> {
+pub async fn get_announcements(_db: &DatabaseConnection) -> anyhow::Result<AnnouncementData> {
     // TODO: Populate this using data from the database.
     Ok(AnnouncementData {
         list: vec![AnnouncementOneData {
             title: "Operation Announcement".to_string(),
-            content: "<b><color=#ffa500ff>《音灵INVAXION》Closing notice</color></b>\n\t\t  \n\n　　It's been a long wait, guardians of the sound.\n\t\t  \n　　Welcome to the<color=#ffa500ff>《音灵INVAXION》</color> world.".to_string(),
+            content: "<b><color=#ffa500ff>《音灵INVAXION》Closing notice</color></b>\n\t\t  \n\nIt's been a long wait, guardians of the sound.\n\t\t  \nWelcome to the<color=#ffa500ff>《音灵INVAXION》</color> world.".to_string(),
             pic_id: 0,
             tag: 1,
         }],

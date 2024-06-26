@@ -1,5 +1,3 @@
-use std::time::SystemTime;
-
 use anyhow::Context;
 use prost::Message;
 

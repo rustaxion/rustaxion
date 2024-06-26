@@ -3,18 +3,12 @@ use std::env;
 use anyhow::Context;
 use prost::Message;
 
-use sea_orm::{ entity::*, error::*, query::*, DbConn, FromQueryResult };
+use sea_orm::{ entity::*, query::* };
 use crate::database::entities::{ account, prelude::* };
 
 use crate::{
     enums::comet::{ comet_login::CometLogin, MainCmd, ParaCmd },
-    proto::comet_login::{
-        GatewayServerData,
-        ReqGameVersion,
-        ReqThirdLogin,
-        RetGameVersion,
-        RetThirdLogin,
-    },
+    proto::comet_login::{ GatewayServerData, ReqThirdLogin, RetThirdLogin },
     types::{ response::Response, session::SessionData },
 };
 

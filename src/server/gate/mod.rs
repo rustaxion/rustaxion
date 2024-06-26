@@ -1,5 +1,3 @@
-use tokio::sync::Mutex;
-
 use crate::{
     enums::comet::{ comet_gate::CometGate, MainCmd, ParaCmd },
     types::{ packet::Packet, response::Response, session::SessionData },

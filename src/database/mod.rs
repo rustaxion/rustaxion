@@ -1,6 +1,4 @@
-use std::{ env, sync::Arc };
-
-use dotenvy::dotenv;
+use std::env;
 use sea_orm::{ ConnectOptions, Database, DatabaseConnection };
 
 pub mod entities;

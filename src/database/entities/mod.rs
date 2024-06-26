@@ -4,3 +4,4 @@ pub mod prelude;
 
 pub mod account;
 pub mod player;
+pub mod shop_item;

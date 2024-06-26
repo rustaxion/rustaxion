@@ -4,6 +4,7 @@ use crate::{
 };
 
 mod change_language;
+mod shop;
 
 #[rustfmt::skip]
 pub async fn handle(
@@ -43,7 +44,7 @@ pub async fn handle(
         CometScene::RequestChangeHeadIcon => todo!(),
         CometScene::RequestChangeCharacter => todo!(),
         CometScene::RequestChangeTheme => todo!(),
-        CometScene::RequestShopInfo => todo!(),
+        CometScene::RequestShopInfo => shop::shop_info::handle(session, db, data).await,
         CometScene::RequestShopBuy => todo!(),
         CometScene::RequestPieceExchange => todo!(),
         CometScene::RequestBattleFieldInfo => todo!(),

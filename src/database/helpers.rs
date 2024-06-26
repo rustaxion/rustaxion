@@ -9,11 +9,11 @@ use crate::proto::comet_scene::{
     CharacterFullData,
     CharacterList,
     DifficultyList,
-    NotifyCharacterFullData,
     PlayerBaseInfo,
     PlayerCurrencyInfo,
     PlayerVipInfo,
     ScoreList,
+    ShopItemInfo,
     SocialData,
     SongData,
     SongList,
@@ -22,6 +22,8 @@ use crate::proto::comet_scene::{
     ThemeList,
     TitleData,
 };
+
+use super::entities::shop_item;
 
 #[rustfmt::skip]
 pub async fn get_player_base_info(
@@ -282,4 +284,19 @@ pub async fn get_character_full_data(
         title_list,
         team,
     })
+}
+
+impl shop_item::Model {
+    pub fn into_proto(&self) -> ShopItemInfo {
+        ShopItemInfo {
+            id: self.item_id,
+            cost_type: self.cost_type,
+            normal_price: self.normal_price,
+            discount_price: self.discount_price,
+            order: self.order,
+            begin_sale_time: self.begin_sale_time as u64,
+            discount_begin_time: self.discount_begin_time as u64,
+            discount_end_time: self.discount_end_time as u64,
+        }
+    }
 }

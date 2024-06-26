@@ -2,3 +2,4 @@
 
 pub use super::account::Entity as Account;
 pub use super::player::Entity as Player;
+pub use super::shop_item::Entity as ShopItem;

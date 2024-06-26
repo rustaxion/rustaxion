@@ -1,19 +1,10 @@
-#![allow(unused)]
-
 use anyhow::Context;
-use dotenvy::dotenv;
-use futures_util::{ future, StreamExt };
-use prost::bytes::BytesMut;
-use sea_orm::{ ConnectOptions, Database, DatabaseConnection };
-use std::collections::VecDeque;
-use std::error::Error;
+use futures_util::StreamExt;
+use sea_orm::DatabaseConnection;
+use std::env;
 use std::net::SocketAddr;
-use std::panic;
-use std::{ backtrace::Backtrace, env };
-use tokio::io::AsyncWriteExt;
-use tokio::{ net::{ TcpListener, TcpStream }, task::futures };
-use tokio_util::codec::{ Decoder, Encoder, Framed };
-use types::packet::PacketDecodeError;
+use tokio::net::{ TcpListener, TcpStream };
+use tokio_util::codec::Framed;
 use types::{ packet::Packet, session::SessionData };
 
 mod enums;
@@ -40,8 +31,6 @@ async fn main() -> anyhow::Result<()> {
     let server = TcpListener::bind(&addr).await?;
     println!("Listening on: tcp://{}", addr);
 
-    let mut last_session_id = 0;
-
     loop {
         let (stream, addr) = server.accept().await?;
         let db = db.clone();
@@ -56,7 +45,7 @@ async fn main() -> anyhow::Result<()> {
 
 async fn process(
     stream: TcpStream,
-    addr: SocketAddr,
+    _addr: SocketAddr,
     db: DatabaseConnection
 ) -> anyhow::Result<()> {
     use futures_util::sink::SinkExt;

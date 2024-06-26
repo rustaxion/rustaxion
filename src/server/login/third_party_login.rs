@@ -35,9 +35,9 @@ pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, 
         acc_id = Some(insert.last_insert_id);
     }
 
-    session.account_id = acc_id;
     anyhow::ensure!(acc_id.is_some());
     let acc_id = acc_id.unwrap();
+    session.account_id = Some(acc_id as i64);
 
     let gate_ip = env::var("HOST").unwrap_or("127.0.0.1".to_string());
     let gate_port: u32 = env::var("PORT").unwrap_or("6969".to_string()).parse()?;

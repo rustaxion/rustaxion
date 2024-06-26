@@ -5,6 +5,7 @@ use crate::{
 
 mod change_language;
 mod shop;
+mod event;
 
 #[rustfmt::skip]
 pub async fn handle(
@@ -75,7 +76,7 @@ pub async fn handle(
         CometScene::RequestArcadeInfo => todo!(),
         CometScene::RequestArcadeFinish => todo!(),
         CometScene::RequestChangeTitle => todo!(),
-        CometScene::RequestEventInfo => todo!(),
+        CometScene::RequestEventInfo => event::event_info::handle(session, db, data).await,
         CometScene::RequestEventLevelGift => todo!(),
         CometScene::RequestEventStamina => todo!(),
         CometScene::RequestEventNewPlayer => todo!(),

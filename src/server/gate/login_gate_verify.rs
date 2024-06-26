@@ -1,10 +1,9 @@
 use std::time::SystemTime;
 
-use tokio::sync::Mutex;
 use anyhow::Context;
 use prost::Message;
 
-use sea_orm::{ entity::*, error::*, query::*, DbConn, FromQueryResult };
+use sea_orm::entity::*;
 use crate::database::entities::prelude::*;
 
 use crate::{
@@ -18,15 +17,15 @@ pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, 
     let req = LoginGateVerify::decode(buffer.as_slice()).context("Failed to decode LoginGateVerify.")?;
     let mut responses = Vec::<Response>::with_capacity(2);
 
-    let now = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH)?;
+    let now = chrono::Utc::now().timestamp();
     responses.push(Response {
         main_cmd: MainCmd::Time,
         para_cmd: ParaCmd::CometGate(CometGate::NotifyGameTime),
-        body: NotifyGameTime { gametime: u32::try_from(now.as_secs())? }.encode_to_vec()
+        body: NotifyGameTime { gametime: now as i32 }.encode_to_vec()
     });
 
-    let user = Account::find_by_id(req.acc_id as i32).one(&db).await?;
-    session.account_id = user.clone().map(|x| x.id);
+    let user = Account::find_by_id(req.acc_id).one(&db).await?;
+    session.account_id = user.clone().map(|x| x.id as i64);
     anyhow::ensure!(user.is_some());
 
     let user = user.unwrap();
@@ -36,7 +35,7 @@ pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, 
         user_list: players
             .iter()
             .map(|p| SelectUserInfo {
-                char_id: p.account_id as u64,
+                char_id: p.account_id as i64,
                 acc_states: 0
             })
             .collect::<Vec<_>>()

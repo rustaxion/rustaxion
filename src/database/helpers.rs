@@ -1,39 +1,17 @@
-use sea_orm::{ entity::*, error::*, query::*, DatabaseConnection, DbConn, FromQueryResult };
-use crate::database::entities::{ player, prelude::* };
+use sea_orm::{ entity::*, DatabaseConnection };
 
-use crate::proto::comet_scene::{
-    AnnouncementData,
-    AnnouncementOneData,
-    ArcadeData,
-    ArcadeDiffList,
-    CharacterFullData,
-    CharacterList,
-    DifficultyList,
-    PlayerBaseInfo,
-    PlayerCurrencyInfo,
-    PlayerVipInfo,
-    ScoreList,
-    ShopItemInfo,
-    SocialData,
-    SongData,
-    SongList,
-    TeamData,
-    ThemeData,
-    ThemeList,
-    TitleData,
-};
-
-use super::entities::shop_item;
+use crate::{ proto::comet_scene::*, database::entities::{ player, shop_item, prelude::* } };
 
 #[rustfmt::skip]
 pub async fn get_player_base_info(
-    account_id: i32,
+    player_id: i64,
     db: &DatabaseConnection
 ) -> anyhow::Result<PlayerBaseInfo> {
-    let player = Player::find_by_id(account_id).one(db).await?;
+    let player = Player::find_by_id(player_id as i32).one(db).await?;
 
     let player::Model {
         name,
+        account_id,
         character_id,
         head_id,
         level,
@@ -50,8 +28,8 @@ pub async fn get_player_base_info(
     } = player.unwrap();
 
     Ok(PlayerBaseInfo {
-        acc_id: account_id,
-        char_id: character_id,
+        acc_id: account_id as i32,
+        char_id: character_id as i64,
         char_name: name,
         head_id,
         level,
@@ -77,8 +55,8 @@ pub async fn get_player_base_info(
 
 #[rustfmt::skip]
 pub async fn get_player_currency_info(
-    account_id: i32,
-    db: &DatabaseConnection
+    _player_id: i64,
+    _db: &DatabaseConnection
 ) -> anyhow::Result<PlayerCurrencyInfo> {
     // TODO: Populate this using data from the database.
     Ok(PlayerCurrencyInfo {
@@ -105,8 +83,8 @@ pub async fn get_announcements(db: &DatabaseConnection) -> anyhow::Result<Announ
 
 #[rustfmt::skip]
 pub async fn get_player_score_list(
-    account_id: i32,
-    db: &DatabaseConnection
+    _player_id: i64,
+    _db: &DatabaseConnection
 ) -> anyhow::Result<ScoreList> {
     // TODO: Populate this using data from the database.
 
@@ -125,8 +103,8 @@ pub async fn get_player_score_list(
 
 #[rustfmt::skip]
 pub async fn get_player_song_list(
-    account_id: i32,
-    db: &DatabaseConnection
+    _account_id: i64,
+    _db: &DatabaseConnection
 ) -> anyhow::Result<SongList> {
     // TODO: Populate this using data from the database.
 
@@ -153,8 +131,8 @@ pub async fn get_player_song_list(
 
 #[rustfmt::skip]
 pub async fn get_player_char_list(
-    account_id: i32,
-    db: &DatabaseConnection
+    _account_id: i64,
+    _db: &DatabaseConnection
 ) -> anyhow::Result<CharacterList> {
     // TODO: Populate this using data from the database.
 
@@ -165,8 +143,8 @@ pub async fn get_player_char_list(
 
 #[rustfmt::skip]
 pub async fn get_player_social_data(
-    account_id: i32,
-    db: &DatabaseConnection
+    _player_id: i64,
+    _db: &DatabaseConnection
 ) -> anyhow::Result<SocialData> {
     // TODO: Populate this using data from the database.
 
@@ -178,8 +156,8 @@ pub async fn get_player_social_data(
 
 #[rustfmt::skip]
 pub async fn get_player_theme_list(
-    account_id: i32,
-    db: &DatabaseConnection
+    _player_id: i64,
+    _db: &DatabaseConnection
 ) -> anyhow::Result<ThemeList> {
     // TODO: Populate this using data from the database.
 
@@ -188,8 +166,8 @@ pub async fn get_player_theme_list(
 
 #[rustfmt::skip]
 pub async fn get_player_vip_info(
-    account_id: i32,
-    db: &DatabaseConnection
+    _player_id: i64,
+    _db: &DatabaseConnection
 ) -> anyhow::Result<PlayerVipInfo> {
     // TODO: Populate this using data from the database.
 
@@ -203,8 +181,8 @@ pub async fn get_player_vip_info(
 
 #[rustfmt::skip]
 pub async fn get_player_arcade_data(
-    account_id: i32,
-    db: &DatabaseConnection
+    _player_id: i64,
+    _db: &DatabaseConnection
 ) -> anyhow::Result<ArcadeData> {
     // TODO: Populate this using data from the database.
 
@@ -222,8 +200,8 @@ pub async fn get_player_arcade_data(
 
 #[rustfmt::skip]
 pub async fn get_player_title_data(
-    account_id: i32,
-    db: &DatabaseConnection
+    _player_id: i64,
+    _db: &DatabaseConnection
 ) -> anyhow::Result<TitleData> {
     // TODO: Populate this using data from the database.
 
@@ -234,8 +212,8 @@ pub async fn get_player_title_data(
 
 #[rustfmt::skip]
 pub async fn get_player_team(
-    account_id: i32,
-    db: &DatabaseConnection
+    _player_id: i64,
+    _db: &DatabaseConnection
 ) -> anyhow::Result<TeamData> {
     // TODO: Populate this using data from the database.
 
@@ -250,23 +228,23 @@ pub async fn get_player_team(
 
 #[rustfmt::skip]
 pub async fn get_character_full_data(
-    account_id: i32,
+    player_id: i64,
     db: &DatabaseConnection
 ) -> anyhow::Result<CharacterFullData> {
     let announcement = get_announcements(db).await?;
-    let base_info = get_player_base_info(account_id, db).await?;
-    let currency_info = get_player_currency_info(account_id, db).await?;
-    let score_list = get_player_score_list(account_id, db).await?;
-    let song_list = get_player_song_list(account_id, db).await?;
-    let char_list = get_player_char_list(account_id, db).await?;
-    let social_data = get_player_social_data(account_id, db).await?;
+    let base_info = get_player_base_info(player_id, db).await?;
+    let currency_info = get_player_currency_info(player_id, db).await?;
+    let score_list = get_player_score_list(player_id, db).await?;
+    let song_list = get_player_song_list(player_id, db).await?;
+    let char_list = get_player_char_list(player_id, db).await?;
+    let social_data = get_player_social_data(player_id, db).await?;
     let item_list = Vec::with_capacity(0);
-    let theme_list = get_player_theme_list(account_id, db).await?;
-    let vip_info = get_player_vip_info(account_id, db).await?;
+    let theme_list = get_player_theme_list(player_id, db).await?;
+    let vip_info = get_player_vip_info(player_id, db).await?;
     let experience_list = Vec::with_capacity(0);
-    let arcade_data = get_player_arcade_data(account_id, db).await?;
-    let title_list = get_player_title_data(account_id, db).await?;
-    let team = get_player_team(account_id, db).await?;
+    let arcade_data = get_player_arcade_data(player_id, db).await?;
+    let title_list = get_player_title_data(player_id, db).await?;
+    let team = get_player_team(player_id, db).await?;
 
     Ok(CharacterFullData {
         base_info,

@@ -1,21 +1,18 @@
-use std::time::SystemTime;
-
-use tokio::sync::Mutex;
 use anyhow::Context;
 use prost::Message;
 
-use sea_orm::{ entity::*, error::*, query::*, DbConn, FromQueryResult };
+use sea_orm::entity::*;
 use crate::database::entities::{ player, prelude::* };
 
 use crate::database::helpers::get_character_full_data;
 use crate::enums::comet::comet_gate::CometGate;
 use crate::proto::comet_gate::{ SelectUserInfo, SelectUserInfoList };
-use crate::proto::comet_scene::{ NotifyCharacterFullData, ThemeData, ThemeList };
+use crate::proto::comet_scene::NotifyCharacterFullData;
 use crate::{
     enums::comet::{ comet_scene::CometScene, MainCmd, ParaCmd },
     proto::{
         comet_gate::CreateCharacter,
-        comet_scene::{ AnnouncementData, CharData, CharacterFullData, CharacterList },
+        comet_scene::{ CharData, CharacterFullData, CharacterList },
     },
     types::{ response::Response, session::SessionData },
 };
@@ -27,22 +24,19 @@ pub async fn handle(
 ) -> anyhow::Result<Vec<Response>> {
     anyhow::ensure!(session.account_id.is_some());
 
-    let req = CreateCharacter::decode(buffer.as_slice()).context(
-        "Failed to decode CreateCharacter."
-    )?;
+    // prettier-ignore
+    let req = CreateCharacter::decode(buffer.as_slice()).context("Failed to decode CreateCharacter.")?;
 
     let mut responses = Vec::<Response>::with_capacity(2);
-
     Player::insert(player::ActiveModel {
-        account_id: ActiveValue::Set(session.account_id.unwrap()),
-        character_id: ActiveValue::Set((session.account_id.unwrap() as i64) + 40000000000),
-        head_id: ActiveValue::Set(req.select_char_id as i32),
-        title_id: ActiveValue::Set(10001),
-        name: ActiveValue::Set(req.name),
-        language: ActiveValue::Set(req.language as i32),
-        country: ActiveValue::Set(req.country as i32),
-        selected_character_id: ActiveValue::Set(req.select_char_id as i32),
-        selected_theme_id: ActiveValue::Set(1),
+        account_id: Set(session.account_id.unwrap()),
+        head_id: Set(req.select_char_id as i32),
+        title_id: Set(10001),
+        name: Set(req.name),
+        language: Set(req.language as i32),
+        country: Set(req.country as i32),
+        selected_character_id: Set(req.select_char_id as i32),
+        selected_theme_id: Set(1),
         ..Default::default()
     }).exec(&db).await?;
 
@@ -72,7 +66,7 @@ pub async fn handle(
         user_list: players
             .iter()
             .map(|p| SelectUserInfo {
-                char_id: p.account_id as u64,
+                char_id: p.account_id as i64,
                 acc_states: 0,
             })
             .collect::<Vec<_>>(),

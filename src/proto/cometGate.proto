@@ -2,7 +2,7 @@ syntax = "proto2";
 package cometGate;
 
 message Notify_GameTime {
-    required uint32 gametime = 1;
+    required int32 gametime = 1;
 }
 
 message Req_UserGameTime {
@@ -18,16 +18,16 @@ message LoginGateError {
 }
 
 message LoginGateVerify {
-    required uint32 accId = 1;
+    required int32 accId = 1;
     required string token = 2;
-    required uint32 zoneId = 3;
+    required int32 zoneId = 3;
     optional string version = 4 [default=""];
     optional string device = 5 [default=""];
 }
 
 message SelectUserInfo {
-    required uint64 charId = 1;
-    required uint32 accStates = 2;
+    required int64 charId = 1;
+    required int32 accStates = 2;
 }
 
 message SelectUserInfoList {
@@ -42,6 +42,6 @@ message CreateCharacter {
 }
 
 message EnterGame {
-    required uint64 charId = 1;
+    required int64 charId = 1;
     required string deviceInfo = 2;
 }

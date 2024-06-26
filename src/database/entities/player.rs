@@ -6,8 +6,8 @@ use sea_orm::entity::prelude::*;
 #[sea_orm(table_name = "player")]
 pub struct Model {
     #[sea_orm(primary_key)]
-    pub account_id: i32,
-    pub character_id: i64,
+    pub character_id: i32,
+    pub account_id: i64,
     pub name: String,
     pub language: i32,
     pub country: i32,
@@ -41,11 +41,19 @@ pub enum Relation {
         on_delete = "Cascade"
     )]
     Account,
+    #[sea_orm(has_many = "super::daily_login::Entity")]
+    DailyLogin,
 }
 
 impl Related<super::account::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::Account.def()
+    }
+}
+
+impl Related<super::daily_login::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::DailyLogin.def()
     }
 }
 

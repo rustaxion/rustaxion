@@ -38,6 +38,7 @@ md5 = "0.7.0"
 indent = "0.1.1"
 dotenvy = "0.15.7"
 lazy_static = "1.5.0"
+chrono = "0.4.38"
 
 
 [build-dependencies]

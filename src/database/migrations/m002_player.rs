@@ -1,6 +1,4 @@
-extern crate sea_orm_migration;
 use sea_orm_migration::prelude::*;
-
 use super::m001_account::Account;
 
 #[derive(DeriveMigrationName)]
@@ -14,13 +12,13 @@ impl MigrationTrait for Migration {
                 .table(Player::Table)
                 .if_not_exists()
                 .col(
-                    ColumnDef::new(Player::AccountId)
-                        .integer()
+                    ColumnDef::new(Player::CharacterId)
+                        .big_integer()
                         .primary_key()
                         .auto_increment()
                         .not_null()
                 )
-                .col(ColumnDef::new(Player::CharacterId).big_integer().not_null())
+                .col(ColumnDef::new(Player::AccountId).integer().not_null())
                 .col(ColumnDef::new(Player::Name).string_len(50).not_null())
                 .col(ColumnDef::new(Player::Language).small_integer().not_null())
                 .col(ColumnDef::new(Player::Country).small_integer().not_null())
@@ -62,8 +60,8 @@ impl MigrationTrait for Migration {
 #[derive(DeriveIden)]
 pub enum Player {
     Table,
-    AccountId,
     CharacterId,
+    AccountId,
     Name,
     Language,
     Country,

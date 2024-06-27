@@ -25,6 +25,8 @@ pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, 
         daily_login::Column::PlayerId.eq(session.player_id.unwrap() as i32)
     ).one(&db).await?.ok_or(anyhow::anyhow!("Expected a daily login to already exit."))?;
 
+    // TODO(arjix): Once a web-ui is made, make this more customizable.
+
     let ret = RetEventInfo {
         level_gift: LevelGiftData { get_list: vec![5, 2] },
         get_stamina: GetStaminaData { is_get: 0 },

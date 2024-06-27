@@ -11,6 +11,9 @@ use crate::{
 #[rustfmt::skip]
 pub async fn handle(_session: &mut SessionData, db: sea_orm::DatabaseConnection, _body: Vec<u8>) -> anyhow::Result<Vec<Response>> {
     let shop_items = ShopItem::find().all(&db).await?;
+
+    // TODO(arjix): Once a web-ui is made, make this more customizable.
+
     let ret = RetShopInfo {
         character_list: shop_items.iter().filter_map(|item| {
             match item.item_type.as_ref().map(|x| x.as_str()) {

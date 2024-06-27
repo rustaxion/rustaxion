@@ -6,6 +6,8 @@ use crate::{
 mod change_language;
 mod shop;
 mod event;
+mod song;
+mod rank_info;
 
 #[rustfmt::skip]
 pub async fn handle(
@@ -24,10 +26,10 @@ pub async fn handle(
     };
 
     match para_cmd {
-        CometScene::RequestBeginSong => todo!(),
-        CometScene::RequestFinishSong => todo!(),
+        CometScene::RequestBeginSong => song::begin_song::handle(session, db, data).await,
+        CometScene::RequestFinishSong => song::finish_song::handle(session, db, data).await,
         CometScene::RequestSingleSongRank => todo!(),
-        CometScene::RequestRankInfo => todo!(),
+        CometScene::RequestRankInfo => rank_info::handle(session, db, data).await,
         CometScene::RequestSetFavorite => todo!(),
         CometScene::RequestBackstageGame => todo!(),
         CometScene::RequestActivityInfo => todo!(),

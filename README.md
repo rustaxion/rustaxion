@@ -36,17 +36,17 @@ If you are looking for a working solution, try out my [server emulator](https://
 | CometGate::RequestUserGameTime | ❌ |
 | CometGate::SelectUserInfoList | ❌ |
 
-### Comet::Scene (3% done)
+### Comet::Scene (7% done)
 
 | Method | Implemented |
 | --------- | ------- |
+| CometScene::RequestBeginSong | ✅ |
+| CometScene::RequestFinishSong | ✅ |
+| CometScene::RequestRankInfo | ✅ |
 | CometScene::RequestShopInfo | ✅ |
 | CometScene::RequestChangeLanguage | ✅ |
 | CometScene::RequestEventInfo | ✅ |
-| CometScene::RequestBeginSong | ❌ |
-| CometScene::RequestFinishSong | ❌ |
 | CometScene::RequestSingleSongRank | ❌ |
-| CometScene::RequestRankInfo | ❌ |
 | CometScene::RequestSetFavorite | ❌ |
 | CometScene::RequestBackstageGame | ❌ |
 | CometScene::RequestActivityInfo | ❌ |

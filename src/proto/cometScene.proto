@@ -1,6 +1,21 @@
 syntax = "proto2";
 package cometScene;
 
+enum RankTopType {
+    rtp_Duanwei = 0;
+    rtp_Rank4 = 1;
+    rtp_Rank6 = 2;
+    rtp_Normal = 3;
+    rtp_Total = 4;
+    rtp_Total4K = 5;
+    rtp_Total6K = 6;
+    rtp_Total8K = 7;
+    rtp_Arcade = 8;
+    rtp_Level = 9;
+    rtp_Bf = 10;
+    rtp_Active = 11;
+}
+
 message Ret_FinishSong {
   required SingleSongInfo songInfo = 1;
   optional SettleData settleData = 2;
@@ -743,12 +758,12 @@ message Ret_SingleSongRank {
 }
 
 message Req_RankInfo {
-  required int32 type = 1;
+  required RankTopType type = 1;
 }
 
 message Ret_RankInfo {
   repeated TotalSongRankData list = 1;
-  required int32 type = 2;
+  required RankTopType type = 2;
 }
 
 message Req_SetFavorite {

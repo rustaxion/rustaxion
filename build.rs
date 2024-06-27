@@ -101,7 +101,6 @@ fn progress_to_tables(progress: Vec<(Comet, Vec<Vec<String>>)>) -> String {
         );
     }
 
-    tables.write_str("</tbody></table>");
     tables
 }
 
@@ -129,16 +128,12 @@ fn add_progress_to_readme() -> anyhow::Result<()> {
     let gate = get_progress_for(Comet::Gate)?;
     let scene = get_progress_for(Comet::Scene)?;
 
-    readme.write(
-        (
-            prefix.to_owned() +
-            "<!-- progress-start -->\n" +
-            "## Progress\n\n" +
-            &progress_to_tables(vec![login, gate, scene]) +
-            "\n<!-- progress-end -->" +
-            suffix
-        ).as_bytes()
-    )?;
+    readme.write(prefix.to_string().as_bytes());
+    readme.write(b"<!-- progress-start -->\n");
+    readme.write(b"## Progress\n\n");
+    readme.write(progress_to_tables(vec![login, gate, scene]).as_bytes());
+    readme.write(b"\n<!-- progress-end -->\n");
+    readme.write(suffix.as_bytes());
 
     Ok(())
 }

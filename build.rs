@@ -49,19 +49,8 @@ fn get_progress_for(comet: Comet) -> anyhow::Result<(Comet, Vec<Vec<String>>)> {
 }
 
 #[rustfmt::skip]
-fn progress_to_table(progress: Vec<(Comet, Vec<Vec<String>>)>) -> String {
-    let mut table = String::new();
-    table.write_str(
-        indoc! {"
-            <table>
-                <thead>
-                    <th>Comet</th>
-                    <th>Completion</th>
-                    <th></th>
-                </thead>
-                <tbody>
-        "}
-    );
+fn progress_to_tables(progress: Vec<(Comet, Vec<Vec<String>>)>) -> String {
+    let mut tables = String::new();
 
     for comet in progress {
         let (comet, row) = comet;
@@ -72,28 +61,27 @@ fn progress_to_table(progress: Vec<(Comet, Vec<Vec<String>>)>) -> String {
 
         let mut row_table = String::new();
         row_table.write_str(
-            indoc! {"<table>
-                <tbody>
+            indoc! {"
+                | Method | Implemented |
+                | --------- | ------- |
             "}
         );
 
         for method in &row {
             row_table.write_str(&format!(
-                "<tr><td>{} <ul><li>- [{}]</li></ul></td></tr>",
+                "| {} | [{}] |\n",
                 method[0],
                 if method[1] == "todo!()" { " " } else { "x" }
             ));
         }
 
-        row_table.write_str("</tbody></table>");
-        table.write_str(
+        row_table.write_str("\n\n");
+        tables.write_str(
             &format!(
                 indoc! {"
-                    <tr>
-                        <td>{:?}</td>
-                        <td>{:.0}%</td>
-                        <td>{}</td>
-                    </tr>
+                    ### Comet::{:?} ({:.0}% done)
+
+                    {}
                 "},
                 comet,
                 ((completion as f32) / (row.len() as f32)) * 100.0,
@@ -102,8 +90,8 @@ fn progress_to_table(progress: Vec<(Comet, Vec<Vec<String>>)>) -> String {
         );
     }
 
-    table.write_str("</tbody></table>");
-    table
+    tables.write_str("</tbody></table>");
+    tables
 }
 
 fn add_progress_to_readme() -> anyhow::Result<()> {
@@ -135,7 +123,7 @@ fn add_progress_to_readme() -> anyhow::Result<()> {
             prefix.to_owned() +
             "<!-- progress-start -->\n" +
             "## Progress\n\n" +
-            &progress_to_table(vec![login, gate, scene]) +
+            &progress_to_tables(vec![login, gate, scene]) +
             "\n<!-- progress-end -->" +
             suffix
         ).as_bytes()

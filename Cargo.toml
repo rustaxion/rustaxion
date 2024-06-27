@@ -40,9 +40,8 @@ dotenvy = "0.15.7"
 lazy_static = "1.5.0"
 chrono = "0.4.38"
 
-
 [build-dependencies]
 anyhow = { version = "1.0.86", features = ["std", "backtrace"] }
+indoc = "2.0.5"
 prost-build = "0.12.6"
 protobuf-src = "2.0.1"
-indoc = "2.0.5"

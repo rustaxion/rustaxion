@@ -1,13 +1,27 @@
 #![allow(unused)]
 
-use std::{ cmp::Ordering, fmt::Write, fs::File, io::{ Read, Seek, Write as ioWrite } };
+use std::{ cmp::Ordering, fmt::Write, fs };
 
-use indoc::indoc;
-
-extern crate indoc;
 extern crate anyhow;
 extern crate prost_build;
 extern crate protobuf_src;
+
+fn main() {
+    std::env::set_var("PROTOC", protobuf_src::protoc());
+
+    prost_build
+        ::compile_protos(
+            &[
+                "src/proto/cometGate.proto",
+                "src/proto/cometLogin.proto",
+                "src/proto/cometScene.proto",
+            ],
+            &["src/"]
+        )
+        .unwrap();
+
+    add_progress_to_readme();
+}
 
 #[derive(Debug)]
 enum Comet {
@@ -23,8 +37,7 @@ fn get_progress_for(comet: Comet) -> anyhow::Result<(Comet, Vec<Vec<String>>)> {
         Comet::Scene => "src/server/scene/mod.rs",
     };
 
-    let mut content = String::new();
-    File::open(module)?.read_to_string(&mut content)?;
+    let content = fs::read_to_string(module)?;
 
     let match_branch = content.splitn(2, "match para_cmd {").skip(1).take(1).next().unwrap();
     let match_arms = match_branch
@@ -72,7 +85,7 @@ fn progress_to_tables(progress: Vec<(Comet, Vec<Vec<String>>)>) -> String {
 
         let mut row_table = String::new();
         row_table.write_str(
-            indoc! {"
+            indoc::indoc! {"
                 | Method | Implemented |
                 | --------- | ------- |
             "}
@@ -86,10 +99,9 @@ fn progress_to_tables(progress: Vec<(Comet, Vec<Vec<String>>)>) -> String {
             ));
         }
 
-        row_table.write_str("\n\n");
         tables.write_str(
             &format!(
-                indoc! {"
+                indoc::indoc! {"
                     ### Comet::{:?} ({:.0}% done)
 
                     {}
@@ -105,52 +117,27 @@ fn progress_to_tables(progress: Vec<(Comet, Vec<Vec<String>>)>) -> String {
 }
 
 fn add_progress_to_readme() -> anyhow::Result<()> {
-    let readme = File::options().read(true).write(true).open("README.md");
+    let buffer = fs::read_to_string("README.md")?;
 
-    // We don't want the code to fail compilation just because the README cannot be opened.
-    if readme.is_err() {
-        return Ok(());
-    }
+    let start = "<!-- progress-start -->";
+    let end = "<!-- progress-end -->";
 
-    let mut readme = readme.unwrap();
-    let mut buffer = String::new();
+    let prefix = &buffer[..buffer.find(start).unwrap()];
+    let suffix = &buffer[buffer.find("<!-- progress-end -->").unwrap() + end.len()..];
 
-    let _ = readme.read_to_string(&mut buffer);
-    let _ = readme.seek(std::io::SeekFrom::Start(0))?;
+    let login = get_progress_for(Comet::Login).unwrap_or((Comet::Login, vec![]));
+    let gate = get_progress_for(Comet::Gate).unwrap_or((Comet::Gate, vec![]));
+    let scene = get_progress_for(Comet::Scene).unwrap_or((Comet::Scene, vec![]));
 
-    let parts: Vec<&str> = buffer.splitn(2, "<!-- progress-start -->").collect();
-    let (prefix, buffer) = (parts[0], parts[1]);
+    let mut output = String::new();
 
-    let parts: Vec<&str> = buffer.splitn(2, "<!-- progress-end -->").collect();
-    let suffix = parts[1];
+    output.write_str(prefix);
+    output.write_str("<!-- progress-start -->\n## Progress\n\n");
+    output.write_str(progress_to_tables(vec![login, gate, scene]).as_str());
+    output.write_str("<!-- progress-end -->");
+    output.write_str(suffix);
 
-    let login = get_progress_for(Comet::Login)?;
-    let gate = get_progress_for(Comet::Gate)?;
-    let scene = get_progress_for(Comet::Scene)?;
-
-    readme.write(prefix.to_string().as_bytes());
-    readme.write(b"<!-- progress-start -->\n");
-    readme.write(b"## Progress\n\n");
-    readme.write(progress_to_tables(vec![login, gate, scene]).as_bytes());
-    readme.write(b"\n<!-- progress-end -->\n");
-    readme.write(suffix.as_bytes());
+    fs::write("README.md", output)?;
 
     Ok(())
-}
-
-fn main() {
-    std::env::set_var("PROTOC", protobuf_src::protoc());
-
-    prost_build
-        ::compile_protos(
-            &[
-                "src/proto/cometGate.proto",
-                "src/proto/cometLogin.proto",
-                "src/proto/cometScene.proto",
-            ],
-            &["src/"]
-        )
-        .unwrap();
-
-    add_progress_to_readme().unwrap();
 }

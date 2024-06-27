@@ -14,16 +14,16 @@ If you are looking for a working solution, try out my [server emulator](https://
 
 | Method | Implemented |
 | --------- | ------- |
-| CometLogin::RequestRegAccount | [ ] |
-| CometLogin::RequestLoginAccount | [ ] |
-| CometLogin::RequestFindPassword | [ ] |
-| CometLogin::RequestQuickToken | [ ] |
-| CometLogin::RequestQuickLogin | [ ] |
-| CometLogin::RequestThirdLogin | [x] |
-| CometLogin::RequestBindAccount | [ ] |
-| CometLogin::RequestAnnouncement | [ ] |
-| CometLogin::RequestGameVersion | [x] |
-| CometLogin::RequestBiliLogin | [ ] |
+| CometLogin::RequestThirdLogin | ✅ |
+| CometLogin::RequestGameVersion | ✅ |
+| CometLogin::RequestRegAccount | ❌ |
+| CometLogin::RequestLoginAccount | ❌ |
+| CometLogin::RequestFindPassword | ❌ |
+| CometLogin::RequestQuickToken | ❌ |
+| CometLogin::RequestQuickLogin | ❌ |
+| CometLogin::RequestBindAccount | ❌ |
+| CometLogin::RequestAnnouncement | ❌ |
+| CometLogin::RequestBiliLogin | ❌ |
 
 
 
@@ -31,12 +31,12 @@ If you are looking for a working solution, try out my [server emulator](https://
 
 | Method | Implemented |
 | --------- | ------- |
-| CometGate::NotifyGameTime | [ ] |
-| CometGate::RequestUserGameTime | [ ] |
-| CometGate::LoginGateVerify | [x] |
-| CometGate::SelectUserInfoList | [ ] |
-| CometGate::CreateCharacter | [x] |
-| CometGate::EnterGame | [x] |
+| CometGate::LoginGateVerify | ✅ |
+| CometGate::CreateCharacter | ✅ |
+| CometGate::EnterGame | ✅ |
+| CometGate::NotifyGameTime | ❌ |
+| CometGate::RequestUserGameTime | ❌ |
+| CometGate::SelectUserInfoList | ❌ |
 
 
 
@@ -44,119 +44,119 @@ If you are looking for a working solution, try out my [server emulator](https://
 
 | Method | Implemented |
 | --------- | ------- |
-| CometScene::NotifyCharacterFullData | [ ] |
-| CometScene::RequestBeginSong | [ ] |
-| CometScene::RequestFinishSong | [ ] |
-| CometScene::RequestSingleSongRank | [ ] |
-| CometScene::RequestRankInfo | [ ] |
-| CometScene::RequestSetFavorite | [ ] |
-| CometScene::RequestBackstageGame | [ ] |
-| CometScene::NotifyUpdateInfo | [ ] |
-| CometScene::RequestActivityInfo | [ ] |
-| CometScene::RequestActivityBegin | [ ] |
-| CometScene::RequestActivityFinish | [ ] |
-| CometScene::NotifyActivityChange | [ ] |
-| CometScene::RequestMailList | [ ] |
-| CometScene::RequestGetMailReward | [ ] |
-| CometScene::RequestDeleteMail | [ ] |
-| CometScene::NotifyDeleteInfo | [ ] |
-| CometScene::RequestGuide | [ ] |
-| CometScene::RequestGuideClear | [ ] |
-| CometScene::RequestChangeHeadIcon | [ ] |
-| CometScene::RequestChangeCharacter | [ ] |
-| CometScene::RequestChangeTheme | [ ] |
-| CometScene::RequestShopInfo | [x] |
-| CometScene::RequestShopBuy | [ ] |
-| CometScene::RequestPieceExchange | [ ] |
-| CometScene::RequestBattleFieldInfo | [ ] |
-| CometScene::RequestBattleFieldRankInfo | [ ] |
-| CometScene::RequestBattleFieldBegin | [ ] |
-| CometScene::RequestBattleFieldFinish | [ ] |
-| CometScene::RequestSummonInfo | [ ] |
-| CometScene::RequestSummon | [ ] |
-| CometScene::RequestSummonWeekReward | [ ] |
-| CometScene::RequestSummonShopBuy | [ ] |
-| CometScene::RequestChangeLanguage | [x] |
-| CometScene::RequestSocialSearchPlayer | [ ] |
-| CometScene::RequestSocialPlayerProfile | [ ] |
-| CometScene::RequestSocialSendAddFriendRequest | [ ] |
-| CometScene::NotifySocialAddFriendRequest | [ ] |
-| CometScene::RequestSocialDeleteFriend | [ ] |
-| CometScene::NotifySocialDeleteFriend | [ ] |
-| CometScene::RequestSocialDisposeFriendRequest | [ ] |
-| CometScene::NotifySocialDisposeFriendRequest | [ ] |
-| CometScene::RequestSocialPublishDynamics | [ ] |
-| CometScene::RequestSocialDeleteDynamics | [ ] |
-| CometScene::RequestSocialFriendDynamics | [ ] |
-| CometScene::NotifySocialFriendPublicDynamic | [ ] |
-| CometScene::NotifySocialFriendStatus | [ ] |
-| CometScene::RequestStoryInfo | [ ] |
-| CometScene::RequestStoryFinish | [ ] |
-| CometScene::RequestUseItem | [ ] |
-| CometScene::RequestArcadeInfo | [ ] |
-| CometScene::RequestArcadeFinish | [ ] |
-| CometScene::RequestChangeTitle | [ ] |
-| CometScene::RequestEventInfo | [x] |
-| CometScene::RequestEventLevelGift | [ ] |
-| CometScene::RequestEventStamina | [ ] |
-| CometScene::RequestEventNewPlayer | [ ] |
-| CometScene::RequestEventWeekCheckin | [ ] |
-| CometScene::RequestEventRecharge | [ ] |
-| CometScene::NotifyRechargeUpdate | [ ] |
-| CometScene::RequestEventLogin | [ ] |
-| CometScene::RequestEventNewCharLogin | [ ] |
-| CometScene::RequestEventNewThemeLogin | [ ] |
-| CometScene::RequestEventNewCharRelease | [ ] |
-| CometScene::RequestEventNewThemeRelease | [ ] |
-| CometScene::NotifyEventNewReleaseUpdate | [ ] |
-| CometScene::RequestEventFriend | [ ] |
-| CometScene::RequestEventBili | [ ] |
-| CometScene::RequestTeamCreate | [ ] |
-| CometScene::RequestTeamSearch | [ ] |
-| CometScene::RequestTeamList | [ ] |
-| CometScene::RequestTeamApply | [ ] |
-| CometScene::RequestTeamDeclaration | [ ] |
-| CometScene::RequestTeamInfo | [ ] |
-| CometScene::RequestTeamPosition | [ ] |
-| CometScene::RequestTeamApplyList | [ ] |
-| CometScene::RequestTeamDealApply | [ ] |
-| CometScene::RequestTeamKick | [ ] |
-| CometScene::RequestTeamExit | [ ] |
-| CometScene::RequestTeamLogs | [ ] |
-| CometScene::NotifyTeamChange | [ ] |
-| CometScene::NotifyTeamInfoChange | [ ] |
-| CometScene::NotifyTeamApplyChange | [ ] |
-| CometScene::RequestTeamUploadSong | [ ] |
-| CometScene::RequestTeamConfirmUploadSong | [ ] |
-| CometScene::RequestTeamBuyItem | [ ] |
-| CometScene::NotifyTeamBuffList | [ ] |
-| CometScene::RequestPreRankInfo | [ ] |
-| CometScene::RequestPreRankBegin | [ ] |
-| CometScene::RequestPreRankEnd | [ ] |
-| CometScene::RequestPreRankRankList | [ ] |
-| CometScene::RequestPVPBeginMatching | [ ] |
-| CometScene::RequestPVPEndMatching | [ ] |
-| CometScene::NotifyPVPMatchSuccess | [ ] |
-| CometScene::RequestPVPMatchConfirm | [ ] |
-| CometScene::NotifyPVPMatchConfirm | [ ] |
-| CometScene::NotifyPVPStartLoading | [ ] |
-| CometScene::RequestPVPFinishLoading | [ ] |
-| CometScene::NotifyPVPFinishLoading | [ ] |
-| CometScene::NotifyPVPStartGame | [ ] |
-| CometScene::RequestPVPSyncScore | [ ] |
-| CometScene::NotifyPVPSyncScore | [ ] |
-| CometScene::RequestPVPUseSkill | [ ] |
-| CometScene::NotifyPVPUseSkill | [ ] |
-| CometScene::RequestPVPFinishGame | [ ] |
-| CometScene::NotifyPVPFinishGame | [ ] |
-| CometScene::RequestPVPCurrentState | [ ] |
-| CometScene::RequestBuyProduct | [ ] |
-| CometScene::RequestVerifyIOSReceipt | [ ] |
-| CometScene::RequestMissingOrder | [ ] |
-| CometScene::RequestSendOrder | [ ] |
-| CometScene::RequestVerifyGooglePay | [ ] |
-| CometScene::RequestIOSAppReceipt | [ ] |
-| CometScene::RequestTestVerify | [ ] |
+| CometScene::RequestShopInfo | ✅ |
+| CometScene::RequestChangeLanguage | ✅ |
+| CometScene::RequestEventInfo | ✅ |
+| CometScene::NotifyCharacterFullData | ❌ |
+| CometScene::RequestBeginSong | ❌ |
+| CometScene::RequestFinishSong | ❌ |
+| CometScene::RequestSingleSongRank | ❌ |
+| CometScene::RequestRankInfo | ❌ |
+| CometScene::RequestSetFavorite | ❌ |
+| CometScene::RequestBackstageGame | ❌ |
+| CometScene::NotifyUpdateInfo | ❌ |
+| CometScene::RequestActivityInfo | ❌ |
+| CometScene::RequestActivityBegin | ❌ |
+| CometScene::RequestActivityFinish | ❌ |
+| CometScene::NotifyActivityChange | ❌ |
+| CometScene::RequestMailList | ❌ |
+| CometScene::RequestGetMailReward | ❌ |
+| CometScene::RequestDeleteMail | ❌ |
+| CometScene::NotifyDeleteInfo | ❌ |
+| CometScene::RequestGuide | ❌ |
+| CometScene::RequestGuideClear | ❌ |
+| CometScene::RequestChangeHeadIcon | ❌ |
+| CometScene::RequestChangeCharacter | ❌ |
+| CometScene::RequestChangeTheme | ❌ |
+| CometScene::RequestShopBuy | ❌ |
+| CometScene::RequestPieceExchange | ❌ |
+| CometScene::RequestBattleFieldInfo | ❌ |
+| CometScene::RequestBattleFieldRankInfo | ❌ |
+| CometScene::RequestBattleFieldBegin | ❌ |
+| CometScene::RequestBattleFieldFinish | ❌ |
+| CometScene::RequestSummonInfo | ❌ |
+| CometScene::RequestSummon | ❌ |
+| CometScene::RequestSummonWeekReward | ❌ |
+| CometScene::RequestSummonShopBuy | ❌ |
+| CometScene::RequestSocialSearchPlayer | ❌ |
+| CometScene::RequestSocialPlayerProfile | ❌ |
+| CometScene::RequestSocialSendAddFriendRequest | ❌ |
+| CometScene::NotifySocialAddFriendRequest | ❌ |
+| CometScene::RequestSocialDeleteFriend | ❌ |
+| CometScene::NotifySocialDeleteFriend | ❌ |
+| CometScene::RequestSocialDisposeFriendRequest | ❌ |
+| CometScene::NotifySocialDisposeFriendRequest | ❌ |
+| CometScene::RequestSocialPublishDynamics | ❌ |
+| CometScene::RequestSocialDeleteDynamics | ❌ |
+| CometScene::RequestSocialFriendDynamics | ❌ |
+| CometScene::NotifySocialFriendPublicDynamic | ❌ |
+| CometScene::NotifySocialFriendStatus | ❌ |
+| CometScene::RequestStoryInfo | ❌ |
+| CometScene::RequestStoryFinish | ❌ |
+| CometScene::RequestUseItem | ❌ |
+| CometScene::RequestArcadeInfo | ❌ |
+| CometScene::RequestArcadeFinish | ❌ |
+| CometScene::RequestChangeTitle | ❌ |
+| CometScene::RequestEventLevelGift | ❌ |
+| CometScene::RequestEventStamina | ❌ |
+| CometScene::RequestEventNewPlayer | ❌ |
+| CometScene::RequestEventWeekCheckin | ❌ |
+| CometScene::RequestEventRecharge | ❌ |
+| CometScene::NotifyRechargeUpdate | ❌ |
+| CometScene::RequestEventLogin | ❌ |
+| CometScene::RequestEventNewCharLogin | ❌ |
+| CometScene::RequestEventNewThemeLogin | ❌ |
+| CometScene::RequestEventNewCharRelease | ❌ |
+| CometScene::RequestEventNewThemeRelease | ❌ |
+| CometScene::NotifyEventNewReleaseUpdate | ❌ |
+| CometScene::RequestEventFriend | ❌ |
+| CometScene::RequestEventBili | ❌ |
+| CometScene::RequestTeamCreate | ❌ |
+| CometScene::RequestTeamSearch | ❌ |
+| CometScene::RequestTeamList | ❌ |
+| CometScene::RequestTeamApply | ❌ |
+| CometScene::RequestTeamDeclaration | ❌ |
+| CometScene::RequestTeamInfo | ❌ |
+| CometScene::RequestTeamPosition | ❌ |
+| CometScene::RequestTeamApplyList | ❌ |
+| CometScene::RequestTeamDealApply | ❌ |
+| CometScene::RequestTeamKick | ❌ |
+| CometScene::RequestTeamExit | ❌ |
+| CometScene::RequestTeamLogs | ❌ |
+| CometScene::NotifyTeamChange | ❌ |
+| CometScene::NotifyTeamInfoChange | ❌ |
+| CometScene::NotifyTeamApplyChange | ❌ |
+| CometScene::RequestTeamUploadSong | ❌ |
+| CometScene::RequestTeamConfirmUploadSong | ❌ |
+| CometScene::RequestTeamBuyItem | ❌ |
+| CometScene::NotifyTeamBuffList | ❌ |
+| CometScene::RequestPreRankInfo | ❌ |
+| CometScene::RequestPreRankBegin | ❌ |
+| CometScene::RequestPreRankEnd | ❌ |
+| CometScene::RequestPreRankRankList | ❌ |
+| CometScene::RequestPVPBeginMatching | ❌ |
+| CometScene::RequestPVPEndMatching | ❌ |
+| CometScene::NotifyPVPMatchSuccess | ❌ |
+| CometScene::RequestPVPMatchConfirm | ❌ |
+| CometScene::NotifyPVPMatchConfirm | ❌ |
+| CometScene::NotifyPVPStartLoading | ❌ |
+| CometScene::RequestPVPFinishLoading | ❌ |
+| CometScene::NotifyPVPFinishLoading | ❌ |
+| CometScene::NotifyPVPStartGame | ❌ |
+| CometScene::RequestPVPSyncScore | ❌ |
+| CometScene::NotifyPVPSyncScore | ❌ |
+| CometScene::RequestPVPUseSkill | ❌ |
+| CometScene::NotifyPVPUseSkill | ❌ |
+| CometScene::RequestPVPFinishGame | ❌ |
+| CometScene::NotifyPVPFinishGame | ❌ |
+| CometScene::RequestPVPCurrentState | ❌ |
+| CometScene::RequestBuyProduct | ❌ |
+| CometScene::RequestVerifyIOSReceipt | ❌ |
+| CometScene::RequestMissingOrder | ❌ |
+| CometScene::RequestSendOrder | ❌ |
+| CometScene::RequestVerifyGooglePay | ❌ |
+| CometScene::RequestIOSAppReceipt | ❌ |
+| CometScene::RequestTestVerify | ❌ |
 
 
 
@@ -646,4 +646,98 @@ her stuff)
  stuff)
 )
 her stuff)
+ stuff)
+ stuff)
+   her stuff)
+her stuff)
+ stuff)
+her stuff)
+her stuff)
+ stuff)
+)
+her stuff)
+ stuff)
+her stuff)
+ stuff)
+   her stuff)
+her stuff)
+ stuff)
+her stuff)
+her stuff)
+ stuff)
+)
+her stuff)
+ stuff)
+ stuff)
+ stuff)
+)
+her stuff)
+ stuff)
+
+her stuff)
+ stuff)
+her stuff)
+her stuff)
+ stuff)
+)
+her stuff)
+ stuff)
+ stuff)
+ stuff)
+)
+her stuff)
+ stuff)
+ stuff)
+   her stuff)
+her stuff)
+ stuff)
+her stuff)
+her stuff)
+ stuff)
+)
+her stuff)
+ stuff)
+her stuff)
+ stuff)
+   her stuff)
+her stuff)
+ stuff)
+her stuff)
+her stuff)
+ stuff)
+)
+her stuff)
+ stuff)
+ stuff)
+ stuff)
+)
+her stuff)
+ stuff)
+ stuff)
+   her stuff)
+her stuff)
+ stuff)
+her stuff)
+her stuff)
+ stuff)
+)
+her stuff)
+ stuff)
+her stuff)
+ stuff)
+   her stuff)
+her stuff)
+ stuff)
+her stuff)
+her stuff)
+ stuff)
+)
+her stuff)
+ stuff)
+ stuff)
+ stuff)
+)
+her stuff)
+ stuff)
+uff)
  stuff)

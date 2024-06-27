@@ -1,6 +1,6 @@
 #![allow(unused)]
 
-use std::{ fmt::Write, fs::File, io::{ Read, Seek, Write as ioWrite } };
+use std::{ cmp::Ordering, fmt::Write, fs::File, io::{ Read, Seek, Write as ioWrite } };
 
 use indoc::indoc;
 
@@ -53,7 +53,18 @@ fn progress_to_tables(progress: Vec<(Comet, Vec<Vec<String>>)>) -> String {
     let mut tables = String::new();
 
     for comet in progress {
-        let (comet, row) = comet;
+        let (comet, mut row) = comet;
+        row.sort_by(|a, b| {
+            let result = if b[1] == "todo!()" { 0 } else { 1 } - if a[1] == "todo!()" { 0 } else { 1 };
+            
+            match result {
+                0 => Ordering::Equal,
+                -1 => Ordering::Less,
+                1 => Ordering::Greater,
+                _ => unreachable!()
+            }
+        });
+
         let completion = row
             .iter()
             .filter(|x| x[1] != "todo!()")
@@ -69,9 +80,9 @@ fn progress_to_tables(progress: Vec<(Comet, Vec<Vec<String>>)>) -> String {
 
         for method in &row {
             row_table.write_str(&format!(
-                "| {} | [{}] |\n",
+                "| {} | {} |\n",
                 method[0],
-                if method[1] == "todo!()" { " " } else { "x" }
+                if method[1] == "todo!()" { "❌" } else { "✅" }
             ));
         }
 

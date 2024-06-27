@@ -21,34 +21,22 @@ If you are looking for a working solution, try out my [server emulator](https://
     <td>Login</td>
     <td>20%</td>
     <td><table>
-<thead>
-    <th>Method</th>
-    <th>Implemented</th>
-</thead>
 <tbody>
-<tr><td>CometLogin::RequestRegAccount</td><td><input type="checkbox"></td></tr><tr><td>CometLogin::RequestLoginAccount</td><td><input type="checkbox"></td></tr><tr><td>CometLogin::RequestFindPassword</td><td><input type="checkbox"></td></tr><tr><td>CometLogin::RequestQuickToken</td><td><input type="checkbox"></td></tr><tr><td>CometLogin::RequestQuickLogin</td><td><input type="checkbox"></td></tr><tr><td>CometLogin::RequestThirdLogin</td><td><input type="checkbox" checked></td></tr><tr><td>CometLogin::RequestBindAccount</td><td><input type="checkbox"></td></tr><tr><td>CometLogin::RequestAnnouncement</td><td><input type="checkbox"></td></tr><tr><td>CometLogin::RequestGameVersion</td><td><input type="checkbox" checked></td></tr><tr><td>CometLogin::RequestBiliLogin</td><td><input type="checkbox"></td></tr></tbody></table></td>
+<tr><td>CometLogin::RequestRegAccount <ul><li>- [ ]</li></ul></td></tr><tr><td>CometLogin::RequestLoginAccount <ul><li>- [ ]</li></ul></td></tr><tr><td>CometLogin::RequestFindPassword <ul><li>- [ ]</li></ul></td></tr><tr><td>CometLogin::RequestQuickToken <ul><li>- [ ]</li></ul></td></tr><tr><td>CometLogin::RequestQuickLogin <ul><li>- [ ]</li></ul></td></tr><tr><td>CometLogin::RequestThirdLogin <ul><li>- [x]</li></ul></td></tr><tr><td>CometLogin::RequestBindAccount <ul><li>- [ ]</li></ul></td></tr><tr><td>CometLogin::RequestAnnouncement <ul><li>- [ ]</li></ul></td></tr><tr><td>CometLogin::RequestGameVersion <ul><li>- [x]</li></ul></td></tr><tr><td>CometLogin::RequestBiliLogin <ul><li>- [ ]</li></ul></td></tr></tbody></table></td>
 </tr>
 <tr>
     <td>Gate</td>
     <td>50%</td>
     <td><table>
-<thead>
-    <th>Method</th>
-    <th>Implemented</th>
-</thead>
 <tbody>
-<tr><td>CometGate::NotifyGameTime</td><td><input type="checkbox"></td></tr><tr><td>CometGate::RequestUserGameTime</td><td><input type="checkbox"></td></tr><tr><td>CometGate::LoginGateVerify</td><td><input type="checkbox" checked></td></tr><tr><td>CometGate::SelectUserInfoList</td><td><input type="checkbox"></td></tr><tr><td>CometGate::CreateCharacter</td><td><input type="checkbox" checked></td></tr><tr><td>CometGate::EnterGame</td><td><input type="checkbox" checked></td></tr></tbody></table></td>
+<tr><td>CometGate::NotifyGameTime <ul><li>- [ ]</li></ul></td></tr><tr><td>CometGate::RequestUserGameTime <ul><li>- [ ]</li></ul></td></tr><tr><td>CometGate::LoginGateVerify <ul><li>- [x]</li></ul></td></tr><tr><td>CometGate::SelectUserInfoList <ul><li>- [ ]</li></ul></td></tr><tr><td>CometGate::CreateCharacter <ul><li>- [x]</li></ul></td></tr><tr><td>CometGate::EnterGame <ul><li>- [x]</li></ul></td></tr></tbody></table></td>
 </tr>
 <tr>
     <td>Scene</td>
     <td>3%</td>
     <td><table>
-<thead>
-    <th>Method</th>
-    <th>Implemented</th>
-</thead>
 <tbody>
-<tr><td>CometScene::NotifyCharacterFullData</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestBeginSong</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestFinishSong</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestSingleSongRank</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestRankInfo</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestSetFavorite</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestBackstageGame</td><td><input type="checkbox"></td></tr><tr><td>CometScene::NotifyUpdateInfo</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestActivityInfo</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestActivityBegin</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestActivityFinish</td><td><input type="checkbox"></td></tr><tr><td>CometScene::NotifyActivityChange</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestMailList</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestGetMailReward</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestDeleteMail</td><td><input type="checkbox"></td></tr><tr><td>CometScene::NotifyDeleteInfo</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestGuide</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestGuideClear</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestChangeHeadIcon</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestChangeCharacter</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestChangeTheme</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestShopInfo</td><td><input type="checkbox" checked></td></tr><tr><td>CometScene::RequestShopBuy</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestPieceExchange</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestBattleFieldInfo</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestBattleFieldRankInfo</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestBattleFieldBegin</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestBattleFieldFinish</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestSummonInfo</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestSummon</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestSummonWeekReward</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestSummonShopBuy</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestChangeLanguage</td><td><input type="checkbox" checked></td></tr><tr><td>CometScene::RequestSocialSearchPlayer</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestSocialPlayerProfile</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestSocialSendAddFriendRequest</td><td><input type="checkbox"></td></tr><tr><td>CometScene::NotifySocialAddFriendRequest</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestSocialDeleteFriend</td><td><input type="checkbox"></td></tr><tr><td>CometScene::NotifySocialDeleteFriend</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestSocialDisposeFriendRequest</td><td><input type="checkbox"></td></tr><tr><td>CometScene::NotifySocialDisposeFriendRequest</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestSocialPublishDynamics</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestSocialDeleteDynamics</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestSocialFriendDynamics</td><td><input type="checkbox"></td></tr><tr><td>CometScene::NotifySocialFriendPublicDynamic</td><td><input type="checkbox"></td></tr><tr><td>CometScene::NotifySocialFriendStatus</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestStoryInfo</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestStoryFinish</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestUseItem</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestArcadeInfo</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestArcadeFinish</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestChangeTitle</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestEventInfo</td><td><input type="checkbox" checked></td></tr><tr><td>CometScene::RequestEventLevelGift</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestEventStamina</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestEventNewPlayer</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestEventWeekCheckin</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestEventRecharge</td><td><input type="checkbox"></td></tr><tr><td>CometScene::NotifyRechargeUpdate</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestEventLogin</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestEventNewCharLogin</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestEventNewThemeLogin</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestEventNewCharRelease</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestEventNewThemeRelease</td><td><input type="checkbox"></td></tr><tr><td>CometScene::NotifyEventNewReleaseUpdate</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestEventFriend</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestEventBili</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestTeamCreate</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestTeamSearch</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestTeamList</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestTeamApply</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestTeamDeclaration</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestTeamInfo</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestTeamPosition</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestTeamApplyList</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestTeamDealApply</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestTeamKick</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestTeamExit</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestTeamLogs</td><td><input type="checkbox"></td></tr><tr><td>CometScene::NotifyTeamChange</td><td><input type="checkbox"></td></tr><tr><td>CometScene::NotifyTeamInfoChange</td><td><input type="checkbox"></td></tr><tr><td>CometScene::NotifyTeamApplyChange</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestTeamUploadSong</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestTeamConfirmUploadSong</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestTeamBuyItem</td><td><input type="checkbox"></td></tr><tr><td>CometScene::NotifyTeamBuffList</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestPreRankInfo</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestPreRankBegin</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestPreRankEnd</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestPreRankRankList</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestPVPBeginMatching</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestPVPEndMatching</td><td><input type="checkbox"></td></tr><tr><td>CometScene::NotifyPVPMatchSuccess</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestPVPMatchConfirm</td><td><input type="checkbox"></td></tr><tr><td>CometScene::NotifyPVPMatchConfirm</td><td><input type="checkbox"></td></tr><tr><td>CometScene::NotifyPVPStartLoading</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestPVPFinishLoading</td><td><input type="checkbox"></td></tr><tr><td>CometScene::NotifyPVPFinishLoading</td><td><input type="checkbox"></td></tr><tr><td>CometScene::NotifyPVPStartGame</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestPVPSyncScore</td><td><input type="checkbox"></td></tr><tr><td>CometScene::NotifyPVPSyncScore</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestPVPUseSkill</td><td><input type="checkbox"></td></tr><tr><td>CometScene::NotifyPVPUseSkill</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestPVPFinishGame</td><td><input type="checkbox"></td></tr><tr><td>CometScene::NotifyPVPFinishGame</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestPVPCurrentState</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestBuyProduct</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestVerifyIOSReceipt</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestMissingOrder</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestSendOrder</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestVerifyGooglePay</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestIOSAppReceipt</td><td><input type="checkbox"></td></tr><tr><td>CometScene::RequestTestVerify</td><td><input type="checkbox"></td></tr></tbody></table></td>
+<tr><td>CometScene::NotifyCharacterFullData <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestBeginSong <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestFinishSong <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestSingleSongRank <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestRankInfo <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestSetFavorite <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestBackstageGame <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::NotifyUpdateInfo <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestActivityInfo <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestActivityBegin <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestActivityFinish <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::NotifyActivityChange <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestMailList <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestGetMailReward <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestDeleteMail <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::NotifyDeleteInfo <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestGuide <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestGuideClear <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestChangeHeadIcon <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestChangeCharacter <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestChangeTheme <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestShopInfo <ul><li>- [x]</li></ul></td></tr><tr><td>CometScene::RequestShopBuy <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestPieceExchange <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestBattleFieldInfo <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestBattleFieldRankInfo <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestBattleFieldBegin <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestBattleFieldFinish <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestSummonInfo <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestSummon <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestSummonWeekReward <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestSummonShopBuy <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestChangeLanguage <ul><li>- [x]</li></ul></td></tr><tr><td>CometScene::RequestSocialSearchPlayer <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestSocialPlayerProfile <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestSocialSendAddFriendRequest <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::NotifySocialAddFriendRequest <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestSocialDeleteFriend <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::NotifySocialDeleteFriend <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestSocialDisposeFriendRequest <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::NotifySocialDisposeFriendRequest <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestSocialPublishDynamics <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestSocialDeleteDynamics <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestSocialFriendDynamics <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::NotifySocialFriendPublicDynamic <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::NotifySocialFriendStatus <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestStoryInfo <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestStoryFinish <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestUseItem <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestArcadeInfo <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestArcadeFinish <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestChangeTitle <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestEventInfo <ul><li>- [x]</li></ul></td></tr><tr><td>CometScene::RequestEventLevelGift <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestEventStamina <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestEventNewPlayer <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestEventWeekCheckin <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestEventRecharge <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::NotifyRechargeUpdate <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestEventLogin <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestEventNewCharLogin <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestEventNewThemeLogin <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestEventNewCharRelease <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestEventNewThemeRelease <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::NotifyEventNewReleaseUpdate <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestEventFriend <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestEventBili <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestTeamCreate <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestTeamSearch <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestTeamList <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestTeamApply <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestTeamDeclaration <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestTeamInfo <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestTeamPosition <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestTeamApplyList <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestTeamDealApply <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestTeamKick <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestTeamExit <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestTeamLogs <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::NotifyTeamChange <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::NotifyTeamInfoChange <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::NotifyTeamApplyChange <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestTeamUploadSong <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestTeamConfirmUploadSong <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestTeamBuyItem <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::NotifyTeamBuffList <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestPreRankInfo <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestPreRankBegin <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestPreRankEnd <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestPreRankRankList <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestPVPBeginMatching <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestPVPEndMatching <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::NotifyPVPMatchSuccess <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestPVPMatchConfirm <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::NotifyPVPMatchConfirm <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::NotifyPVPStartLoading <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestPVPFinishLoading <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::NotifyPVPFinishLoading <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::NotifyPVPStartGame <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestPVPSyncScore <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::NotifyPVPSyncScore <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestPVPUseSkill <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::NotifyPVPUseSkill <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestPVPFinishGame <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::NotifyPVPFinishGame <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestPVPCurrentState <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestBuyProduct <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestVerifyIOSReceipt <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestMissingOrder <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestSendOrder <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestVerifyGooglePay <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestIOSAppReceipt <ul><li>- [ ]</li></ul></td></tr><tr><td>CometScene::RequestTestVerify <ul><li>- [ ]</li></ul></td></tr></tbody></table></td>
 </tr>
 </tbody></table>
 <!-- progress-end -->
@@ -88,6 +76,157 @@ her stuff)
 CosmicTour and some other stuff)
    her stuff)
 her stuff)
+ stuff)
+her stuff)
+her stuff)
+ stuff)
+ff)
+her stuff)
+CosmicTour and some other stuff)
+   her stuff)
+her stuff)
+er stuff)
+her stuff)
+CosmicTour and some other stuff)
+   her stuff)
+her stuff)
+ stuff)
+her stuff)
+her stuff)
+ stuff)
+Grid and @603185423 for the server logic
+2. [Invaxion-Server-Emulator](https://github.com/Invaxion-Server-Emulator/invaxion-server-emulator) by @ArjixWasTaken (me!) for discovering the missing parts (CosmicTour and some other stuff)
+   her stuff)
+her stuff)
+CosmicTour and some other stuff)
+   her stuff)
+her stuff)
+ @603185423 for the server logic
+2. [Invaxion-Server-Emulator](https://github.com/Invaxion-Server-Emulator/invaxion-server-emulator) by @ArjixWasTaken (me!) for discovering the missing parts (CosmicTour and some other stuff)
+   her stuff)
+her stuff)
+CosmicTour and some other stuff)
+   her stuff)
+her stuff)
+er stuff)
+her stuff)
+CosmicTour and some other stuff)
+   her stuff)
+her stuff)
+ stuff)
+her stuff)
+her stuff)
+ stuff)
+ff)
+her stuff)
+CosmicTour and some other stuff)
+   her stuff)
+her stuff)
+er stuff)
+her stuff)
+CosmicTour and some other stuff)
+   her stuff)
+her stuff)
+ stuff)
+her stuff)
+her stuff)
+ stuff)
+i>- [x] item1</li><li>- [ ] item2</li></ul></td></tr><tr><td>CometScene::RequestMissingOrder</td><td><ul><li>- [x] item1</li><li>- [ ] item2</li></ul></td></tr><tr><td>CometScene::RequestSendOrder</td><td><ul><li>- [x] item1</li><li>- [ ] item2</li></ul></td></tr><tr><td>CometScene::RequestVerifyGooglePay</td><td><ul><li>- [x] item1</li><li>- [ ] item2</li></ul></td></tr><tr><td>CometScene::RequestIOSAppReceipt</td><td><ul><li>- [x] item1</li><li>- [ ] item2</li></ul></td></tr><tr><td>CometScene::RequestTestVerify</td><td><ul><li>- [x] item1</li><li>- [ ] item2</li></ul></td></tr></tbody></table></td>
+</tr>
+</tbody></table>
+<!-- progress-end -->
+
+## Technologies
+
+Here I list some of the crates I found useful
+
+-   tokio's [runtime](https://github.com/tokio-rs/tokio) as well as its helpers to run a nice TCP server.
+-   tokio's [prost](https://github.com/tokio-rs/prost) is used to encode/decode protobuf messages.
+-   [enum-repr-derive](https://github.com/ssalonen/enum-repr-derive) to encode/decode enums outside of protobuf.
+-   [anyhow](https://github.com/dtolnay/anyhow) to make error handling more convenient
+
+## Contributing
+
+Feel free to contribute in any way you can! <br />
+I even accept [donations](https://github.com/sponsors/ArjixWasTaken) if you want to contribute but cannot code :^)
+
+## Attributions
+
+1. [invaxion-server](https://github.com/603185423/invaxion-server) by @MoeGrid and @603185423 for the server logic
+2. [Invaxion-Server-Emulator](https://github.com/Invaxion-Server-Emulator/invaxion-server-emulator) by @ArjixWasTaken (me!) for discovering the missing parts (CosmicTour and some other stuff)
+   her stuff)
+her stuff)
+CosmicTour and some other stuff)
+   her stuff)
+her stuff)
+ @603185423 for the server logic
+2. [Invaxion-Server-Emulator](https://github.com/Invaxion-Server-Emulator/invaxion-server-emulator) by @ArjixWasTaken (me!) for discovering the missing parts (CosmicTour and some other stuff)
+   her stuff)
+her stuff)
+CosmicTour and some other stuff)
+   her stuff)
+her stuff)
+er stuff)
+her stuff)
+CosmicTour and some other stuff)
+   her stuff)
+her stuff)
+ stuff)
+her stuff)
+her stuff)
+ stuff)
+ff)
+her stuff)
+CosmicTour and some other stuff)
+   her stuff)
+her stuff)
+er stuff)
+her stuff)
+CosmicTour and some other stuff)
+   her stuff)
+her stuff)
+ stuff)
+her stuff)
+her stuff)
+ stuff)
+Grid and @603185423 for the server logic
+2. [Invaxion-Server-Emulator](https://github.com/Invaxion-Server-Emulator/invaxion-server-emulator) by @ArjixWasTaken (me!) for discovering the missing parts (CosmicTour and some other stuff)
+   her stuff)
+her stuff)
+CosmicTour and some other stuff)
+   her stuff)
+her stuff)
+ @603185423 for the server logic
+2. [Invaxion-Server-Emulator](https://github.com/Invaxion-Server-Emulator/invaxion-server-emulator) by @ArjixWasTaken (me!) for discovering the missing parts (CosmicTour and some other stuff)
+   her stuff)
+her stuff)
+CosmicTour and some other stuff)
+   her stuff)
+her stuff)
+er stuff)
+her stuff)
+CosmicTour and some other stuff)
+   her stuff)
+her stuff)
+ stuff)
+her stuff)
+her stuff)
+ stuff)
+ff)
+her stuff)
+CosmicTour and some other stuff)
+   her stuff)
+her stuff)
+er stuff)
+her stuff)
+CosmicTour and some other stuff)
+   her stuff)
+her stuff)
+ stuff)
+her stuff)
+her stuff)
+ stuff)
+f)
  stuff)
 her stuff)
 her stuff)

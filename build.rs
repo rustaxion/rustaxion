@@ -73,19 +73,15 @@ fn progress_to_table(progress: Vec<(Comet, Vec<Vec<String>>)>) -> String {
         let mut row_table = String::new();
         row_table.write_str(
             indoc! {"<table>
-                <thead>
-                    <th>Method</th>
-                    <th>Implemented</th>
-                </thead>
                 <tbody>
             "}
         );
 
         for method in &row {
             row_table.write_str(&format!(
-                "<tr><td>{}</td><td>{}</td></tr>",
+                "<tr><td>{} <ul><li>- [{}]</li></ul></td></tr>",
                 method[0],
-                if method[1] == "todo!()" { "<input type=\"checkbox\">" } else { "<input type=\"checkbox\" checked>" }
+                if method[1] == "todo!()" { " " } else { "x" }
             ));
         }
 

@@ -1,16 +1,166 @@
+#![allow(unused)]
+
+use std::{ fmt::Write, fs::File, io::{ Read, Seek, Write as ioWrite } };
+
+use indoc::indoc;
+
+extern crate indoc;
+extern crate anyhow;
 extern crate prost_build;
 extern crate protobuf_src;
+
+#[derive(Debug)]
+enum Comet {
+    Login,
+    Gate,
+    Scene,
+}
+
+fn get_progress_for(comet: Comet) -> anyhow::Result<(Comet, Vec<Vec<String>>)> {
+    let module = match comet {
+        Comet::Login => "src/server/login/mod.rs",
+        Comet::Gate => "src/server/gate/mod.rs",
+        Comet::Scene => "src/server/scene/mod.rs",
+    };
+
+    let mut content = String::new();
+    File::open(module)?.read_to_string(&mut content)?;
+
+    let match_branch = content.splitn(2, "match para_cmd {").skip(1).take(1).next().unwrap();
+    let match_arms = match_branch
+        .splitn(2, "_ => unreachable!()")
+        .take(1)
+        .next()
+        .unwrap()
+        .lines()
+        .filter_map(|x| {
+            if x.trim().is_empty() || x.trim().starts_with("//") { None } else { Some(x.trim()) }
+        })
+        .map(|x|
+            x
+                .trim_end_matches(",")
+                .split("=>")
+                .map(|x| x.trim().to_owned())
+                .collect::<Vec<_>>()
+        )
+        .collect::<Vec<_>>();
+
+    Ok((comet, match_arms))
+}
+
+#[rustfmt::skip]
+fn progress_to_table(progress: Vec<(Comet, Vec<Vec<String>>)>) -> String {
+    let mut table = String::new();
+    table.write_str(
+        indoc! {"
+            <table>
+                <thead>
+                    <th>Comet</th>
+                    <th>Completion</th>
+                    <th></th>
+                </thead>
+                <tbody>
+        "}
+    );
+
+    for comet in progress {
+        let (comet, row) = comet;
+        let completion = row
+            .iter()
+            .filter(|x| x[1] != "todo!()")
+            .count();
+
+        let mut row_table = String::new();
+        row_table.write_str(
+            indoc! {"<table>
+                <thead>
+                    <th>Method</th>
+                    <th>Implemented</th>
+                </thead>
+                <tbody>
+            "}
+        );
+
+        for method in &row {
+            row_table.write_str(&format!(
+                "<tr><td>{}</td><td>{}</td></tr>",
+                method[0],
+                if method[1] == "todo!()" { "<input type=\"checkbox\">" } else { "<input type=\"checkbox\" checked>" }
+            ));
+        }
+
+        row_table.write_str("</tbody></table>");
+        table.write_str(
+            &format!(
+                indoc! {"
+                    <tr>
+                        <td>{:?}</td>
+                        <td>{:.0}%</td>
+                        <td>{}</td>
+                    </tr>
+                "},
+                comet,
+                ((completion as f32) / (row.len() as f32)) * 100.0,
+                row_table
+            )
+        );
+    }
+
+    table.write_str("</tbody></table>");
+    table
+}
+
+fn add_progress_to_readme() -> anyhow::Result<()> {
+    let readme = File::options().read(true).write(true).open("README.md");
+
+    // We don't want the code to fail compilation just because the README cannot be opened.
+    if readme.is_err() {
+        return Ok(());
+    }
+
+    let mut readme = readme.unwrap();
+    let mut buffer = String::new();
+
+    let _ = readme.read_to_string(&mut buffer);
+    let _ = readme.seek(std::io::SeekFrom::Start(0))?;
+
+    let parts: Vec<&str> = buffer.splitn(2, "<!-- progress-start -->").collect();
+    let (prefix, buffer) = (parts[0], parts[1]);
+
+    let parts: Vec<&str> = buffer.splitn(2, "<!-- progress-end -->").collect();
+    let suffix = parts[1];
+
+    let login = get_progress_for(Comet::Login)?;
+    let gate = get_progress_for(Comet::Gate)?;
+    let scene = get_progress_for(Comet::Scene)?;
+
+    readme.write(
+        (
+            prefix.to_owned() +
+            "<!-- progress-start -->\n" +
+            "## Progress\n\n" +
+            &progress_to_table(vec![login, gate, scene]) +
+            "\n<!-- progress-end -->" +
+            suffix
+        ).as_bytes()
+    )?;
+
+    Ok(())
+}
 
 fn main() {
     std::env::set_var("PROTOC", protobuf_src::protoc());
 
-    prost_build::compile_protos(
-        &[
-            "src/proto/cometGate.proto",
-            "src/proto/cometLogin.proto",
-            "src/proto/cometScene.proto",
-        ],
-        &["src/"],
-    )
-    .unwrap();
+    prost_build
+        ::compile_protos(
+            &[
+                "src/proto/cometGate.proto",
+                "src/proto/cometLogin.proto",
+                "src/proto/cometScene.proto",
+            ],
+            &["src/"]
+        )
+        .unwrap();
+
+    add_progress_to_readme().unwrap();
 }

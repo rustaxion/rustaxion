@@ -29,7 +29,7 @@ pub async fn handle(
 
     let mut responses = Vec::<Response>::with_capacity(2);
     Player::insert(player::ActiveModel {
-        account_id: Set(session.account_id.unwrap()),
+        account_id: Set(session.account_id.unwrap() as i32),
         head_id: Set(req.select_char_id as i32),
         title_id: Set(10001),
         name: Set(req.name),

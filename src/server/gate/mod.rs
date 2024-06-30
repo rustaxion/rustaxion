@@ -6,6 +6,7 @@ use crate::{
 mod login_gate_verify;
 mod create_character;
 mod enter_game;
+mod time;
 
 #[rustfmt::skip]
 pub async fn handle(
@@ -24,8 +25,8 @@ pub async fn handle(
     };
 
     match para_cmd {
-        CometGate::NotifyGameTime => todo!(),
-        CometGate::RequestUserGameTime => todo!(),
+        CometGate::RequestUserGameTime => time::handle(session, db, data).await,
+        CometGate::ResponseUserGameTime => time::handle(session, db, data).await,
         CometGate::LoginGateVerify => login_gate_verify::handle(session, db, data).await,
         CometGate::SelectUserInfoList => todo!(),
         CometGate::CreateCharacter => create_character::handle(session, db, data).await,

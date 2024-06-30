@@ -33,12 +33,12 @@ pub async fn handle(_session: &mut SessionData, db: sea_orm::DatabaseConnection,
                 _ => None
             }
         }).collect::<Vec<_>>(),
-        pay_list: Vec::with_capacity(0),
-        piece_list: Vec::with_capacity(0),
-        member_list: Vec::with_capacity(0),
-        shop_recommend: ShopRecommend { hot_sell_list: Vec::with_capacity(0) },
-        summon_shop_list: Vec::with_capacity(0),
-        vip_reward_list: Vec::with_capacity(0),
+        pay_list: vec![],
+        piece_list: vec![],
+        member_list: vec![],
+        shop_recommend: ShopRecommend { hot_sell_list: vec![] },
+        summon_shop_list: vec![],
+        vip_reward_list: vec![],
     };
     
     Ok(vec![Response {

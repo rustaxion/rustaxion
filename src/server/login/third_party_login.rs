@@ -34,7 +34,7 @@ pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, 
     session.account_id = Some(acc_id as i64);
 
     let gate_ip = env::var("HOST").unwrap_or("127.0.0.1".to_string());
-    let gate_port: u32 = env::var("PORT").unwrap_or("6969".to_string()).parse()?;
+    let gate_port: u32 = env::var("PORT").unwrap_or("20017".to_string()).parse()?;
 
     let ret = RetThirdLogin {
         data: GatewayServerData {

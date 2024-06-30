@@ -1,6 +1,18 @@
 syntax = "proto2";
 package cometScene;
 
+enum BeatmapMode {
+    bmm_4k = 1;
+    bmm_6k = 2;
+    bmm_8k = 3;
+}
+
+enum BeatmapDifficulty {
+    bmd_Easy = 1;
+    bmd_Normal = 2;
+    bmd_Hard = 3;
+}
+
 enum RankTopType {
     rtp_Duanwei = 0;
     rtp_Rank4 = 1;
@@ -29,8 +41,8 @@ message Ret_ActivityBegin {
 
 message SingleSongData {
   required int32 songId = 1;
-  required int32 difficulty = 2;
-  required int32 mode = 3;
+  required BeatmapDifficulty difficulty = 2;
+  required BeatmapMode mode = 3;
 }
 
 message SettleData {
@@ -294,8 +306,8 @@ message Req_BattleFieldFinish {
 
 message songFinishData {
   required int32 songId = 1;
-  required int32 mode = 2;
-  required int32 difficulty = 3;
+  required BeatmapMode mode = 2;
+  required BeatmapDifficulty difficulty = 3;
   required PlayData playData = 4;
   required int32 totalScore = 5;
   optional int32 total4KScore = 6 [default=0];
@@ -723,8 +735,8 @@ message Notify_CharacterFullData {
 
 message Req_BeginSong {
   required int32 songId = 1;
-  required int32 mode = 2;
-  required int32 difficulty = 3;
+  required BeatmapMode mode = 2;
+  required BeatmapDifficulty difficulty = 3;
 }
 
 message Ret_BeginSong {
@@ -736,8 +748,8 @@ message Req_FinishSong {
 
 message Req_SingleSongRank {
   required int32 songId = 1;
-  required int32 mode = 2;
-  required int32 difficulty = 3;
+  required BeatmapMode mode = 2;
+  required BeatmapDifficulty difficulty = 3;
   optional int32 isWeek = 4 [default=0];
 }
 
@@ -800,7 +812,7 @@ message ActivityData {
   required int32 beginTime = 1;
   required int32 endTime = 2;
   required int32 songId = 3;
-  required int32 difficulty = 4;
+  required BeatmapDifficulty difficulty = 4;
   required int32 costType = 5;
   required int32 costValue = 6;
   repeated ItemData itemList = 7;
@@ -1227,8 +1239,8 @@ message TeamUploadSongOneData {
   required uint64 charId = 1;
   required int32 score = 2;
   required int32 songId = 3;
-  required int32 diff = 4;
-  required int32 mode = 5;
+  required BeatmapDifficulty diff = 4;
+  required BeatmapMode mode = 5;
   required uint64 time = 6;
 }
 

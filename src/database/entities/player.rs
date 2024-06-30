@@ -7,7 +7,7 @@ use sea_orm::entity::prelude::*;
 pub struct Model {
     #[sea_orm(primary_key)]
     pub character_id: i32,
-    pub account_id: i64,
+    pub account_id: i32,
     pub name: String,
     pub language: i32,
     pub country: i32,
@@ -22,6 +22,11 @@ pub struct Model {
     pub level: i32,
     pub current_exp: i32,
     pub maximum_exp: i32,
+    pub gold: i32,
+    pub diamond: i32,
+    pub current_stamina: i32,
+    pub maximum_stamina: i32,
+    pub honour_points: i32,
     pub total_arcade_score: i32,
     pub pre_rank: i32,
     pub pre_rank4k: i32,

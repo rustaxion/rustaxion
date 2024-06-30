@@ -33,6 +33,11 @@ impl MigrationTrait for Migration {
                 .col(ColumnDef::new(Player::Level).integer().not_null().default(1))
                 .col(ColumnDef::new(Player::CurrentExp).integer().not_null().default(0))
                 .col(ColumnDef::new(Player::MaximumExp).integer().not_null().default(0))
+                .col(ColumnDef::new(Player::Gold).integer().not_null().default(0))
+                .col(ColumnDef::new(Player::Diamond).integer().not_null().default(0))
+                .col(ColumnDef::new(Player::CurrentStamina).integer().not_null().default(10))
+                .col(ColumnDef::new(Player::MaximumStamina).integer().not_null().default(10))
+                .col(ColumnDef::new(Player::HonourPoints).integer().not_null().default(0))
                 .col(ColumnDef::new(Player::TotalArcadeScore).integer().not_null().default(0))
                 .col(ColumnDef::new(Player::PreRank).integer().not_null().default(0))
                 .col(ColumnDef::new(Player::PreRank4k).integer().not_null().default(0))
@@ -69,13 +74,18 @@ pub enum Player {
     SelectedThemeId,
     HeadId,
     TitleId,
+    Level,
+    CurrentExp,
+    MaximumExp,
+    Gold,
+    Diamond,
+    CurrentStamina,
+    MaximumStamina,
+    HonourPoints,
     TotalScore,
     Total4kScore,
     Total6kScore,
     Total8kScore,
-    Level,
-    CurrentExp,
-    MaximumExp,
     TotalArcadeScore,
     PreRank,
     PreRank4k,

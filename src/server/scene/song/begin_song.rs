@@ -4,14 +4,21 @@ use prost::Message;
 use crate::{
     enums::comet::{ comet_scene::CometScene, MainCmd, ParaCmd },
     proto::comet_scene::ReqBeginSong,
-    types::{ response::Response, session::SessionData },
+    types::{ response::Response, session::{ NowPlaying, SessionData } },
 };
 
 #[rustfmt::skip]
-pub async fn handle(_session: &mut SessionData, _db: sea_orm::DatabaseConnection, body: Vec<u8>) -> anyhow::Result<Vec<Response>> {
-    let _req = ReqBeginSong::decode(body.as_slice()).context("Failed to decode ReqBeginSong.")?;
+pub async fn handle(session: &mut SessionData, _db: sea_orm::DatabaseConnection, body: Vec<u8>) -> anyhow::Result<Vec<Response>> {
+    let req = ReqBeginSong::decode(body.as_slice()).context("Failed to decode ReqBeginSong.")?;
+    let now = chrono::Utc::now().timestamp();
 
-    // TODO(arjix): Maybe store this in a table, or the session data?
+    // Save the beatmap to the session
+    session.now_playing = Some(NowPlaying {
+        song_id: req.song_id,
+        mode: req.mode,
+        difficulty: req.difficulty,
+        time: now
+    });
 
     Ok(vec![Response {
         main_cmd: MainCmd::Game,

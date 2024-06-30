@@ -23,20 +23,21 @@ pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, 
 
     let daily = DailyLogin::find().filter(
         daily_login::Column::PlayerId.eq(session.player_id.unwrap() as i32)
-    ).one(&db).await?.ok_or(anyhow::anyhow!("Expected a daily login to already exit."))?;
+    ).one(&db).await?.ok_or(anyhow::anyhow!("Expected a daily login to already exist."))?;
 
     // TODO(arjix): Once a web-ui is made, make this more customizable.
+    // TODO(arjix): I should probably return a reward message for the daily login??
 
     let ret = RetEventInfo {
         level_gift: LevelGiftData { get_list: vec![5, 2] },
         get_stamina: GetStaminaData { is_get: 0 },
         new_player: NewPlayerData {
             login_day: daily.login_counter,
-            get_list: Vec::with_capacity(0)
+            get_list: vec![]
         },
         week_checkin: WeekCheckinData {
             login_day: daily.login_counter,
-            get_list: Vec::with_capacity(0),
+            get_list: vec![],
             reward_list: vec![
                 WeekCheckinRewardData { day: 1, reward: ItemData { id: 0, r#type: 1, count: 10 } },
                 WeekCheckinRewardData { day: 2, reward: ItemData { id: 90002, r#type: 3, count: 1 } },

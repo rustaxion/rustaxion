@@ -25,15 +25,15 @@ If you are looking for a working solution, try out my [server emulator](https://
 | CometLogin::RequestAnnouncement | ❌ |
 | CometLogin::RequestBiliLogin | ❌ |
 
-### Comet::Gate (50% done)
+### Comet::Gate (83% done)
 
 | Method | Implemented |
 | --------- | ------- |
+| CometGate::RequestUserGameTime | ✅ |
+| CometGate::ResponseUserGameTime | ✅ |
 | CometGate::LoginGateVerify | ✅ |
 | CometGate::CreateCharacter | ✅ |
 | CometGate::EnterGame | ✅ |
-| CometGate::NotifyGameTime | ❌ |
-| CometGate::RequestUserGameTime | ❌ |
 | CometGate::SelectUserInfoList | ❌ |
 
 ### Comet::Scene (7% done)

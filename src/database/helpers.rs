@@ -1,72 +1,5 @@
 use sea_orm::{ entity::*, DatabaseConnection };
-
 use crate::{ proto::comet_scene::*, database::entities::{ player, shop_item, prelude::* } };
-
-#[rustfmt::skip]
-pub async fn get_player_base_info(
-    player_id: i64,
-    db: &DatabaseConnection
-) -> anyhow::Result<PlayerBaseInfo> {
-    let player = Player::find_by_id(player_id as i32).one(db).await?;
-
-    let player::Model {
-        name,
-        account_id,
-        character_id,
-        head_id,
-        level,
-        current_exp,
-        maximum_exp,
-        selected_character_id,
-        selected_theme_id,
-        pre_rank,
-        country,
-        pre_rank4k,
-        pre_rank6k,
-        title_id,
-        ..
-    } = player.unwrap();
-
-    Ok(PlayerBaseInfo {
-        acc_id: account_id as i32,
-        char_id: character_id as i64,
-        char_name: name,
-        head_id,
-        level,
-        cur_exp: current_exp,
-        max_exp: maximum_exp,
-        guide_step: 7,
-        cur_character_id: selected_character_id,
-        cur_theme_id: selected_theme_id,
-        online_time: 0,
-        need_req_app_receipt: 0,
-        active_point: 0,
-        pre_rank_id: pre_rank,
-
-        // TODO(arjix): Figure out what this is.
-        guide_list: vec![9, 8, 7, 6, 5, 4, 3, 2, 1],
-        
-        country,
-        pre_rank_id4_k: pre_rank4k,
-        pre_rank_id6_k: pre_rank6k,
-        title_id,
-    })
-}
-
-#[rustfmt::skip]
-pub async fn get_player_currency_info(
-    _player_id: i64,
-    _db: &DatabaseConnection
-) -> anyhow::Result<PlayerCurrencyInfo> {
-    // TODO: Populate this using data from the database.
-    Ok(PlayerCurrencyInfo {
-        gold: 0,
-        diamond: 0,
-        cur_stamina: 10,
-        max_stamina: 10,
-        honour_point: 0,
-    })
-}
 
 pub async fn get_announcements(_db: &DatabaseConnection) -> anyhow::Result<AnnouncementData> {
     // TODO: Populate this using data from the database.
@@ -89,9 +22,9 @@ pub async fn get_player_score_list(
     // TODO: Populate this using data from the database.
 
     let diff = DifficultyList {
-        easy_list: Vec::with_capacity(0),
-        normal_list: Vec::with_capacity(0),
-        hard_list: Vec::with_capacity(0)
+        easy_list: vec![],
+        normal_list: vec![],
+        hard_list: vec![]
     };
 
     Ok(ScoreList {
@@ -125,7 +58,7 @@ pub async fn get_player_song_list(
 
     Ok(SongList {
         list,
-        favorite_list: Vec::with_capacity(0),
+        favorite_list: vec![],
     })
 }
 
@@ -137,7 +70,7 @@ pub async fn get_player_char_list(
     // TODO: Populate this using data from the database.
 
     Ok(CharacterList {
-        list: Vec::with_capacity(0),
+        list: vec![],
     })
 }
 
@@ -149,8 +82,8 @@ pub async fn get_player_social_data(
     // TODO: Populate this using data from the database.
 
     Ok(SocialData {
-        friend_list: Vec::with_capacity(0),
-        request_list: Vec::with_capacity(0),
+        friend_list: vec![],
+        request_list: vec![],
     })
 }
 
@@ -187,9 +120,9 @@ pub async fn get_player_arcade_data(
     // TODO: Populate this using data from the database.
 
     let diff = ArcadeDiffList {
-        easy_list: Vec::with_capacity(0),
-        normal_list: Vec::with_capacity(0),
-        hard_list: Vec::with_capacity(0)
+        easy_list: vec![],
+        normal_list: vec![],
+        hard_list: vec![]
     };
     Ok(ArcadeData {
         key4_list: diff.clone(),
@@ -206,7 +139,7 @@ pub async fn get_player_title_data(
     // TODO: Populate this using data from the database.
 
     Ok(TitleData {
-        list: Vec::with_capacity(0),
+        list: vec![],
     })
 }
 
@@ -222,7 +155,7 @@ pub async fn get_player_team(
         team_name: "N/A".to_string(),
         upload_song_count: 0,
         can_upload_song: 0,
-        buff_list: Vec::with_capacity(0),
+        buff_list: vec![],
     })
 }
 
@@ -231,17 +164,22 @@ pub async fn get_character_full_data(
     player_id: i64,
     db: &DatabaseConnection
 ) -> anyhow::Result<CharacterFullData> {
+    let player = Player::find_by_id(player_id as i32).one(db).await?;
+    anyhow::ensure!(player.is_some());
+
+    let player = player.unwrap();
+
     let announcement = get_announcements(db).await?;
-    let base_info = get_player_base_info(player_id, db).await?;
-    let currency_info = get_player_currency_info(player_id, db).await?;
+    let base_info = player.get_base_info();
+    let currency_info = player.get_currency();
     let score_list = get_player_score_list(player_id, db).await?;
     let song_list = get_player_song_list(player_id, db).await?;
     let char_list = get_player_char_list(player_id, db).await?;
     let social_data = get_player_social_data(player_id, db).await?;
-    let item_list = Vec::with_capacity(0);
+    let item_list = vec![];
     let theme_list = get_player_theme_list(player_id, db).await?;
     let vip_info = get_player_vip_info(player_id, db).await?;
-    let experience_list = Vec::with_capacity(0);
+    let experience_list = vec![];
     let arcade_data = get_player_arcade_data(player_id, db).await?;
     let title_list = get_player_title_data(player_id, db).await?;
     let team = get_player_team(player_id, db).await?;
@@ -262,6 +200,45 @@ pub async fn get_character_full_data(
         title_list,
         team,
     })
+}
+
+impl player::Model {
+    pub fn get_currency(&self) -> PlayerCurrencyInfo {
+        PlayerCurrencyInfo {
+            gold: self.gold,
+            diamond: self.diamond,
+            cur_stamina: self.current_stamina,
+            max_stamina: self.maximum_stamina,
+            honour_point: self.honour_points,
+        }
+    }
+
+    pub fn get_base_info(&self) -> PlayerBaseInfo {
+        PlayerBaseInfo {
+            acc_id: self.account_id,
+            char_id: self.character_id as i64,
+            char_name: self.name.clone(),
+            head_id: self.head_id,
+            level: self.level,
+            cur_exp: self.current_exp,
+            max_exp: self.maximum_exp,
+            guide_step: 7,
+            cur_character_id: self.selected_character_id,
+            cur_theme_id: self.selected_theme_id,
+            online_time: 0,
+            need_req_app_receipt: 0,
+            active_point: 0,
+            pre_rank_id: self.pre_rank,
+
+            // TODO(arjix): Figure out what this is.
+            guide_list: vec![9, 8, 7, 6, 5, 4, 3, 2, 1],
+
+            country: self.country,
+            pre_rank_id4_k: self.pre_rank4k,
+            pre_rank_id6_k: self.pre_rank6k,
+            title_id: self.title_id,
+        }
+    }
 }
 
 impl shop_item::Model {

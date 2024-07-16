@@ -25,7 +25,7 @@ If you are looking for a working solution, try out my [server emulator](https://
 | CometLogin::RequestAnnouncement | ❌ |
 | CometLogin::RequestBiliLogin | ❌ |
 
-### Comet::Gate (83% done)
+### Comet::Gate (100% done)
 
 | Method | Implemented |
 | --------- | ------- |
@@ -34,7 +34,6 @@ If you are looking for a working solution, try out my [server emulator](https://
 | CometGate::LoginGateVerify | ✅ |
 | CometGate::CreateCharacter | ✅ |
 | CometGate::EnterGame | ✅ |
-| CometGate::SelectUserInfoList | ❌ |
 
 ### Comet::Scene (7% done)
 

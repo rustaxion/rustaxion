@@ -28,7 +28,6 @@ pub async fn handle(
         CometGate::RequestUserGameTime => time::handle(session, db, data).await,
         CometGate::ResponseUserGameTime => time::handle(session, db, data).await,
         CometGate::LoginGateVerify => login_gate_verify::handle(session, db, data).await,
-        CometGate::SelectUserInfoList => todo!(),
         CometGate::CreateCharacter => create_character::handle(session, db, data).await,
         CometGate::EnterGame => enter_game::handle(session, db, data).await,
 

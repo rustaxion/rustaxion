@@ -29,9 +29,14 @@ pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, 
     let daily = DailyLogin::find().filter(daily_login::Column::PlayerId.eq(req.char_id)).one(&db).await?;
     match daily {
         Some(daily) => {
-            let date_time = DateTime::from_timestamp(daily.last_day_login, 0).ok_or(anyhow::anyhow!("Failed to parse unix timestamp."))?;
-            let is_new_day = now.day() - date_time.day() == 1;
-            let broke_streak = now.day() - date_time.day() > 1;
+            let date_time = DateTime::from_timestamp(daily.last_day_login, 0)
+                .ok_or(anyhow::anyhow!("Failed to parse unix timestamp."))?;
+
+            let today = now.day() as i32;
+            let other_day = date_time.day() as i32;
+
+            let is_new_day = today - other_day == 1;
+            let broke_streak = today - other_day > 1;
 
             let mut daily = daily;
             if is_new_day {

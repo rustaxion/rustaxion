@@ -3,6 +3,7 @@
 pub mod prelude;
 
 pub mod account;
+pub mod character;
 pub mod daily_login;
 pub mod player;
 pub mod shop_item;

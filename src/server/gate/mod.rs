@@ -1,11 +1,11 @@
 use crate::{
-    enums::comet::{ comet_gate::CometGate, MainCmd, ParaCmd },
-    types::{ packet::Packet, response::Response, session::SessionData },
+    enums::comet::{comet_gate::CometGate, MainCmd, ParaCmd},
+    types::{packet::Packet, response::Response, session::SessionData},
 };
 
-mod login_gate_verify;
 mod create_character;
 mod enter_game;
+mod login_gate_verify;
 mod time;
 
 #[rustfmt::skip]

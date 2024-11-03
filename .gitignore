@@ -1,5 +1,4 @@
-sqlite.db
+.vscode/
 target/
-env/*
 
-!env/*.example
+.env

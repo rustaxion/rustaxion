@@ -1,9 +1,9 @@
 use prost::Message;
 
 use crate::{
-    enums::comet::{ comet_gate::CometGate, MainCmd, ParaCmd },
-    proto::comet_gate::{ NotifyGameTime, RetUserGameTime },
-    types::{ response::Response, session::SessionData },
+    enums::comet::{comet_gate::CometGate, MainCmd, ParaCmd},
+    proto::comet_gate::NotifyGameTime,
+    types::{response::Response, session::SessionData},
 };
 
 #[rustfmt::skip]

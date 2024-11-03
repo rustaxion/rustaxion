@@ -1,6 +1,6 @@
 use crate::{
-    enums::comet::{ comet_scene::CometScene, MainCmd, ParaCmd },
-    types::{ response::Response, session::SessionData },
+    enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd},
+    types::{response::Response, session::SessionData},
 };
 
 #[rustfmt::skip]

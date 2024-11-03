@@ -2,19 +2,19 @@ syntax = "proto2";
 package cometLogin;
 
 enum LanguageType {
-    NullLanguage = 0;
-    DefaultLanguage = 1;
-    China = 2;
-    Japan = 3;
-    TraditionalChinese = 4;
-    MaxLanguage = 5;
+    l_Null = 0;
+    l_Default = 1;
+    l_China = 2;
+    l_Japan = 3;
+    l_TraditionalChinese = 4;
+    l_Max = 5;
 }
 
 enum PlatformType {
-    NullPlatform = 0;
-    IOS = 1;
-    Android = 2;
-    MaxPlatform = 3;
+    pt_Null = 0;
+    pt_IOS = 1;
+    pt_Android = 2;
+    pt_Max = 3;
 }
 
 message Ret_GameVersion {
@@ -105,8 +105,8 @@ message Ret_Announcement {
 }
 
 message Req_GameVersion {
-  required PlatformType type = 1 [default=Android];
-  required LanguageType language = 2 [default=DefaultLanguage];
+  required PlatformType type = 1 [default=pt_Android];
+  required LanguageType language = 2 [default=l_Default];
 }
 
 message Req_BiliLogin {

@@ -1,4 +1,4 @@
-use sea_orm_migration::prelude::*;
+use sea_orm_migration::{prelude::*, schema::*};
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;
@@ -7,19 +7,23 @@ pub struct Migration;
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // prettier-ignore
-        manager.create_table(
-            Table::create()
-                .table(Account::Table)
-                .if_not_exists()
-                .col(ColumnDef::new(Account::Id).integer().not_null().auto_increment().primary_key())
-                .col(ColumnDef::new(Account::SteamId).string().not_null())
-                .col(ColumnDef::new(Account::Token).string().not_null())
-                .to_owned()
-        ).await
+        manager
+            .create_table(
+                Table::create()
+                    .table(Account::Table)
+                    .if_not_exists()
+                    .col(pk_auto(Account::Id))
+                    .col(string(Account::SteamId))
+                    .col(string(Account::Token))
+                    .to_owned(),
+            )
+            .await
     }
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-        manager.drop_table(Table::drop().table(Account::Table).to_owned()).await
+        manager
+            .drop_table(Table::drop().table(Account::Table).to_owned())
+            .await
     }
 }
 

@@ -1,6 +1,6 @@
 #![allow(unused)]
 
-use std::{ cmp::Ordering, fmt::Write, fs };
+use std::{cmp::Ordering, fmt::Write, fs};
 
 extern crate anyhow;
 extern crate prost_build;
@@ -9,16 +9,23 @@ extern crate protobuf_src;
 fn main() {
     std::env::set_var("PROTOC", protobuf_src::protoc());
 
-    prost_build
-        ::compile_protos(
-            &[
-                "src/proto/cometGate.proto",
-                "src/proto/cometLogin.proto",
-                "src/proto/cometScene.proto",
-            ],
-            &["src/"]
-        )
-        .unwrap();
+    let proto = prost_build::compile_protos(
+        &[
+            "src/proto/cometGate.proto",
+            "src/proto/cometLogin.proto",
+            "src/proto/cometScene.proto",
+        ],
+        &["src/"],
+    );
+
+    match proto {
+        Ok(_) => {}
+        Err(err) => {
+            let inner = err.into_inner().unwrap();
+            eprintln!("Failed to compile proto files: {}", inner);
+            std::process::exit(1);
+        }
+    };
 
     add_progress_to_readme();
 }
@@ -39,7 +46,12 @@ fn get_progress_for(comet: Comet) -> anyhow::Result<(Comet, Vec<Vec<String>>)> {
 
     let content = fs::read_to_string(module)?;
 
-    let match_branch = content.splitn(2, "match para_cmd {").skip(1).take(1).next().unwrap();
+    let match_branch = content
+        .splitn(2, "match para_cmd {")
+        .skip(1)
+        .take(1)
+        .next()
+        .unwrap();
     let match_arms = match_branch
         .splitn(2, "_ => unreachable!()")
         .take(1)
@@ -47,15 +59,18 @@ fn get_progress_for(comet: Comet) -> anyhow::Result<(Comet, Vec<Vec<String>>)> {
         .unwrap()
         .lines()
         .filter_map(|x| {
-            if x.trim().is_empty() || x.trim().starts_with("//") { None } else { Some(x.trim()) }
+            if x.trim().is_empty() || x.trim().starts_with("//") {
+                None
+            } else {
+                Some(x.trim())
+            }
         })
-        .map(|x|
-            x
-                .trim_end_matches(",")
+        .map(|x| {
+            x.trim_end_matches(",")
                 .split("=>")
                 .map(|x| x.trim().to_owned())
                 .collect::<Vec<_>>()
-        )
+        })
         .collect::<Vec<_>>();
 
     Ok((comet, match_arms))

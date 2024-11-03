@@ -28,6 +28,23 @@ enum RankTopType {
     rtp_Active = 11;
 }
 
+enum Country {
+    c_Null = 0;
+    c_China = 1;
+    c_HongKong = 2;
+    c_TaiWan = 3;
+    c_Macao = 4;
+    c_Japan = 5;
+    c_SouthKorea = 6;
+    c_ASEAN = 7;
+    c_UnitedStates = 8;
+    c_UnitedKingdom = 9;
+    c_EU = 10;
+    c_Other = 11;
+    c_Alien = 12;
+    c_Max = 13;
+}
+
 message Ret_FinishSong {
   required SingleSongInfo songInfo = 1;
   optional SettleData settleData = 2;
@@ -193,7 +210,7 @@ message FriendBaseInfo {
   required int32 level = 4;
   required int32 headId = 5;
   required int32 preRankId = 6;
-  required int32 country = 7;
+  required Country country = 7;
   required int32 preRankId4K = 8;
   required int32 preRankId6K = 9;
   required int32 titleId = 10;
@@ -247,7 +264,7 @@ message TotalSongRankData {
   required string charName = 2;
   required int32 headId = 3;
   required uint64 score = 4;
-  required int32 country = 5;
+  required Country country = 5;
   optional int32 param = 6 [default=0];
   optional string teamName = 7 [default=""];
   optional int32 titleId = 8 [default=0];
@@ -383,7 +400,7 @@ message PreRankListData {
   required int32 headId = 4;
   required int32 score = 5;
   required int32 percent = 6;
-  required int32 country = 7;
+  required Country country = 7;
 }
 
 message Ret_PreRank_RankList {
@@ -649,7 +666,7 @@ message PlayerBaseInfo {
   required int32 activePoint = 13;
   required int32 preRankId = 14;
   repeated int32 guideList = 15;
-  required int32 country = 16;
+  required Country country = 16;
   required int32 preRankId4K = 17;
   required int32 preRankId6K = 18;
   required int32 titleId = 19;
@@ -760,7 +777,7 @@ message SingleSongRankData {
   required int32 finishLevel = 4;
   required int32 headId = 5;
   required uint64 charId = 6;
-  required int32 country = 7;
+  required Country country = 7;
   optional string teamName = 8 [default=""];
   optional int32 titleId = 9 [default=0];
 }
@@ -927,7 +944,7 @@ message Ret_Social_SearchPlayer {
   optional string name = 2 [default=""];
   optional uint64 charId = 3 [default=0];
   optional int32 headId = 4 [default=0];
-  optional int32 country = 5 [default=0];
+  optional Country country = 5 [default=c_Null];
   optional int32 isOnline = 6 [default=0];
 }
 
@@ -940,7 +957,7 @@ message PlayerProfileData {
   required int32 level = 2;
   required uint64 charId = 3;
   required int32 isOnline = 4;
-  required int32 country = 5;
+  required Country country = 5;
   repeated DynamicData list = 6;
 }
 

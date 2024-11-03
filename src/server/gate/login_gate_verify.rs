@@ -1,13 +1,13 @@
 use anyhow::Context;
 use prost::Message;
 
-use sea_orm::entity::*;
 use crate::database::entities::prelude::*;
+use sea_orm::entity::*;
 
 use crate::{
-    enums::comet::{ comet_gate::CometGate, MainCmd, ParaCmd },
-    proto::comet_gate::{ LoginGateVerify, NotifyGameTime, SelectUserInfo, SelectUserInfoList },
-    types::{ response::Response, session::SessionData },
+    enums::comet::{comet_gate::CometGate, MainCmd, ParaCmd},
+    proto::comet_gate::{LoginGateVerify, NotifyGameTime, SelectUserInfo, SelectUserInfoList},
+    types::{response::Response, session::SessionData},
 };
 
 #[rustfmt::skip]

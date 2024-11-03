@@ -2,9 +2,8 @@ use anyhow::Context;
 use prost::Message;
 
 use crate::{
-    enums::comet::{ comet_scene::CometScene, MainCmd, ParaCmd },
-    proto::comet_scene::{ ReqFinishSong, RetFinishSong },
-    types::{ response::Response, session::SessionData },
+    proto::comet_scene::ReqFinishSong,
+    types::{response::Response, session::SessionData},
 };
 
 #[rustfmt::skip]

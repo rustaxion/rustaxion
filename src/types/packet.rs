@@ -1,11 +1,11 @@
-use std::io::{ Cursor, Read, Write };
+use std::io::{Cursor, Read, Write};
 use thiserror::Error;
 
 use anyhow::Context;
-use tokio_util::bytes::{ Buf, BufMut, BytesMut };
-use tokio_util::codec::{ Decoder, Encoder };
+use tokio_util::bytes::{Buf, BufMut, BytesMut};
+use tokio_util::codec::{Decoder, Encoder};
 
-use crate::enums::comet::{ MainCmd, ParaCmd };
+use crate::enums::comet::{MainCmd, ParaCmd};
 
 pub struct PacketGlue;
 
@@ -19,7 +19,8 @@ pub struct Packet {
 }
 
 pub const PACKET_HEADER_SIZE: usize =
-    /* main_cmd */ std::mem::size_of::<i8>() +
+    /* main_cmd */
+    std::mem::size_of::<i8>() +
     /* para_cmd */ std::mem::size_of::<u8>() +
     /* data_len */ std::mem::size_of::<u16>();
 
@@ -31,7 +32,7 @@ pub enum PacketDecodeError {
 
 impl Packet {
     pub fn encode(&self) -> anyhow::Result<Vec<u8>> {
-        use byteorder::{ LittleEndian, WriteBytesExt };
+        use byteorder::{LittleEndian, WriteBytesExt};
 
         anyhow::ensure!(
             self.pkg_len >= (PACKET_HEADER_SIZE as i32),
@@ -49,7 +50,7 @@ impl Packet {
     }
 
     pub fn decode(buffer: &mut BytesMut) -> anyhow::Result<Self> {
-        use byteorder::{ LittleEndian, ReadBytesExt };
+        use byteorder::{LittleEndian, ReadBytesExt};
 
         let mut cursor = buffer.reader();
 
@@ -59,7 +60,9 @@ impl Packet {
         }
 
         let mut pkg = vec![0u8; pkg_len as usize];
-        cursor.read_exact(&mut pkg).context(format!("Failed to read {} bytes", pkg_len))?;
+        cursor
+            .read_exact(&mut pkg)
+            .context(format!("Failed to read {} bytes", pkg_len))?;
 
         let mut cursor = Cursor::new(pkg);
 
@@ -74,7 +77,9 @@ impl Packet {
         let mut data = vec![0u8; data_len as usize];
 
         if data_len > 0 {
-            cursor.read_exact(&mut data).context("Failed to read Packet::data")?;
+            cursor
+                .read_exact(&mut data)
+                .context("Failed to read Packet::data")?;
         }
 
         Ok(Packet {
@@ -109,17 +114,17 @@ impl Decoder for PacketGlue {
 
         let error = packet.unwrap_err();
         if error.is::<PacketDecodeError>() {
-            let Some(error) = error.downcast_ref::<PacketDecodeError>() else { unreachable!() };
+            let Some(error) = error.downcast_ref::<PacketDecodeError>() else {
+                unreachable!()
+            };
             match error {
                 PacketDecodeError::NoDataToRead => Ok(None),
             }
         } else {
             match error.downcast_ref::<std::io::Error>() {
-                Some(io_error) => {
-                    match io_error.kind() {
-                        _ => {}
-                    }
-                }
+                Some(io_error) => match io_error.kind() {
+                    _ => {}
+                },
                 _ => {}
             }
 

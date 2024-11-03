@@ -1,22 +1,19 @@
 use anyhow::Context;
 use prost::Message;
 
-use sea_orm::{ entity::*, query::* };
 use chrono::prelude::*;
+use sea_orm::{entity::*, query::*};
 
-use crate::database::entities::{ daily_login, prelude::* };
+use crate::database::entities::{daily_login, prelude::*};
 use crate::database::helpers::get_character_full_data;
 use crate::enums::comet::comet_scene::CometScene;
 use crate::proto::comet_scene::{
-    CharData,
-    CharacterFullData,
-    CharacterList,
-    NotifyCharacterFullData,
+    CharData, CharacterFullData, CharacterList, NotifyCharacterFullData,
 };
 use crate::{
-    enums::comet::{ MainCmd, ParaCmd },
+    enums::comet::{MainCmd, ParaCmd},
     proto::comet_gate::EnterGame,
-    types::{ response::Response, session::SessionData },
+    types::{response::Response, session::SessionData},
 };
 
 #[rustfmt::skip]
@@ -29,7 +26,7 @@ pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, 
     let daily = DailyLogin::find().filter(daily_login::Column::PlayerId.eq(req.char_id)).one(&db).await?;
     match daily {
         Some(daily) => {
-            let date_time = DateTime::from_timestamp(daily.last_day_login, 0)
+            let date_time = DateTime::from_timestamp(daily.last_day_login.to_utc().timestamp(), 0)
                 .ok_or(anyhow::anyhow!("Failed to parse unix timestamp."))?;
 
             let today = now.day() as i32;
@@ -52,7 +49,7 @@ pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, 
             }
 
             if is_new_day || broke_streak {
-                daily.last_day_login = now.timestamp();
+                daily.last_day_login = now.fixed_offset();
             }
 
             daily_login::ActiveModel {
@@ -65,10 +62,10 @@ pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, 
         },
         None => {
             daily_login::ActiveModel {
-                player_id: Unchanged(req.char_id),
+                player_id: Unchanged(req.char_id.try_into()?),
                 login_counter: Set(1),
                 login_streak: Set(1),
-                last_day_login: Set(now.timestamp()),
+                last_day_login: Set(now.fixed_offset()),
                 ..Default::default()
             }.insert(&db).await?;
         }

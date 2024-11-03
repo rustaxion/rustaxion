@@ -15,6 +15,8 @@ pub struct SessionData {
 
 impl SessionData {
     pub fn new() -> Self {
-        Self { ..Default::default() }
+        Self {
+            ..Default::default()
+        }
     }
 }

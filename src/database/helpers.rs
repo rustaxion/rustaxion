@@ -1,5 +1,10 @@
-use sea_orm::{ entity::*, DatabaseConnection };
-use crate::{ proto::comet_scene::*, database::entities::{ player, shop_item, prelude::* } };
+use crate::{
+    database::entities::{player, prelude::*, shop_item},
+    proto::{self, comet_scene::*},
+};
+use sea_orm::{entity::*, DatabaseConnection};
+
+use super::entities::sea_orm_active_enums;
 
 pub async fn get_announcements(_db: &DatabaseConnection) -> anyhow::Result<AnnouncementData> {
     // TODO: Populate this using data from the database.
@@ -216,7 +221,7 @@ impl player::Model {
     pub fn get_base_info(&self) -> PlayerBaseInfo {
         PlayerBaseInfo {
             acc_id: self.account_id,
-            char_id: self.character_id as i64,
+            char_id: self.id as i64,
             char_name: self.name.clone(),
             head_id: self.head_id,
             level: self.level,
@@ -233,7 +238,7 @@ impl player::Model {
             // TODO(arjix): Figure out what this is.
             guide_list: vec![9, 8, 7, 6, 5, 4, 3, 2, 1],
 
-            country: self.country,
+            country: self.country.into_proto() as i32,
             pre_rank_id4_k: self.pre_rank4k,
             pre_rank_id6_k: self.pre_rank6k,
             title_id: self.title_id,
@@ -249,9 +254,75 @@ impl shop_item::Model {
             normal_price: self.normal_price,
             discount_price: self.discount_price,
             order: self.order,
-            begin_sale_time: self.begin_sale_time as u64,
-            discount_begin_time: self.discount_begin_time as u64,
-            discount_end_time: self.discount_end_time as u64,
+            begin_sale_time: self.begin_sale_time.timestamp() as u64,
+            discount_begin_time: self.discount_begin_time.timestamp() as u64,
+            discount_end_time: self.discount_end_time.timestamp() as u64,
+        }
+    }
+}
+
+#[rustfmt::skip]
+impl sea_orm_active_enums::Country {
+    pub fn into_proto(&self) -> proto::comet_scene::Country {
+        match self {
+            sea_orm_active_enums::Country::Alien => proto::comet_scene::Country::CAlien,
+            sea_orm_active_enums::Country::Asean => proto::comet_scene::Country::CAsean,
+            sea_orm_active_enums::Country::China => proto::comet_scene::Country::CChina,
+            sea_orm_active_enums::Country::Eu => proto::comet_scene::Country::CEu,
+            sea_orm_active_enums::Country::HongKong => proto::comet_scene::Country::CHongKong,
+            sea_orm_active_enums::Country::Japan => proto::comet_scene::Country::CJapan,
+            sea_orm_active_enums::Country::Macao => proto::comet_scene::Country::CMacao,
+            sea_orm_active_enums::Country::Max => proto::comet_scene::Country::CMax,
+            sea_orm_active_enums::Country::Null => proto::comet_scene::Country::CNull,
+            sea_orm_active_enums::Country::Other => proto::comet_scene::Country::COther,
+            sea_orm_active_enums::Country::SouthKorea => proto::comet_scene::Country::CSouthKorea,
+            sea_orm_active_enums::Country::TaiWan => proto::comet_scene::Country::CTaiWan,
+            sea_orm_active_enums::Country::UnitedKingdom => proto::comet_scene::Country::CUnitedKingdom,
+            sea_orm_active_enums::Country::UnitedStates => proto::comet_scene::Country::CUnitedStates,
+        }
+    }
+
+    pub fn from_proto(proto: proto::comet_scene::Country) -> Self {
+        match proto {
+            proto::comet_scene::Country::CAlien => sea_orm_active_enums::Country::Alien,
+            proto::comet_scene::Country::CAsean => sea_orm_active_enums::Country::Asean,
+            proto::comet_scene::Country::CChina => sea_orm_active_enums::Country::China,
+            proto::comet_scene::Country::CEu => sea_orm_active_enums::Country::Eu,
+            proto::comet_scene::Country::CHongKong => sea_orm_active_enums::Country::HongKong,
+            proto::comet_scene::Country::CJapan => sea_orm_active_enums::Country::Japan,
+            proto::comet_scene::Country::CMacao => sea_orm_active_enums::Country::Macao,
+            proto::comet_scene::Country::CMax => sea_orm_active_enums::Country::Max,
+            proto::comet_scene::Country::CNull => sea_orm_active_enums::Country::Null,
+            proto::comet_scene::Country::COther => sea_orm_active_enums::Country::Other,
+            proto::comet_scene::Country::CSouthKorea => sea_orm_active_enums::Country::SouthKorea,
+            proto::comet_scene::Country::CTaiWan => sea_orm_active_enums::Country::TaiWan,
+            proto::comet_scene::Country::CUnitedKingdom => sea_orm_active_enums::Country::UnitedKingdom,
+            proto::comet_scene::Country::CUnitedStates => sea_orm_active_enums::Country::UnitedStates,
+        }
+    }
+}
+
+#[rustfmt::skip]
+impl sea_orm_active_enums::Language {
+    pub fn into_proto(&self) -> proto::comet_login::LanguageType {
+        match self {
+            sea_orm_active_enums::Language::China => proto::comet_login::LanguageType::LChina,
+            sea_orm_active_enums::Language::Default => proto::comet_login::LanguageType::LDefault,
+            sea_orm_active_enums::Language::Japan => proto::comet_login::LanguageType::LJapan,
+            sea_orm_active_enums::Language::Max => proto::comet_login::LanguageType::LMax,
+            sea_orm_active_enums::Language::Null => proto::comet_login::LanguageType::LNull,
+            sea_orm_active_enums::Language::Traditional => proto::comet_login::LanguageType::LTraditionalChinese,
+        }
+    }
+
+    pub fn from_proto(proto: proto::comet_login::LanguageType) -> Self {
+        match proto {
+            proto::comet_login::LanguageType::LNull => sea_orm_active_enums::Language::Null,
+            proto::comet_login::LanguageType::LDefault => sea_orm_active_enums::Language::Default,
+            proto::comet_login::LanguageType::LChina => sea_orm_active_enums::Language::China,
+            proto::comet_login::LanguageType::LJapan => sea_orm_active_enums::Language::Japan,
+            proto::comet_login::LanguageType::LTraditionalChinese => sea_orm_active_enums::Language::Traditional,
+            proto::comet_login::LanguageType::LMax => sea_orm_active_enums::Language::Max,
         }
     }
 }

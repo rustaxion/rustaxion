@@ -6,20 +6,18 @@ description = ""
 edition = "2021"
 
 [dependencies]
-moka = { version = "0.12.7", features = ["future"] }
-sea-orm = { version = "0.12", features = [
-    "sqlx-sqlite",
+moka = { version = "0.12.8", features = ["future"] }
+sea-orm = { version = "1.1", features = [
+    "sqlx-postgres",
     "runtime-tokio-rustls",
     "macros",
+    "with-chrono",
 ] }
 
-sea-orm-migration = { version = "0.12.0", features = [
+sea-orm-migration = { version = "1.1", features = [
+    "sqlx-postgres",
     "runtime-tokio-rustls",
-    "sqlx-sqlite",
 ] }
-
-tracing = { git = "https://github.com/tokio-rs/tracing", rev = "382ee01dc1cf428c071cad1e3f2e6c6427e70f87" }
-tracing-subscriber = { git = "https://github.com/tokio-rs/tracing", rev = "382ee01dc1cf428c071cad1e3f2e6c6427e70f87" }
 
 tokio = { version = "1.38.0", features = ["full"] }
 tokio-stream = { version = "0.1.15", features = ["tokio-util"] }

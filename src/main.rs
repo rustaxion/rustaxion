@@ -1,34 +1,25 @@
 use anyhow::Context;
-use futures_util::future::abortable;
-use futures_util::stream::Aborted;
-use futures_util::StreamExt;
+use futures_util::{future::abortable, stream::Aborted, StreamExt};
 use moka::future::Cache;
 use sea_orm::DatabaseConnection;
-use tokio_util::sync::CancellationToken;
-use std::{ env, time::Duration };
-use std::net::SocketAddr;
-use tokio::net::{ TcpListener, TcpStream };
-use tokio_util::codec::Framed;
-use types::{ packet::Packet, session::SessionData };
+use std::{env, net::SocketAddr, time::Duration};
+use tokio::net::{TcpListener, TcpStream};
+use tokio_util::{codec::Framed, sync::CancellationToken};
+use types::{packet::Packet, session::SessionData};
 
+mod database;
 mod enums;
 mod proto;
 mod server;
 mod types;
-mod database;
 
-#[allow(non_snake_case)]
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> anyhow::Result<()> {
-    dotenvy::from_filename("env/app.ini").ok();
-    dotenvy::from_filename("env/database.ini").ok();
-
-    tracing_subscriber::fmt::init();
+    dotenvy::from_filename(".env").ok();
     color_backtrace::install();
 
     let db = crate::database::establish_connection().await?;
-    let cache = Cache::<i64, SessionData>
-        ::builder()
+    let cache = Cache::<i64, SessionData>::builder()
         .time_to_idle(Duration::from_secs(5 * 60))
         .initial_capacity(1_000)
         .build();
@@ -36,8 +27,8 @@ async fn main() -> anyhow::Result<()> {
     let cancellation_token = CancellationToken::new();
     let ctrl_cancel = cancellation_token.clone();
 
-    let host = env::var("HOST").unwrap_or("127.0.0.1".to_string());
-    let port: u16 = env::var("PORT").unwrap_or("20017".to_string()).parse()?;
+    let host = env::var("APP_HOST").unwrap();
+    let port: u16 = env::var("APP_PORT").unwrap().parse().unwrap();
 
     let addr = format!("{}:{}", host, port);
     let server = TcpListener::bind(&addr).await?;
@@ -77,7 +68,7 @@ async fn main() -> anyhow::Result<()> {
         Ok(res) => {
             return res;
         }
-        Err(Aborted) => {/* do nothing */}
+        Err(Aborted) => { /* do nothing */ }
     }
 
     println!("Shutting down server...");
@@ -90,7 +81,7 @@ async fn process(
     _addr: SocketAddr,
     cache: Cache<i64, SessionData>,
     db: DatabaseConnection,
-    cancellation_token: CancellationToken
+    cancellation_token: CancellationToken,
 ) -> anyhow::Result<()> {
     use futures_util::sink::SinkExt;
 
@@ -120,7 +111,9 @@ async fn process(
         }
 
         if session != session_snapshot && session.player_id.is_some() {
-            cache.insert(session.player_id.unwrap(), session.clone()).await;
+            cache
+                .insert(session.player_id.unwrap(), session.clone())
+                .await;
         }
     }
 

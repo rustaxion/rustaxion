@@ -1,6 +1,6 @@
 use crate::{
-    enums::comet::{ comet_login::CometLogin, MainCmd, ParaCmd },
-    types::{ packet::Packet, response::Response, session::SessionData },
+    enums::comet::{comet_login::CometLogin, MainCmd, ParaCmd},
+    types::{packet::Packet, response::Response, session::SessionData},
 };
 
 mod game_version;

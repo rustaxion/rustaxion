@@ -1,13 +1,13 @@
 use crate::{
-    enums::comet::{ comet_scene::CometScene, MainCmd, ParaCmd },
-    types::{ packet::Packet, response::Response, session::SessionData },
+    enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd},
+    types::{packet::Packet, response::Response, session::SessionData},
 };
 
 mod change_language;
-mod shop;
 mod event;
-mod song;
 mod rank_info;
+mod shop;
+mod song;
 
 #[rustfmt::skip]
 pub async fn handle(

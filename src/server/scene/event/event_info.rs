@@ -1,19 +1,14 @@
 use prost::Message;
-use sea_orm::{ entity::*, query::* };
+use sea_orm::{entity::*, query::*};
 
 use crate::{
-    database::entities::{ daily_login, prelude::* },
-    enums::comet::{ comet_scene::CometScene, MainCmd, ParaCmd },
+    database::entities::{daily_login, prelude::*},
+    enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd},
     proto::comet_scene::{
-        GetStaminaData,
-        ItemData,
-        LevelGiftData,
-        NewPlayerData,
-        RetEventInfo,
-        WeekCheckinData,
+        GetStaminaData, ItemData, LevelGiftData, NewPlayerData, RetEventInfo, WeekCheckinData,
         WeekCheckinRewardData,
     },
-    types::{ response::Response, session::SessionData },
+    types::{response::Response, session::SessionData},
 };
 
 #[rustfmt::skip]

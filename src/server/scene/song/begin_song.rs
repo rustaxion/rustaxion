@@ -2,9 +2,12 @@ use anyhow::Context;
 use prost::Message;
 
 use crate::{
-    enums::comet::{ comet_scene::CometScene, MainCmd, ParaCmd },
+    enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd},
     proto::comet_scene::ReqBeginSong,
-    types::{ response::Response, session::{ NowPlaying, SessionData } },
+    types::{
+        response::Response,
+        session::{NowPlaying, SessionData},
+    },
 };
 
 #[rustfmt::skip]

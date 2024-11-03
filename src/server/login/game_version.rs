@@ -2,9 +2,9 @@ use anyhow::Context;
 use prost::Message;
 
 use crate::{
-    enums::comet::{ comet_login::CometLogin, MainCmd, ParaCmd },
-    proto::comet_login::{ ReqGameVersion, RetGameVersion },
-    types::{ response::Response, session::SessionData },
+    enums::comet::{comet_login::CometLogin, MainCmd, ParaCmd},
+    proto::comet_login::{ReqGameVersion, RetGameVersion},
+    types::{response::Response, session::SessionData},
 };
 
 #[rustfmt::skip]

@@ -2,9 +2,9 @@ use anyhow::Context;
 use prost::Message;
 
 use crate::{
-    enums::comet::{ comet_scene::CometScene, MainCmd, ParaCmd },
-    proto::comet_scene::{ RankTopType, ReqRankInfo, RetRankInfo },
-    types::{ response::Response, session::SessionData },
+    enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd},
+    proto::comet_scene::{RankTopType, ReqRankInfo, RetRankInfo},
+    types::{response::Response, session::SessionData},
 };
 
 #[rustfmt::skip]

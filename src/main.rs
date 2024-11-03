@@ -17,6 +17,9 @@ mod types;
 async fn main() -> anyhow::Result<()> {
     dotenvy::from_filename(".env").ok();
     color_backtrace::install();
+    tracing_subscriber::fmt()
+        .with_max_level(tracing::Level::DEBUG)
+        .init();
 
     let db = crate::database::establish_connection().await?;
     let cache = Cache::<i64, SessionData>::builder()

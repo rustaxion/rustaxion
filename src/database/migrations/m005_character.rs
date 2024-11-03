@@ -36,6 +36,8 @@ impl MigrationTrait for Migration {
             )
             .await?;
 
+        // TODO: Seed data
+
         Ok(())
     }
 

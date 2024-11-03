@@ -16,8 +16,9 @@ pub async fn establish_connection() -> anyhow::Result<DatabaseConnection> {
         postgres_user, postgres_password, postgres_host, postgres_db
     );
 
-    let mut opt = ConnectOptions::new(connection_uri);
-    opt.sqlx_logging(false);
+    let opt = ConnectOptions::new(connection_uri)
+        .sqlx_logging(false)
+        .to_owned();
 
     let db = Database::connect(opt).await?;
 

@@ -1,3 +1,6 @@
+use std::time::Duration;
+
+use chrono::TimeDelta;
 use extension::postgres::Type;
 use sea_orm::{ActiveModelTrait, EnumIter, Iterable, Set};
 use sea_orm_migration::{prelude::*, schema::*};
@@ -42,6 +45,13 @@ impl MigrationTrait for Migration {
             .await?;
 
         let db = manager.get_connection();
+        let time = chrono::DateTime::from_timestamp(1730681814, 0)
+            .unwrap()
+            .fixed_offset();
+
+        let end_time = chrono::DateTime::from_timestamp(1730681814 + 31536000, 0)
+            .unwrap()
+            .fixed_offset();
 
         let characters = vec![
             shop_item::ActiveModel {
@@ -51,7 +61,9 @@ impl MigrationTrait for Migration {
                 normal_price: Set(1000),
                 discount_price: Set(1000),
                 order: Set(1),
-                ..Default::default()
+                begin_sale_time: Set(time),
+                discount_begin_time: Set(time),
+                discount_end_time: Set(end_time),
             },
             shop_item::ActiveModel {
                 item_id: Set(40320),
@@ -60,7 +72,9 @@ impl MigrationTrait for Migration {
                 normal_price: Set(300),
                 discount_price: Set(300),
                 order: Set(0),
-                ..Default::default()
+                begin_sale_time: Set(time),
+                discount_begin_time: Set(time),
+                discount_end_time: Set(end_time),
             },
             shop_item::ActiveModel {
                 item_id: Set(20060),
@@ -69,7 +83,9 @@ impl MigrationTrait for Migration {
                 normal_price: Set(300),
                 discount_price: Set(300),
                 order: Set(0),
-                ..Default::default()
+                begin_sale_time: Set(time),
+                discount_begin_time: Set(time),
+                discount_end_time: Set(end_time),
             },
             shop_item::ActiveModel {
                 item_id: Set(40010),
@@ -78,7 +94,9 @@ impl MigrationTrait for Migration {
                 normal_price: Set(1888),
                 discount_price: Set(1888),
                 order: Set(2),
-                ..Default::default()
+                begin_sale_time: Set(time),
+                discount_begin_time: Set(time),
+                discount_end_time: Set(end_time),
             },
             shop_item::ActiveModel {
                 item_id: Set(40090),
@@ -87,7 +105,9 @@ impl MigrationTrait for Migration {
                 normal_price: Set(300),
                 discount_price: Set(300),
                 order: Set(0),
-                ..Default::default()
+                begin_sale_time: Set(time),
+                discount_begin_time: Set(time),
+                discount_end_time: Set(end_time),
             },
             shop_item::ActiveModel {
                 item_id: Set(20050),
@@ -96,7 +116,9 @@ impl MigrationTrait for Migration {
                 normal_price: Set(1000),
                 discount_price: Set(1000),
                 order: Set(1),
-                ..Default::default()
+                begin_sale_time: Set(time),
+                discount_begin_time: Set(time),
+                discount_end_time: Set(end_time),
             },
             shop_item::ActiveModel {
                 item_id: Set(30040),
@@ -105,7 +127,9 @@ impl MigrationTrait for Migration {
                 normal_price: Set(1888),
                 discount_price: Set(1888),
                 order: Set(2),
-                ..Default::default()
+                begin_sale_time: Set(time),
+                discount_begin_time: Set(time),
+                discount_end_time: Set(end_time),
             },
             shop_item::ActiveModel {
                 item_id: Set(40250),
@@ -114,7 +138,9 @@ impl MigrationTrait for Migration {
                 normal_price: Set(300),
                 discount_price: Set(300),
                 order: Set(0),
-                ..Default::default()
+                begin_sale_time: Set(time),
+                discount_begin_time: Set(time),
+                discount_end_time: Set(end_time),
             },
             shop_item::ActiveModel {
                 item_id: Set(40150),
@@ -123,7 +149,9 @@ impl MigrationTrait for Migration {
                 normal_price: Set(1000),
                 discount_price: Set(1000),
                 order: Set(1),
-                ..Default::default()
+                begin_sale_time: Set(time),
+                discount_begin_time: Set(time),
+                discount_end_time: Set(end_time),
             },
             shop_item::ActiveModel {
                 item_id: Set(20040),
@@ -132,7 +160,9 @@ impl MigrationTrait for Migration {
                 normal_price: Set(1000),
                 discount_price: Set(1000),
                 order: Set(1),
-                ..Default::default()
+                begin_sale_time: Set(time),
+                discount_begin_time: Set(time),
+                discount_end_time: Set(end_time),
             },
         ];
 
@@ -148,7 +178,9 @@ impl MigrationTrait for Migration {
                 normal_price: Set(200),
                 discount_price: Set(200),
                 order: Set(0),
-                ..Default::default()
+                begin_sale_time: Set(time),
+                discount_begin_time: Set(time),
+                discount_end_time: Set(end_time),
             },
             shop_item::ActiveModel {
                 item_id: Set(68008),
@@ -157,7 +189,9 @@ impl MigrationTrait for Migration {
                 normal_price: Set(200),
                 discount_price: Set(200),
                 order: Set(2),
-                ..Default::default()
+                begin_sale_time: Set(time),
+                discount_begin_time: Set(time),
+                discount_end_time: Set(end_time),
             },
             shop_item::ActiveModel {
                 item_id: Set(62005),
@@ -166,7 +200,9 @@ impl MigrationTrait for Migration {
                 normal_price: Set(200),
                 discount_price: Set(200),
                 order: Set(0),
-                ..Default::default()
+                begin_sale_time: Set(time),
+                discount_begin_time: Set(time),
+                discount_end_time: Set(end_time),
             },
             shop_item::ActiveModel {
                 item_id: Set(63103),
@@ -175,7 +211,9 @@ impl MigrationTrait for Migration {
                 normal_price: Set(200),
                 discount_price: Set(200),
                 order: Set(0),
-                ..Default::default()
+                begin_sale_time: Set(time),
+                discount_begin_time: Set(time),
+                discount_end_time: Set(end_time),
             },
             shop_item::ActiveModel {
                 item_id: Set(63123),
@@ -184,7 +222,9 @@ impl MigrationTrait for Migration {
                 normal_price: Set(200),
                 discount_price: Set(200),
                 order: Set(0),
-                ..Default::default()
+                begin_sale_time: Set(time),
+                discount_begin_time: Set(time),
+                discount_end_time: Set(end_time),
             },
             shop_item::ActiveModel {
                 item_id: Set(80002),
@@ -193,7 +233,9 @@ impl MigrationTrait for Migration {
                 normal_price: Set(200),
                 discount_price: Set(200),
                 order: Set(2),
-                ..Default::default()
+                begin_sale_time: Set(time),
+                discount_begin_time: Set(time),
+                discount_end_time: Set(end_time),
             },
             shop_item::ActiveModel {
                 item_id: Set(62006),
@@ -202,7 +244,9 @@ impl MigrationTrait for Migration {
                 normal_price: Set(200),
                 discount_price: Set(200),
                 order: Set(0),
-                ..Default::default()
+                begin_sale_time: Set(time),
+                discount_begin_time: Set(time),
+                discount_end_time: Set(end_time),
             },
             shop_item::ActiveModel {
                 item_id: Set(63122),
@@ -211,7 +255,9 @@ impl MigrationTrait for Migration {
                 normal_price: Set(200),
                 discount_price: Set(200),
                 order: Set(0),
-                ..Default::default()
+                begin_sale_time: Set(time),
+                discount_begin_time: Set(time),
+                discount_end_time: Set(end_time),
             },
             shop_item::ActiveModel {
                 item_id: Set(69008),
@@ -220,7 +266,9 @@ impl MigrationTrait for Migration {
                 normal_price: Set(200),
                 discount_price: Set(200),
                 order: Set(2),
-                ..Default::default()
+                begin_sale_time: Set(time),
+                discount_begin_time: Set(time),
+                discount_end_time: Set(end_time),
             },
             shop_item::ActiveModel {
                 item_id: Set(68108),
@@ -229,7 +277,9 @@ impl MigrationTrait for Migration {
                 normal_price: Set(200),
                 discount_price: Set(200),
                 order: Set(0),
-                ..Default::default()
+                begin_sale_time: Set(time),
+                discount_begin_time: Set(time),
+                discount_end_time: Set(end_time),
             },
         ];
 
@@ -245,7 +295,9 @@ impl MigrationTrait for Migration {
                 normal_price: Set(1000),
                 discount_price: Set(1000),
                 order: Set(0),
-                ..Default::default()
+                begin_sale_time: Set(time),
+                discount_begin_time: Set(time),
+                discount_end_time: Set(end_time),
             })
             .insert(db)
             .await?;

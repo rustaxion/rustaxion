@@ -18,6 +18,9 @@ pub async fn establish_connection() -> anyhow::Result<DatabaseConnection> {
 
     let opt = ConnectOptions::new(connection_uri)
         .sqlx_logging(false)
+        .min_connections(1)
+        .max_connections(1)
+        .connect_lazy(false)
         .to_owned();
 
     let db = Database::connect(opt).await?;

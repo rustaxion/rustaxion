@@ -50,14 +50,30 @@ pub enum Relation {
     Account,
     #[sea_orm(
         belongs_to = "super::character::Entity",
+        from = "Column::HeadId",
+        to = "super::character::Column::Id",
+        on_update = "NoAction",
+        on_delete = "NoAction"
+    )]
+    Character2,
+    #[sea_orm(
+        belongs_to = "super::character::Entity",
         from = "Column::SelectedCharacterId",
         to = "super::character::Column::Id",
         on_update = "NoAction",
         on_delete = "NoAction"
     )]
-    Character,
+    Character1,
     #[sea_orm(has_many = "super::daily_login::Entity")]
     DailyLogin,
+    #[sea_orm(
+        belongs_to = "super::theme::Entity",
+        from = "Column::SelectedThemeId",
+        to = "super::theme::Column::Id",
+        on_update = "NoAction",
+        on_delete = "NoAction"
+    )]
+    Theme,
 }
 
 impl Related<super::account::Entity> for Entity {
@@ -66,15 +82,15 @@ impl Related<super::account::Entity> for Entity {
     }
 }
 
-impl Related<super::character::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::Character.def()
-    }
-}
-
 impl Related<super::daily_login::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::DailyLogin.def()
+    }
+}
+
+impl Related<super::theme::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Theme.def()
     }
 }
 

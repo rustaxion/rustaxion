@@ -8,3 +8,4 @@ pub mod daily_login;
 pub mod player;
 pub mod sea_orm_active_enums;
 pub mod shop_item;
+pub mod theme;

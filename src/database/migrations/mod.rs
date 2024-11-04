@@ -5,6 +5,7 @@ mod m002_player;
 mod m003_shop;
 mod m004_daily_login;
 mod m005_character;
+mod m006_theme;
 
 pub struct Migrator;
 
@@ -17,7 +18,8 @@ impl MigratorTrait for Migrator {
             Box::new(m002_player::Migration),
             Box::new(m003_shop::Migration),
             Box::new(m004_daily_login::Migration),
-            Box::new(m005_character::Migration)
+            Box::new(m005_character::Migration),
+            Box::new(m006_theme::Migration),
         ]
     }
 }

@@ -5,3 +5,4 @@ pub use super::character::Entity as Character;
 pub use super::daily_login::Entity as DailyLogin;
 pub use super::player::Entity as Player;
 pub use super::shop_item::Entity as ShopItem;
+pub use super::theme::Entity as Theme;

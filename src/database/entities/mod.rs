@@ -7,6 +7,7 @@ pub mod character;
 pub mod daily_login;
 pub mod player;
 pub mod player_character;
+pub mod player_theme;
 pub mod sea_orm_active_enums;
 pub mod shop_item;
 pub mod theme;

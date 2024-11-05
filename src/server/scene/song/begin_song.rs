@@ -15,6 +15,8 @@ pub async fn handle(session: &mut SessionData, _db: sea_orm::DatabaseConnection,
     let req = ReqBeginSong::decode(body.as_slice()).context("Failed to decode ReqBeginSong.")?;
     let now = chrono::Utc::now().timestamp();
 
+    anyhow::ensure!(session.now_playing.is_none());
+
     // Save the beatmap to the session
     session.now_playing = Some(NowPlaying {
         song_id: req.song_id,

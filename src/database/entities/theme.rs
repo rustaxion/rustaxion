@@ -15,11 +15,22 @@ pub struct Model {
 pub enum Relation {
     #[sea_orm(has_many = "super::player::Entity")]
     Player,
+    #[sea_orm(has_many = "super::player_theme::Entity")]
+    PlayerTheme,
+}
+
+impl Related<super::player_theme::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::PlayerTheme.def()
+    }
 }
 
 impl Related<super::player::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::Player.def()
+        super::player_theme::Relation::Player.def()
+    }
+    fn via() -> Option<RelationDef> {
+        Some(super::player_theme::Relation::Theme.def().rev())
     }
 }
 

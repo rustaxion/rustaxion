@@ -4,7 +4,7 @@ use crate::{
 };
 use sea_orm::{entity::*, DatabaseConnection, QueryFilter};
 
-use super::entities::{player_character, sea_orm_active_enums};
+use super::entities::{player_character, player_theme, sea_orm_active_enums};
 
 pub async fn get_announcements(_db: &DatabaseConnection) -> anyhow::Result<AnnouncementData> {
     // TODO: Populate this using data from the database.
@@ -98,12 +98,11 @@ pub async fn get_player_social_data(
 
 #[rustfmt::skip]
 pub async fn get_player_theme_list(
-    _player_id: i32,
-    _db: &DatabaseConnection
+    player_id: i32,
+    db: &DatabaseConnection
 ) -> anyhow::Result<ThemeList> {
-    // TODO: Populate this using data from the database.
-
-    Ok(ThemeList { list: vec![ThemeData { theme_id: 1 }] })
+    let themes = PlayerTheme::find().filter(player_theme::Column::PlayerId.eq(player_id)).all(db).await?;
+    Ok(ThemeList { list: themes.iter().map(|x| ThemeData { theme_id: x.theme_id }).collect() })
 }
 
 #[rustfmt::skip]

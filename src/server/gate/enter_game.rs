@@ -19,7 +19,7 @@ use crate::{
 #[rustfmt::skip]
 pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, buffer: Vec<u8>) -> anyhow::Result<Vec<Response>> {
     let req = EnterGame::decode(buffer.as_slice()).context("Failed to decode EnterGame.")?;
-    session.player_id = Some(req.char_id as i64);
+    session.player_id = Some(req.char_id as i32);
 
     //=// daily login
     let now = chrono::Utc::now();
@@ -62,7 +62,7 @@ pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, 
         },
         None => {
             daily_login::ActiveModel {
-                player_id: Unchanged(req.char_id.try_into()?),
+                player_id: Unchanged(session.player_id.unwrap()),
                 login_counter: Set(1),
                 login_streak: Set(1),
                 last_day_login: Set(now.fixed_offset()),
@@ -72,17 +72,7 @@ pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, 
     }
     //=// end daily login
 
-    let mut full_data: CharacterFullData = get_character_full_data(req.char_id, &db).await?;
-
-    full_data.char_list = CharacterList {
-        list: vec![CharData {
-            char_id: 30040,
-            level: 1,
-            exp: 0,
-            play_count: 0,
-        }],
-    };
-
+    let full_data: CharacterFullData = get_character_full_data(session.player_id.unwrap(), &db).await?;
     Ok(vec![Response {
         main_cmd: MainCmd::Game,
         para_cmd: ParaCmd::CometScene(CometScene::NotifyCharacterFullData),

@@ -22,7 +22,7 @@ async fn main() -> anyhow::Result<()> {
         .init();
 
     let db = crate::database::establish_connection().await?;
-    let cache = Cache::<i64, SessionData>::builder()
+    let cache = Cache::<i32, SessionData>::builder()
         .time_to_idle(Duration::from_secs(5 * 60))
         .initial_capacity(1_000)
         .build();
@@ -82,7 +82,7 @@ async fn main() -> anyhow::Result<()> {
 async fn process(
     stream: TcpStream,
     _addr: SocketAddr,
-    cache: Cache<i64, SessionData>,
+    cache: Cache<i32, SessionData>,
     db: DatabaseConnection,
     cancellation_token: CancellationToken,
 ) -> anyhow::Result<()> {

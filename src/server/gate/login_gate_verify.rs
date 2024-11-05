@@ -23,7 +23,7 @@ pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, 
     });
 
     let user = Account::find_by_id(req.acc_id).one(&db).await?;
-    session.account_id = user.clone().map(|x| x.id as i64);
+    session.account_id = user.clone().map(|x| x.id);
     anyhow::ensure!(user.is_some());
 
     let user = user.unwrap();

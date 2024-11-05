@@ -96,6 +96,7 @@ pub enum Player {
     Name,
     Language,
     Country,
+    Characters,
     SelectedCharacterId,
     SelectedThemeId,
     HeadId,

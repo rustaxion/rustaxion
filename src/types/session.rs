@@ -8,8 +8,8 @@ pub struct NowPlaying {
 
 #[derive(Debug, Default, PartialEq, Eq, Clone)]
 pub struct SessionData {
-    pub account_id: Option<i64>,
-    pub player_id: Option<i64>,
+    pub account_id: Option<i32>,
+    pub player_id: Option<i32>,
     pub now_playing: Option<NowPlaying>,
 }
 

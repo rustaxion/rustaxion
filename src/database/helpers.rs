@@ -2,9 +2,9 @@ use crate::{
     database::entities::{player, prelude::*, shop_item},
     proto::{self, comet_scene::*},
 };
-use sea_orm::{entity::*, DatabaseConnection};
+use sea_orm::{entity::*, DatabaseConnection, QueryFilter};
 
-use super::entities::sea_orm_active_enums;
+use super::entities::{player_character, sea_orm_active_enums};
 
 pub async fn get_announcements(_db: &DatabaseConnection) -> anyhow::Result<AnnouncementData> {
     // TODO: Populate this using data from the database.
@@ -21,7 +21,7 @@ pub async fn get_announcements(_db: &DatabaseConnection) -> anyhow::Result<Annou
 
 #[rustfmt::skip]
 pub async fn get_player_score_list(
-    _player_id: i64,
+    _player_id: i32,
     _db: &DatabaseConnection
 ) -> anyhow::Result<ScoreList> {
     // TODO: Populate this using data from the database.
@@ -41,7 +41,7 @@ pub async fn get_player_score_list(
 
 #[rustfmt::skip]
 pub async fn get_player_song_list(
-    _account_id: i64,
+    _account_id: i32,
     _db: &DatabaseConnection
 ) -> anyhow::Result<SongList> {
     // TODO: Populate this using data from the database.
@@ -69,19 +69,23 @@ pub async fn get_player_song_list(
 
 #[rustfmt::skip]
 pub async fn get_player_char_list(
-    _account_id: i64,
-    _db: &DatabaseConnection
+    player_id: i32,
+    db: &DatabaseConnection
 ) -> anyhow::Result<CharacterList> {
-    // TODO: Populate this using data from the database.
-
+    let characters = PlayerCharacter::find().filter(player_character::Column::PlayerId.eq(player_id)).all(db).await?;
     Ok(CharacterList {
-        list: vec![],
+        list: characters.iter().map(|x| CharData {
+            char_id: x.character_id,
+            level: x.level,
+            exp: x.experience,
+            play_count: x.play_count,
+        }).collect(),
     })
 }
 
 #[rustfmt::skip]
 pub async fn get_player_social_data(
-    _player_id: i64,
+    _player_id: i32,
     _db: &DatabaseConnection
 ) -> anyhow::Result<SocialData> {
     // TODO: Populate this using data from the database.
@@ -94,7 +98,7 @@ pub async fn get_player_social_data(
 
 #[rustfmt::skip]
 pub async fn get_player_theme_list(
-    _player_id: i64,
+    _player_id: i32,
     _db: &DatabaseConnection
 ) -> anyhow::Result<ThemeList> {
     // TODO: Populate this using data from the database.
@@ -104,7 +108,7 @@ pub async fn get_player_theme_list(
 
 #[rustfmt::skip]
 pub async fn get_player_vip_info(
-    _player_id: i64,
+    _player_id: i32,
     _db: &DatabaseConnection
 ) -> anyhow::Result<PlayerVipInfo> {
     // TODO: Populate this using data from the database.
@@ -119,7 +123,7 @@ pub async fn get_player_vip_info(
 
 #[rustfmt::skip]
 pub async fn get_player_arcade_data(
-    _player_id: i64,
+    _player_id: i32,
     _db: &DatabaseConnection
 ) -> anyhow::Result<ArcadeData> {
     // TODO: Populate this using data from the database.
@@ -138,7 +142,7 @@ pub async fn get_player_arcade_data(
 
 #[rustfmt::skip]
 pub async fn get_player_title_data(
-    _player_id: i64,
+    _player_id: i32,
     _db: &DatabaseConnection
 ) -> anyhow::Result<TitleData> {
     // TODO: Populate this using data from the database.
@@ -150,7 +154,7 @@ pub async fn get_player_title_data(
 
 #[rustfmt::skip]
 pub async fn get_player_team(
-    _player_id: i64,
+    _player_id: i32,
     _db: &DatabaseConnection
 ) -> anyhow::Result<TeamData> {
     // TODO: Populate this using data from the database.
@@ -166,7 +170,7 @@ pub async fn get_player_team(
 
 #[rustfmt::skip]
 pub async fn get_character_full_data(
-    player_id: i64,
+    player_id: i32,
     db: &DatabaseConnection
 ) -> anyhow::Result<CharacterFullData> {
     let player = Player::find_by_id(player_id as i32).one(db).await?;

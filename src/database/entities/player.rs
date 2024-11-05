@@ -66,6 +66,8 @@ pub enum Relation {
     Character1,
     #[sea_orm(has_many = "super::daily_login::Entity")]
     DailyLogin,
+    #[sea_orm(has_many = "super::player_character::Entity")]
+    PlayerCharacter,
     #[sea_orm(
         belongs_to = "super::theme::Entity",
         from = "Column::SelectedThemeId",
@@ -88,9 +90,24 @@ impl Related<super::daily_login::Entity> for Entity {
     }
 }
 
+impl Related<super::player_character::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::PlayerCharacter.def()
+    }
+}
+
 impl Related<super::theme::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::Theme.def()
+    }
+}
+
+impl Related<super::character::Entity> for Entity {
+    fn to() -> RelationDef {
+        super::player_character::Relation::Character.def()
+    }
+    fn via() -> Option<RelationDef> {
+        Some(super::player_character::Relation::Player.def().rev())
     }
 }
 

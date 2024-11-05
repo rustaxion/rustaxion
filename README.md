@@ -5,7 +5,7 @@
 🚧🚧🚧🚧 <br />
 A WIP reverse engineered implementation of [音灵 INVAXION](https://store.steampowered.com/app/921630/_INVAXION/)'s servers, based on the client code.
 
-If you are looking for a working solution, try out my [server emulator](https://github.com/Invaxion-Server-Emulator/invaxion-server-emulator) implemented as a client-side mod for the game.
+If you are looking for a working solution, try out my [server emulator](https://github.com/rustaxion/old-server-emulator) implemented as a client-side mod for the game.
 
 <!-- progress-start -->
 ## Progress
@@ -140,4 +140,4 @@ I even accept [donations](https://github.com/sponsors/ArjixWasTaken) if you want
 ## Attributions
 
 1. [invaxion-server](https://github.com/603185423/invaxion-server) by @MoeGrid and @603185423 for the server logic
-2. [Invaxion-Server-Emulator](https://github.com/Invaxion-Server-Emulator/invaxion-server-emulator) by @ArjixWasTaken (me!) for discovering the missing parts (CosmicTour and some other stuff)
+2. [Invaxion-Server-Emulator](https://github.com/rustaxion/old-server-emulator) by @ArjixWasTaken (me!)

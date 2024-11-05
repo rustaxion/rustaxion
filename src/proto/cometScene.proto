@@ -45,6 +45,21 @@ enum Country {
     c_Max = 13;
 }
 
+enum ItemType {
+    it_Gold = 1;
+    it_Diamond = 2;
+    it_Item = 3;
+    it_Theme = 4;
+    it_Character = 5;
+    it_Song = 6;
+    it_SongPack = 7;
+    it_Stamina = 8;
+    it_Exp = 9;
+    it_HonourPoint = 10;
+    it_Title = 11;
+    it_Buff = 12;
+}
+
 message Ret_FinishSong {
   required SingleSongInfo songInfo = 1;
   optional SettleData settleData = 2;
@@ -69,7 +84,7 @@ message SettleData {
 }
 
 message SettleItemData {
-  required int32 type = 1;
+  required ItemType type = 1;
   required int32 count = 2;
   required int32 id = 3;
 }

@@ -7,9 +7,7 @@ use sea_orm::{entity::*, query::*};
 use crate::database::entities::{daily_login, prelude::*};
 use crate::database::helpers::get_character_full_data;
 use crate::enums::comet::comet_scene::CometScene;
-use crate::proto::comet_scene::{
-    CharData, CharacterFullData, CharacterList, NotifyCharacterFullData,
-};
+use crate::proto::comet_scene::{CharacterFullData, NotifyCharacterFullData};
 use crate::{
     enums::comet::{MainCmd, ParaCmd},
     proto::comet_gate::EnterGame,

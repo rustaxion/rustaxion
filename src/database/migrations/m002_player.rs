@@ -96,7 +96,6 @@ pub enum Player {
     Name,
     Language,
     Country,
-    Characters,
     SelectedCharacterId,
     SelectedThemeId,
     HeadId,
@@ -124,17 +123,14 @@ pub enum Player {
 
 #[derive(Iden, EnumIter)]
 pub enum Language {
-    Null = 0,
-    Default = 1,
+    English = 1,
     China = 2,
     Japan = 3,
     Traditional = 4,
-    Max = 5,
 }
 
 #[derive(Iden, EnumIter)]
 pub enum Country {
-    Null = 0,
     China = 1,
     HongKong = 2,
     TaiWan = 3,
@@ -147,5 +143,4 @@ pub enum Country {
     EU = 10,
     Other = 11,
     Alien = 12,
-    Max = 13,
 }

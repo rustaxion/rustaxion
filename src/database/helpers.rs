@@ -275,8 +275,6 @@ impl sea_orm_active_enums::Country {
             sea_orm_active_enums::Country::HongKong => proto::comet_scene::Country::CHongKong,
             sea_orm_active_enums::Country::Japan => proto::comet_scene::Country::CJapan,
             sea_orm_active_enums::Country::Macao => proto::comet_scene::Country::CMacao,
-            sea_orm_active_enums::Country::Max => proto::comet_scene::Country::CMax,
-            sea_orm_active_enums::Country::Null => proto::comet_scene::Country::CNull,
             sea_orm_active_enums::Country::Other => proto::comet_scene::Country::COther,
             sea_orm_active_enums::Country::SouthKorea => proto::comet_scene::Country::CSouthKorea,
             sea_orm_active_enums::Country::TaiWan => proto::comet_scene::Country::CTaiWan,
@@ -294,8 +292,6 @@ impl sea_orm_active_enums::Country {
             proto::comet_scene::Country::CHongKong => sea_orm_active_enums::Country::HongKong,
             proto::comet_scene::Country::CJapan => sea_orm_active_enums::Country::Japan,
             proto::comet_scene::Country::CMacao => sea_orm_active_enums::Country::Macao,
-            proto::comet_scene::Country::CMax => sea_orm_active_enums::Country::Max,
-            proto::comet_scene::Country::CNull => sea_orm_active_enums::Country::Null,
             proto::comet_scene::Country::COther => sea_orm_active_enums::Country::Other,
             proto::comet_scene::Country::CSouthKorea => sea_orm_active_enums::Country::SouthKorea,
             proto::comet_scene::Country::CTaiWan => sea_orm_active_enums::Country::TaiWan,
@@ -309,23 +305,19 @@ impl sea_orm_active_enums::Country {
 impl sea_orm_active_enums::Language {
     pub fn into_proto(&self) -> proto::comet_login::LanguageType {
         match self {
+            sea_orm_active_enums::Language::English => proto::comet_login::LanguageType::LEnglish,
             sea_orm_active_enums::Language::China => proto::comet_login::LanguageType::LChina,
-            sea_orm_active_enums::Language::Default => proto::comet_login::LanguageType::LDefault,
             sea_orm_active_enums::Language::Japan => proto::comet_login::LanguageType::LJapan,
-            sea_orm_active_enums::Language::Max => proto::comet_login::LanguageType::LMax,
-            sea_orm_active_enums::Language::Null => proto::comet_login::LanguageType::LNull,
             sea_orm_active_enums::Language::Traditional => proto::comet_login::LanguageType::LTraditionalChinese,
         }
     }
 
     pub fn from_proto(proto: proto::comet_login::LanguageType) -> Self {
         match proto {
-            proto::comet_login::LanguageType::LNull => sea_orm_active_enums::Language::Null,
-            proto::comet_login::LanguageType::LDefault => sea_orm_active_enums::Language::Default,
+            proto::comet_login::LanguageType::LEnglish => sea_orm_active_enums::Language::English,
             proto::comet_login::LanguageType::LChina => sea_orm_active_enums::Language::China,
             proto::comet_login::LanguageType::LJapan => sea_orm_active_enums::Language::Japan,
             proto::comet_login::LanguageType::LTraditionalChinese => sea_orm_active_enums::Language::Traditional,
-            proto::comet_login::LanguageType::LMax => sea_orm_active_enums::Language::Max,
         }
     }
 }

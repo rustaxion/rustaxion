@@ -29,7 +29,6 @@ enum RankTopType {
 }
 
 enum Country {
-    c_Null = 0;
     c_China = 1;
     c_HongKong = 2;
     c_TaiWan = 3;
@@ -42,7 +41,6 @@ enum Country {
     c_EU = 10;
     c_Other = 11;
     c_Alien = 12;
-    c_Max = 13;
 }
 
 enum ItemType {
@@ -959,7 +957,7 @@ message Ret_Social_SearchPlayer {
   optional string name = 2 [default=""];
   optional uint64 charId = 3 [default=0];
   optional int32 headId = 4 [default=0];
-  optional Country country = 5 [default=c_Null];
+  optional Country country = 5 [default=c_Other];
   optional int32 isOnline = 6 [default=0];
 }
 

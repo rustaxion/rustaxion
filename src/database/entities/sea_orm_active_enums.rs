@@ -19,10 +19,6 @@ pub enum Country {
     Japan,
     #[sea_orm(string_value = "macao")]
     Macao,
-    #[sea_orm(string_value = "max")]
-    Max,
-    #[sea_orm(string_value = "null")]
-    Null,
     #[sea_orm(string_value = "other")]
     Other,
     #[sea_orm(string_value = "south_korea")]
@@ -39,14 +35,10 @@ pub enum Country {
 pub enum Language {
     #[sea_orm(string_value = "china")]
     China,
-    #[sea_orm(string_value = "default")]
-    Default,
+    #[sea_orm(string_value = "english")]
+    English,
     #[sea_orm(string_value = "japan")]
     Japan,
-    #[sea_orm(string_value = "max")]
-    Max,
-    #[sea_orm(string_value = "null")]
-    Null,
     #[sea_orm(string_value = "traditional")]
     Traditional,
 }

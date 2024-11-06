@@ -3,6 +3,7 @@
 pub mod prelude;
 
 pub mod account;
+pub mod beatmap;
 pub mod character;
 pub mod daily_login;
 pub mod player;

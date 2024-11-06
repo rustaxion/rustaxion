@@ -3,6 +3,7 @@ use std::env;
 
 pub mod entities;
 pub mod helpers;
+pub mod json;
 pub mod migrations;
 
 pub async fn establish_connection() -> anyhow::Result<DatabaseConnection> {

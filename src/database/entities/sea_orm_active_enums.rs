@@ -3,6 +3,18 @@
 use sea_orm::entity::prelude::*;
 
 #[derive(Debug, Clone, PartialEq, Eq, EnumIter, DeriveActiveEnum)]
+#[sea_orm(rs_type = "String", db_type = "Enum", enum_name = "beatmap_kind")]
+pub enum BeatmapKind {
+    #[sea_orm(string_value = "dlc")]
+    Dlc,
+    #[sea_orm(string_value = "free")]
+    Free,
+    #[sea_orm(string_value = "sale")]
+    Sale,
+    #[sea_orm(string_value = "tutorial")]
+    Tutorial,
+}
+#[derive(Debug, Clone, PartialEq, Eq, EnumIter, DeriveActiveEnum)]
 #[sea_orm(rs_type = "String", db_type = "Enum", enum_name = "country")]
 pub enum Country {
     #[sea_orm(string_value = "alien")]

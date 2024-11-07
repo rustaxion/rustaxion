@@ -4,7 +4,9 @@ use crate::{
 };
 use sea_orm::{entity::*, DatabaseConnection, QueryFilter};
 
-use super::entities::{player_beatmap, player_character, player_theme, sea_orm_active_enums};
+use super::entities::{
+    player_beatmap, player_character, player_favourite_beatmap, player_theme, sea_orm_active_enums,
+};
 
 pub async fn get_announcements(_db: &DatabaseConnection) -> anyhow::Result<AnnouncementData> {
     // TODO: Populate this using data from the database.
@@ -44,12 +46,23 @@ pub async fn get_player_song_list(
     player_id: i32,
     db: &DatabaseConnection
 ) -> anyhow::Result<SongList> {
-    let beatmaps = PlayerBeatmap::find().filter(player_beatmap::Column::PlayerId.eq(player_id)).all(db).await?;
-    let list: Vec<SongData> = beatmaps.iter().map(|x| SongData { song_id: x.beatmap_id }).collect();
+    let beatmaps: Vec<SongData> = PlayerBeatmap::find()
+        .filter(player_beatmap::Column::PlayerId.eq(player_id))
+        .all(db).await?
+        .iter()
+        .map(|x| SongData { song_id: x.beatmap_id })
+        .collect();
+
+    let favourites: Vec<i32> = PlayerFavouriteBeatmap::find()
+        .filter(player_favourite_beatmap::Column::PlayerId.eq(player_id))
+        .all(db).await?
+        .iter()
+        .map(|x| x.beatmap_id)
+        .collect();
 
     Ok(SongList {
-        list,
-        favorite_list: vec![],
+        list: beatmaps,
+        favorite_list: favourites,
     })
 }
 

@@ -10,6 +10,7 @@ mod m007_player_character;
 mod m008_player_theme;
 mod m009_beatmap;
 mod m010_player_beatmap;
+mod m011_player_favourite_beatmap;
 
 pub struct Migrator;
 
@@ -28,6 +29,7 @@ impl MigratorTrait for Migrator {
             Box::new(m008_player_theme::Migration),
             Box::new(m009_beatmap::Migration),
             Box::new(m010_player_beatmap::Migration),
+            Box::new(m011_player_favourite_beatmap::Migration),
         ]
     }
 }

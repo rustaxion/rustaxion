@@ -30,7 +30,7 @@ pub async fn handle(
         CometScene::RequestFinishSong => song::finish_song::handle(session, db, data).await,
         CometScene::RequestSingleSongRank => todo!(),
         CometScene::RequestRankInfo => rank_info::handle(session, db, data).await,
-        CometScene::RequestSetFavorite => todo!(),
+        CometScene::RequestSetFavorite => song::require_set_favourite::handle(session, db, data).await,
         CometScene::RequestBackstageGame => todo!(),
         CometScene::RequestActivityInfo => todo!(),
         CometScene::RequestActivityBegin => todo!(),

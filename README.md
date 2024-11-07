@@ -35,18 +35,18 @@ If you are looking for a working solution, try out my [server emulator](https://
 | CometGate::CreateCharacter | ✅ |
 | CometGate::EnterGame | ✅ |
 
-### Comet::Scene (7% done)
+### Comet::Scene (8% done)
 
 | Method | Implemented |
 | --------- | ------- |
 | CometScene::RequestBeginSong | ✅ |
 | CometScene::RequestFinishSong | ✅ |
 | CometScene::RequestRankInfo | ✅ |
+| CometScene::RequestSetFavorite | ✅ |
 | CometScene::RequestShopInfo | ✅ |
 | CometScene::RequestChangeLanguage | ✅ |
 | CometScene::RequestEventInfo | ✅ |
 | CometScene::RequestSingleSongRank | ❌ |
-| CometScene::RequestSetFavorite | ❌ |
 | CometScene::RequestBackstageGame | ❌ |
 | CometScene::RequestActivityInfo | ❌ |
 | CometScene::RequestActivityBegin | ❌ |
@@ -139,5 +139,5 @@ I even accept [donations](https://github.com/sponsors/ArjixWasTaken) if you want
 
 ## Attributions
 
-1. [invaxion-server](https://github.com/603185423/invaxion-server) by @MoeGrid and @603185423 for the server logic
+1. [invaxion-server](https://github.com/603185423/invaxion-server) by @MoeGrid and @603185423
 2. [Invaxion-Server-Emulator](https://github.com/rustaxion/old-server-emulator) by @ArjixWasTaken (me!)

@@ -22,11 +22,11 @@ pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, 
         body: NotifyGameTime { gametime: now as i32 }.encode_to_vec()
     });
 
-    let user = Account::find_by_id(req.acc_id).one(&db).await?;
-    session.account_id = user.clone().map(|x| x.id);
-    anyhow::ensure!(user.is_some());
+    let account = Account::find_by_id(req.acc_id).one(&db).await?;
+    session.account_id = account.clone().map(|x| x.id);
+    anyhow::ensure!(account.is_some());
 
-    let user = user.unwrap();
+    let user = account.unwrap();
     let players = Player::find_by_id(user.id).all(&db).await?;
 
     let user_info = SelectUserInfoList {

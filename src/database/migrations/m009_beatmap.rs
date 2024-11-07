@@ -38,9 +38,9 @@ impl MigrationTrait for Migration {
                     ))
                     .col(integer_null(Beatmap::DLCPack))
                     .col(json_binary(Beatmap::BPMRange))
-                    .col(json_binary(Beatmap::Key4))
-                    .col(json_binary(Beatmap::Key6))
-                    .col(json_binary(Beatmap::Key8))
+                    .col(json_binary_null(Beatmap::Key4))
+                    .col(json_binary_null(Beatmap::Key6))
+                    .col(json_binary_null(Beatmap::Key8))
                     .to_owned(),
             )
             .await?;

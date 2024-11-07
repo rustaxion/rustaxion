@@ -24,6 +24,24 @@ pub struct Model {
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
-pub enum Relation {}
+pub enum Relation {
+    #[sea_orm(has_many = "super::player_beatmap::Entity")]
+    PlayerBeatmap,
+}
+
+impl Related<super::player_beatmap::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::PlayerBeatmap.def()
+    }
+}
+
+impl Related<super::player::Entity> for Entity {
+    fn to() -> RelationDef {
+        super::player_beatmap::Relation::Player.def()
+    }
+    fn via() -> Option<RelationDef> {
+        Some(super::player_beatmap::Relation::Beatmap.def().rev())
+    }
+}
 
 impl ActiveModelBehavior for ActiveModel {}

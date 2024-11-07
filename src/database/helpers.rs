@@ -4,7 +4,7 @@ use crate::{
 };
 use sea_orm::{entity::*, DatabaseConnection, QueryFilter};
 
-use super::entities::{player_character, player_theme, sea_orm_active_enums};
+use super::entities::{player_beatmap, player_character, player_theme, sea_orm_active_enums};
 
 pub async fn get_announcements(_db: &DatabaseConnection) -> anyhow::Result<AnnouncementData> {
     // TODO: Populate this using data from the database.
@@ -41,25 +41,11 @@ pub async fn get_player_score_list(
 
 #[rustfmt::skip]
 pub async fn get_player_song_list(
-    _account_id: i32,
-    _db: &DatabaseConnection
+    player_id: i32,
+    db: &DatabaseConnection
 ) -> anyhow::Result<SongList> {
-    // TODO: Populate this using data from the database.
-
-    let list = vec![
-        80031, 80008, 80011, 80012,
-        80010, 80034, 80007, 80015,
-        80013, 80009, 80014, 80019,
-        80020, 80018, 63122, 63123,
-        63204, 62005, 62006, 63103,
-        69008, 68008, 68108, 80002,
-        64005, 69018, 68002, 68001,
-        82005, 82006, 82007, 82011,
-        65102, 68106, 64003, 62021,
-        65036
-    ].iter()
-     .map(|id| SongData { song_id: *id })
-     .collect::<Vec<_>>();
+    let beatmaps = PlayerBeatmap::find().filter(player_beatmap::Column::PlayerId.eq(player_id)).all(db).await?;
+    let list: Vec<SongData> = beatmaps.iter().map(|x| SongData { song_id: x.beatmap_id }).collect();
 
     Ok(SongList {
         list,

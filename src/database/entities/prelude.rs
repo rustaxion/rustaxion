@@ -5,6 +5,7 @@ pub use super::beatmap::Entity as Beatmap;
 pub use super::character::Entity as Character;
 pub use super::daily_login::Entity as DailyLogin;
 pub use super::player::Entity as Player;
+pub use super::player_beatmap::Entity as PlayerBeatmap;
 pub use super::player_character::Entity as PlayerCharacter;
 pub use super::player_theme::Entity as PlayerTheme;
 pub use super::shop_item::Entity as ShopItem;

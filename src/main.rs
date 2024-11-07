@@ -1,3 +1,5 @@
+#![allow(unused_imports)]
+
 use anyhow::Context;
 use futures_util::{future::abortable, stream::Aborted, StreamExt};
 use moka::future::Cache;

@@ -1,18 +1,11 @@
-use crate::database::entities::{player, prelude::*};
-use anyhow::Context;
-use prost::Message;
-use sea_orm::{ColumnTrait, EntityTrait, QueryFilter, Set};
-
 use crate::{
-    database::entities::sea_orm_active_enums,
     enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd},
-    proto::comet_scene::ReqChangeLanguage,
     types::{response::Response, session::SessionData},
 };
 
 pub async fn handle(
-    session: &mut SessionData,
-    db: sea_orm::DatabaseConnection,
+    _session: &mut SessionData,
+    _db: sea_orm::DatabaseConnection,
     body: Vec<u8>,
 ) -> anyhow::Result<Vec<Response>> {
     // NOTE: The game client sends this request before the player is created.

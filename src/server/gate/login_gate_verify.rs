@@ -27,13 +27,13 @@ pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, 
     anyhow::ensure!(account.is_some());
 
     let user = account.unwrap();
-    let players = Player::find_by_id(user.id).all(&db).await?;
+    let players = user.find_related(Player).all(&db).await?;
 
     let user_info = SelectUserInfoList {
         user_list: players
             .iter()
             .map(|p| SelectUserInfo {
-                char_id: p.account_id as i64,
+                char_id: p.id as i64,
                 acc_states: 0
             })
             .collect::<Vec<_>>()

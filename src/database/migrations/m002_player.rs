@@ -37,12 +37,12 @@ impl MigrationTrait for Migration {
                     .col(string_len(Player::Name, 50))
                     .col(enumeration(
                         Player::Language,
-                        Alias::new("Language"),
+                        Alias::new("language"),
                         Language::iter(),
                     ))
                     .col(enumeration(
                         Player::Country,
-                        Alias::new("Country"),
+                        Alias::new("country"),
                         Country::iter(),
                     ))
                     .col(integer(Player::SelectedCharacterId))

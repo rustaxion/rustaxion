@@ -9,5 +9,6 @@ pub use super::player_beatmap::Entity as PlayerBeatmap;
 pub use super::player_character::Entity as PlayerCharacter;
 pub use super::player_favourite_beatmap::Entity as PlayerFavouriteBeatmap;
 pub use super::player_theme::Entity as PlayerTheme;
+pub use super::score::Entity as Score;
 pub use super::shop_item::Entity as ShopItem;
 pub use super::theme::Entity as Theme;

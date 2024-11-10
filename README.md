@@ -35,7 +35,7 @@ If you are looking for a working solution, try out my [server emulator](https://
 | CometGate::CreateCharacter | ✅ |
 | CometGate::EnterGame | ✅ |
 
-### Comet::Scene (8% done)
+### Comet::Scene (9% done)
 
 | Method | Implemented |
 | --------- | ------- |
@@ -45,6 +45,7 @@ If you are looking for a working solution, try out my [server emulator](https://
 | CometScene::RequestSetFavorite | ✅ |
 | CometScene::RequestShopInfo | ✅ |
 | CometScene::RequestChangeLanguage | ✅ |
+| CometScene::RequestSocialPublishDynamics | ✅ |
 | CometScene::RequestEventInfo | ✅ |
 | CometScene::RequestSingleSongRank | ❌ |
 | CometScene::RequestBackstageGame | ❌ |
@@ -74,7 +75,6 @@ If you are looking for a working solution, try out my [server emulator](https://
 | CometScene::RequestSocialSendAddFriendRequest | ❌ |
 | CometScene::RequestSocialDeleteFriend | ❌ |
 | CometScene::RequestSocialDisposeFriendRequest | ❌ |
-| CometScene::RequestSocialPublishDynamics | ❌ |
 | CometScene::RequestSocialDeleteDynamics | ❌ |
 | CometScene::RequestSocialFriendDynamics | ❌ |
 | CometScene::RequestStoryInfo | ❌ |

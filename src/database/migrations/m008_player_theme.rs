@@ -27,7 +27,9 @@ impl MigrationTrait for Migration {
                             .from_tbl(PlayerTheme::Table)
                             .from_col(PlayerTheme::PlayerId)
                             .to_tbl(Player::Table)
-                            .to_col(Player::Id),
+                            .to_col(Player::Id)
+                            .on_delete(ForeignKeyAction::Cascade)
+                            .on_update(ForeignKeyAction::Cascade),
                     )
                     .foreign_key(
                         ForeignKey::create()
@@ -35,7 +37,9 @@ impl MigrationTrait for Migration {
                             .from_tbl(PlayerTheme::Table)
                             .from_col(PlayerTheme::ThemeId)
                             .to_tbl(Theme::Table)
-                            .to_col(Theme::Id),
+                            .to_col(Theme::Id)
+                            .on_delete(ForeignKeyAction::Cascade)
+                            .on_update(ForeignKeyAction::Cascade),
                     )
                     .to_owned(),
             )

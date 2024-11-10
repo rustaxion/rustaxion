@@ -5,7 +5,7 @@ use chrono::prelude::*;
 use sea_orm::{entity::*, query::*};
 
 use crate::database::entities::{daily_login, prelude::*};
-use crate::database::helpers::get_character_full_data;
+use crate::database::helpers::get_player_full_data;
 use crate::enums::comet::comet_scene::CometScene;
 use crate::proto::comet_scene::{CharacterFullData, NotifyCharacterFullData};
 use crate::{
@@ -70,7 +70,7 @@ pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, 
     }
     //=// end daily login
 
-    let full_data: CharacterFullData = get_character_full_data(session.player_id.unwrap(), &db).await?;
+    let full_data: CharacterFullData = get_player_full_data(session.player_id.unwrap(), &db).await?;
     Ok(vec![Response {
         main_cmd: MainCmd::Game,
         para_cmd: ParaCmd::CometScene(CometScene::NotifyCharacterFullData),

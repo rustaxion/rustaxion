@@ -7,6 +7,7 @@ mod change_language;
 mod event;
 mod rank_info;
 mod shop;
+mod social;
 mod song;
 
 #[rustfmt::skip]
@@ -60,7 +61,7 @@ pub async fn handle(
         CometScene::RequestSocialSendAddFriendRequest => todo!(),
         CometScene::RequestSocialDeleteFriend => todo!(),
         CometScene::RequestSocialDisposeFriendRequest => todo!(),
-        CometScene::RequestSocialPublishDynamics => todo!(),
+        CometScene::RequestSocialPublishDynamics => social::publish_dynamics::handle(session, db, data).await,
         CometScene::RequestSocialDeleteDynamics => todo!(),
         CometScene::RequestSocialFriendDynamics => todo!(),
         CometScene::RequestStoryInfo => todo!(),

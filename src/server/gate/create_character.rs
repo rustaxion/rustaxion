@@ -6,7 +6,7 @@ use crate::database::entities::{player, player_character, player_theme, prelude:
 use crate::proto;
 use sea_orm::{entity::*, QueryFilter};
 
-use crate::database::helpers::get_character_full_data;
+use crate::database::helpers::get_player_full_data;
 use crate::enums::comet::comet_gate::CometGate;
 use crate::proto::comet_gate::{SelectUserInfo, SelectUserInfoList};
 use crate::proto::comet_scene::NotifyCharacterFullData;
@@ -64,7 +64,7 @@ pub async fn handle(
 
     // character full data
     {
-        let data: CharacterFullData = get_character_full_data(player.last_insert_id, &db).await?;
+        let data: CharacterFullData = get_player_full_data(player.last_insert_id, &db).await?;
 
         responses.push(Response {
             main_cmd: MainCmd::Game,

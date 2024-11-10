@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use crate::{
     database::entities::{player, prelude::*, shop_item},
     proto::{self, comet_scene::*},
@@ -5,7 +7,8 @@ use crate::{
 use sea_orm::{entity::*, DatabaseConnection, QueryFilter};
 
 use super::entities::{
-    player_beatmap, player_character, player_favourite_beatmap, player_theme, sea_orm_active_enums,
+    player_beatmap, player_character, player_favourite_beatmap, player_theme, score,
+    sea_orm_active_enums,
 };
 
 pub async fn get_announcements(_db: &DatabaseConnection) -> anyhow::Result<AnnouncementData> {
@@ -23,21 +26,71 @@ pub async fn get_announcements(_db: &DatabaseConnection) -> anyhow::Result<Annou
 
 #[rustfmt::skip]
 pub async fn get_player_score_list(
-    _player_id: i32,
-    _db: &DatabaseConnection
+    player_id: i32,
+    db: &DatabaseConnection
 ) -> anyhow::Result<ScoreList> {
-    // TODO: Populate this using data from the database.
+    let scores = Score::find().filter(score::Column::PlayerId.eq(player_id)).all(db).await?;
+    let mut scores_cant_think_of_a_name: HashMap<(i32, i32, i32, i32), (score::Model, u32)> = std::collections::HashMap::new();
 
-    let diff = DifficultyList {
+    for score in scores {
+        let key = (score.beatmap_id, score.mode.clone() as i32, score.difficulty.clone() as i32, score.finish_level);
+        if let Some(prev) = scores_cant_think_of_a_name.get_mut(&key) {
+            prev.1 += 1;
+
+            if prev.0.score < score.score {
+                prev.0 = score;
+            }
+        } else {
+            scores_cant_think_of_a_name.insert(key, (score, 1));
+        }
+    }
+
+    let mut key4_list = DifficultyList {
         easy_list: vec![],
         normal_list: vec![],
         hard_list: vec![]
     };
 
+    let mut key6_list = DifficultyList {
+        easy_list: vec![],
+        normal_list: vec![],
+        hard_list: vec![]
+    };
+
+    let mut key8_list = DifficultyList {
+        easy_list: vec![],
+        normal_list: vec![],
+        hard_list: vec![]
+    };
+
+    for (score, count) in scores_cant_think_of_a_name.values() {
+        let key = match score.mode {
+            sea_orm_active_enums::BeatmapMode::FourKeys => &mut key4_list,
+            sea_orm_active_enums::BeatmapMode::SixKeys => &mut key6_list,
+            sea_orm_active_enums::BeatmapMode::EightKeys => &mut key8_list,
+        };
+
+        let diff = match score.difficulty {
+            sea_orm_active_enums::BeatmapDifficulty::Easy => &mut key.easy_list,
+            sea_orm_active_enums::BeatmapDifficulty::Normal => &mut key.normal_list,
+            sea_orm_active_enums::BeatmapDifficulty::Hard => &mut key.hard_list,
+        };
+
+        diff.push(SingleSongInfo {
+            song_id: score.beatmap_id,
+            score: score.score,
+            is_full_combo: if score.is_full_combo { 1 } else { 0 },
+            is_all_max: if score.is_perfect { 1 } else { 0 },
+            miss: score.miss_count,
+            finish_level: score.finish_level,
+            play_count: *count as i32,
+        });
+    }
+
     Ok(ScoreList {
-        key4_list: diff.clone(),
-        key6_list: diff.clone(),
-        key8_list: diff.clone(),
+        key4_list,
+        key6_list,
+        key8_list,
     })
 }
 
@@ -167,7 +220,7 @@ pub async fn get_player_team(
 }
 
 #[rustfmt::skip]
-pub async fn get_character_full_data(
+pub async fn get_player_full_data(
     player_id: i32,
     db: &DatabaseConnection
 ) -> anyhow::Result<CharacterFullData> {

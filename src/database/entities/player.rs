@@ -74,6 +74,8 @@ pub enum Relation {
     PlayerFavouriteBeatmap,
     #[sea_orm(has_many = "super::player_theme::Entity")]
     PlayerTheme,
+    #[sea_orm(has_many = "super::score::Entity")]
+    Score,
     #[sea_orm(
         belongs_to = "super::theme::Entity",
         from = "Column::SelectedThemeId",
@@ -117,6 +119,12 @@ impl Related<super::player_favourite_beatmap::Entity> for Entity {
 impl Related<super::player_theme::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::PlayerTheme.def()
+    }
+}
+
+impl Related<super::score::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Score.def()
     }
 }
 

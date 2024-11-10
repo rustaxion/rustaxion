@@ -27,7 +27,9 @@ impl MigrationTrait for Migration {
                             .from_tbl(PlayerBeatmap::Table)
                             .from_col(PlayerBeatmap::PlayerId)
                             .to_tbl(Player::Table)
-                            .to_col(Player::Id),
+                            .to_col(Player::Id)
+                            .on_delete(ForeignKeyAction::Cascade)
+                            .on_update(ForeignKeyAction::Cascade),
                     )
                     .foreign_key(
                         ForeignKey::create()

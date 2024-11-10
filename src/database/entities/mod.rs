@@ -11,6 +11,7 @@ pub mod player_beatmap;
 pub mod player_character;
 pub mod player_favourite_beatmap;
 pub mod player_theme;
+pub mod score;
 pub mod sea_orm_active_enums;
 pub mod shop_item;
 pub mod theme;

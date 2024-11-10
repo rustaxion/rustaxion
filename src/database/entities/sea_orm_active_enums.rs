@@ -3,6 +3,16 @@
 use sea_orm::entity::prelude::*;
 
 #[derive(Debug, Clone, PartialEq, Eq, EnumIter, DeriveActiveEnum)]
+#[sea_orm(rs_type = "String", db_type = "Enum", enum_name = "beatmap_difficulty")]
+pub enum BeatmapDifficulty {
+    #[sea_orm(string_value = "easy")]
+    Easy,
+    #[sea_orm(string_value = "hard")]
+    Hard,
+    #[sea_orm(string_value = "normal")]
+    Normal,
+}
+#[derive(Debug, Clone, PartialEq, Eq, EnumIter, DeriveActiveEnum)]
 #[sea_orm(rs_type = "String", db_type = "Enum", enum_name = "beatmap_kind")]
 pub enum BeatmapKind {
     #[sea_orm(string_value = "dlc")]
@@ -13,6 +23,16 @@ pub enum BeatmapKind {
     Sale,
     #[sea_orm(string_value = "tutorial")]
     Tutorial,
+}
+#[derive(Debug, Clone, PartialEq, Eq, EnumIter, DeriveActiveEnum)]
+#[sea_orm(rs_type = "String", db_type = "Enum", enum_name = "beatmap_mode")]
+pub enum BeatmapMode {
+    #[sea_orm(string_value = "eight_keys")]
+    EightKeys,
+    #[sea_orm(string_value = "four_keys")]
+    FourKeys,
+    #[sea_orm(string_value = "six_keys")]
+    SixKeys,
 }
 #[derive(Debug, Clone, PartialEq, Eq, EnumIter, DeriveActiveEnum)]
 #[sea_orm(rs_type = "String", db_type = "Enum", enum_name = "country")]

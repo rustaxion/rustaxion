@@ -15,7 +15,7 @@ fn main() {
             "src/proto/cometLogin.proto",
             "src/proto/cometScene.proto",
         ],
-        &["src/"],
+        &["src/backend/"],
     );
 
     match proto {
@@ -132,7 +132,7 @@ fn progress_to_tables(progress: Vec<(Comet, Vec<Vec<String>>)>) -> String {
 }
 
 fn add_progress_to_readme() -> anyhow::Result<()> {
-    let buffer = fs::read_to_string("README.md")?;
+    let buffer = fs::read_to_string("../../README.md")?;
 
     let start = "<!-- progress-start -->";
     let end = "<!-- progress-end -->";
@@ -152,7 +152,7 @@ fn add_progress_to_readme() -> anyhow::Result<()> {
     output.write_str("<!-- progress-end -->");
     output.write_str(suffix);
 
-    fs::write("README.md", output)?;
+    fs::write("../../README.md", output)?;
 
     Ok(())
 }

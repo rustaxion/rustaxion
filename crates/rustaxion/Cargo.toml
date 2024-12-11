@@ -1,0 +1,55 @@
+[package]
+name = "rustaxion"
+version = "0.1.0"
+authors = ["ArjixWasTaken <me@arjix.dev>"]
+description = ""
+edition = "2021"
+
+[[bin]]
+name = "rustaxion"
+path = "src/main.rs"
+
+[dependencies]
+moka = { version = "0.12.8", features = ["future"] }
+sea-orm = { version = "1.1", features = [
+    "sqlx-postgres",
+    "runtime-tokio-rustls",
+    "macros",
+    "with-chrono",
+    "debug-print",
+] }
+
+sea-orm-migration = { version = "1.1", features = [
+    "sqlx-postgres",
+    "runtime-tokio-rustls",
+] }
+
+tokio = { version = "1.38.0", features = ["full"] }
+tokio-stream = { version = "0.1.15", features = ["tokio-util"] }
+tokio-util = { version = "0.7.11", features = ["full"] }
+futures-util = { version = "0.3.30", features = ["sink"] }
+tokio-test = "0.4.4"
+
+anyhow = { version = "1.0.86", features = ["std", "backtrace"] }
+thiserror = "1.0"
+color-backtrace = "0.6.1"
+
+enum-repr-derive = "0.2.0"
+byteorder = "1.5.0"
+prost = "0.12.6"
+md5 = "0.7.0"
+
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "*"
+
+indent = "0.1.1"
+dotenvy = "0.15.7"
+chrono = "0.4.38"
+tracing-subscriber = "0.3.18"
+tracing = "0.1.40"
+
+[build-dependencies]
+anyhow = { version = "1.0.86", features = ["std", "backtrace"] }
+indoc = "2.0.5"
+prost-build = "0.12.6"
+protobuf-src = "2.0.1"

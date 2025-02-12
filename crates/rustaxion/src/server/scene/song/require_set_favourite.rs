@@ -4,10 +4,11 @@ use sea_orm::{EntityTrait, Set};
 
 use crate::{
     database::entities::{player_favourite_beatmap, prelude::PlayerFavouriteBeatmap},
-    enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd},
-    proto::comet_scene::ReqSetFavorite,
     types::{response::Response, session::SessionData},
 };
+
+use proto::comet_scene::ReqSetFavorite;
+use proto::enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd};
 
 #[rustfmt::skip]
 pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, body: Vec<u8>) -> anyhow::Result<Vec<Response>> {

@@ -1,5 +1,5 @@
-use super::packet::{Packet, PACKET_HEADER_SIZE};
-use crate::enums::comet::{MainCmd, ParaCmd};
+use proto::enums::comet::{MainCmd, ParaCmd};
+use proto::packet::{Packet, PACKET_HEADER_SIZE};
 
 #[derive(Debug, Clone)]
 pub struct Response {

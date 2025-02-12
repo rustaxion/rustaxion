@@ -1,9 +1,8 @@
 use std::collections::HashMap;
 
-use crate::{
-    database::entities::{player, prelude::*, shop_item},
-    proto::{self, comet_scene::*},
-};
+use crate::database::entities::{player, prelude::*, shop_item};
+
+use proto::{self, comet_scene::*};
 use sea_orm::{entity::*, DatabaseConnection, QueryFilter};
 
 use super::entities::{

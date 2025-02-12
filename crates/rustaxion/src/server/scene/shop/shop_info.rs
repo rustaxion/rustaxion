@@ -3,10 +3,11 @@ use sea_orm::EntityTrait;
 
 use crate::{
     database::entities::{prelude::*, sea_orm_active_enums::ShopItemType},
-    enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd},
-    proto::comet_scene::{RetShopInfo, ShopRecommend},
     types::{response::Response, session::SessionData},
 };
+
+use proto::comet_scene::{RetShopInfo, ShopRecommend};
+use proto::enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd};
 
 #[rustfmt::skip]
 pub async fn handle(_session: &mut SessionData, db: sea_orm::DatabaseConnection, _body: Vec<u8>) -> anyhow::Result<Vec<Response>> {

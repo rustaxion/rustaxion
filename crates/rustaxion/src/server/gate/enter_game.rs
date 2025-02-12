@@ -6,13 +6,12 @@ use sea_orm::{entity::*, query::*};
 
 use crate::database::entities::{daily_login, prelude::*};
 use crate::database::helpers::get_player_full_data;
-use crate::enums::comet::comet_scene::CometScene;
-use crate::proto::comet_scene::{CharacterFullData, NotifyCharacterFullData};
-use crate::{
-    enums::comet::{MainCmd, ParaCmd},
-    proto::comet_gate::EnterGame,
-    types::{response::Response, session::SessionData},
-};
+use crate::types::{response::Response, session::SessionData};
+
+use proto::enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd};
+
+use proto::comet_gate::EnterGame;
+use proto::comet_scene::{CharacterFullData, NotifyCharacterFullData};
 
 #[rustfmt::skip]
 pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, buffer: Vec<u8>) -> anyhow::Result<Vec<Response>> {

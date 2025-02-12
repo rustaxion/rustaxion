@@ -1,7 +1,5 @@
-use crate::{
-    enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd},
-    types::{response::Response, session::SessionData},
-};
+use crate::types::{response::Response, session::SessionData};
+use proto::enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd};
 
 pub async fn handle(
     _session: &mut SessionData,
@@ -16,7 +14,7 @@ pub async fn handle(
     // let req = ReqChangeLanguage::decode(body.as_slice())
     //     .context("Failed to decode ReqChangeLanguage.")?;
 
-    // let language = crate::proto::comet_login::LanguageType::from_i32(req.language)
+    // let language = proto::comet_login::LanguageType::from_i32(req.language)
     //     .ok_or(anyhow::anyhow!("Invalid language type."))?;
 
     // Player::update(player::ActiveModel {

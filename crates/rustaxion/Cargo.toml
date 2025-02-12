@@ -10,6 +10,7 @@ name = "rustaxion"
 path = "src/main.rs"
 
 [dependencies]
+proto = { path = "../proto" }
 moka = { version = "0.12.8", features = ["future"] }
 sea-orm = { version = "1.1", features = [
     "sqlx-postgres",
@@ -29,6 +30,8 @@ tokio-stream = { version = "0.1.15", features = ["tokio-util"] }
 tokio-util = { version = "0.7.11", features = ["full"] }
 futures-util = { version = "0.3.30", features = ["sink"] }
 tokio-test = "0.4.4"
+tokio-tungstenite = "0.24.0"
+tungstenite = "0.24.0"
 
 anyhow = { version = "1.0.86", features = ["std", "backtrace"] }
 thiserror = "1.0"

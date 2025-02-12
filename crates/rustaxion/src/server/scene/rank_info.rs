@@ -1,11 +1,10 @@
 use anyhow::Context;
 use prost::Message;
 
-use crate::{
-    enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd},
-    proto::comet_scene::{RankTopType, ReqRankInfo, RetRankInfo},
-    types::{response::Response, session::SessionData},
-};
+use crate::types::{response::Response, session::SessionData};
+
+use proto::comet_scene::{RankTopType, ReqRankInfo, RetRankInfo};
+use proto::enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd};
 
 #[rustfmt::skip]
 pub async fn handle(_session: &mut SessionData, _db: sea_orm::DatabaseConnection, body: Vec<u8>) -> anyhow::Result<Vec<Response>> {

@@ -1,7 +1,6 @@
-use crate::{
-    enums::comet::MainCmd,
-    types::{packet::Packet, response::Response, session::SessionData},
-};
+use proto::{enums::comet::MainCmd, packet::Packet};
+
+use crate::types::{response::Response, session::SessionData};
 
 mod gate;
 mod login;

@@ -4,6 +4,10 @@ extern crate libc;
 
 use futures_util::{stream::SplitSink, SinkExt, StreamExt};
 use libc::c_char;
+use proto::{
+    enums::comet::{MainCmd, ParaCmd},
+    packet::{Packet, PACKET_HEADER_SIZE},
+};
 use std::{
     ffi::CStr,
     fs::OpenOptions,
@@ -15,6 +19,7 @@ use tokio::{net::TcpStream, runtime::Runtime};
 use tokio_tungstenite::{
     connect_async, tungstenite::protocol::Message, MaybeTlsStream, WebSocketStream,
 };
+use tokio_util::bytes::{Buf, BytesMut};
 use tracing::{debug, error, info};
 use tracing_subscriber::{fmt, layer::SubscriberExt, Registry};
 
@@ -181,8 +186,22 @@ pub extern "C" fn sendCmd(
         tag, main_cmd, para_cmd, data
     );
 
+    let pkg_len = (PACKET_HEADER_SIZE + size as usize) as i32;
+    let main_cmd = MainCmd::try_from(main_cmd as i8).unwrap();
+    let para_cmd = ParaCmd::from_value(&main_cmd, para_cmd as u8).unwrap();
+
+    let packet = Packet {
+        pkg_len,
+        main_cmd,
+        para_cmd,
+        data_len: size as u16,
+        data: data.to_vec(),
+    };
+
+    let encoded = packet.encode().unwrap();
+
     if let Some(conn) = tag.connection() {
-        let msg = Message::Binary(data.to_vec());
+        let msg = Message::Binary(encoded);
         let write = conn.write.clone();
         let runtime = get_runtime().clone();
 
@@ -213,10 +232,23 @@ pub extern "C" fn parseCmd(
         if let Ok(msg) = receiver.try_recv() {
             match msg {
                 Message::Binary(data) => {
-                    debug!("Received message: {:?}", data);
-                    // Fill out main_cmd, para_cmd, and json_out as needed
-                    // For now, return the size of the message
-                    return data.len() as i32;
+                    let packet = Packet::decode(&mut BytesMut::from_iter(data)).unwrap();
+                    debug!(
+                        "Received message: {:?}, {:?}, {:?}, {:?}",
+                        tag, packet.main_cmd, packet.para_cmd, packet.data
+                    );
+
+                    unsafe {
+                        *main_cmd = packet.main_cmd as i32;
+                        *para_cmd = packet.para_cmd.get_value() as i32;
+                        std::ptr::copy_nonoverlapping(
+                            packet.data.as_ptr(),
+                            json_out,
+                            packet.data.len(),
+                        );
+                    }
+
+                    return packet.data_len as i32;
                 }
                 _ => {
                     error!("Unsupported message type");

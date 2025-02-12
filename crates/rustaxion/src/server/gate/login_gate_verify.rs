@@ -4,11 +4,10 @@ use prost::Message;
 use crate::database::entities::prelude::*;
 use sea_orm::entity::*;
 
-use crate::{
-    enums::comet::{comet_gate::CometGate, MainCmd, ParaCmd},
-    proto::comet_gate::{LoginGateVerify, NotifyGameTime, SelectUserInfo, SelectUserInfoList},
-    types::{response::Response, session::SessionData},
-};
+use crate::types::{response::Response, session::SessionData};
+
+use proto::comet_gate::{LoginGateVerify, NotifyGameTime, SelectUserInfo, SelectUserInfoList};
+use proto::enums::comet::{comet_gate::CometGate, MainCmd, ParaCmd};
 
 #[rustfmt::skip]
 pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, buffer: Vec<u8>) -> anyhow::Result<Vec<Response>> {

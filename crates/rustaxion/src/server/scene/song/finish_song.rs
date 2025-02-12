@@ -15,10 +15,11 @@ use crate::{
         },
         helpers::get_player_full_data,
     },
-    enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd},
-    proto::comet_scene::{PlayerExpData, ReqFinishSong, RetFinishSong, SettleData, SettleItemData},
     types::{response::Response, session::SessionData},
 };
+
+use proto::comet_scene::{PlayerExpData, ReqFinishSong, RetFinishSong, SettleData, SettleItemData};
+use proto::enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd};
 
 // TODO: Use sea-ql transactions, to prevent incomplete updates
 pub async fn handle(
@@ -215,7 +216,7 @@ pub async fn handle(
     };
 
     let single_song_data = RetFinishSong {
-        song_info: crate::proto::comet_scene::SingleSongInfo {
+        song_info: proto::comet_scene::SingleSongInfo {
             song_id: song_data.song_id,
             finish_level: play_data.finish_level,
             score: play_data.score,

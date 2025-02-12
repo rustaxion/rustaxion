@@ -1,6 +1,8 @@
-use crate::{
+use crate::types::{response::Response, session::SessionData};
+
+use proto::{
     enums::comet::{comet_login::CometLogin, MainCmd, ParaCmd},
-    types::{packet::Packet, response::Response, session::SessionData},
+    packet::Packet,
 };
 
 mod game_version;

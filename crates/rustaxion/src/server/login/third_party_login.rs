@@ -6,11 +6,10 @@ use prost::Message;
 use crate::database::entities::{account, prelude::*};
 use sea_orm::{entity::*, query::*};
 
-use crate::{
-    enums::comet::{comet_login::CometLogin, MainCmd, ParaCmd},
-    proto::comet_login::{GatewayServerData, ReqThirdLogin, RetThirdLogin},
-    types::{response::Response, session::SessionData},
-};
+use crate::types::{response::Response, session::SessionData};
+
+use proto::comet_login::{GatewayServerData, ReqThirdLogin, RetThirdLogin};
+use proto::enums::comet::{comet_login::CometLogin, MainCmd, ParaCmd};
 
 #[rustfmt::skip]
 pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, buffer: Vec<u8>) -> anyhow::Result<Vec<Response>> {

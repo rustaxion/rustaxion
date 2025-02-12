@@ -1,17 +1,17 @@
 #![allow(unused_imports)]
 
 use anyhow::Context;
-use futures_util::{future::abortable, stream::Aborted, StreamExt};
+use futures_util::{future::abortable, stream::Aborted, StreamExt, TryStreamExt};
 use moka::future::Cache;
+use prost::bytes::BytesMut;
+use proto::packet::Packet;
 use sea_orm::DatabaseConnection;
 use std::{env, net::SocketAddr, time::Duration};
 use tokio::net::{TcpListener, TcpStream};
 use tokio_util::{codec::Framed, sync::CancellationToken};
-use types::{packet::Packet, session::SessionData};
+use types::session::SessionData;
 
 mod database;
-mod enums;
-mod proto;
 mod server;
 mod types;
 
@@ -90,7 +90,9 @@ async fn process(
 ) -> anyhow::Result<()> {
     use futures_util::sink::SinkExt;
 
-    let mut transport = Framed::new(stream, types::packet::PacketGlue);
+    let ws = tokio_tungstenite::accept_async(stream).await?;
+    let (mut write, mut read) = ws.split();
+
     let mut session = SessionData::new();
 
     loop {
@@ -98,9 +100,16 @@ async fn process(
             break;
         }
 
-        let Some(request) = transport.next().await else {
+        let Some(Ok(msg)) = read.next().await else {
             continue;
         };
+
+        if !msg.is_binary() {
+            continue;
+        }
+
+        let bytes = msg.into_data();
+        let request = Packet::decode(&mut BytesMut::from_iter(bytes.iter()));
 
         let session_snapshot = session.clone();
 
@@ -112,7 +121,9 @@ async fn process(
         for resp in responses {
             let packet = Into::<Packet>::into(resp);
             eprintln!("<- {:?}::{:?}", packet.main_cmd, packet.para_cmd);
-            transport.send(packet).await?;
+            write
+                .send(tungstenite::Message::binary(packet.encode()?))
+                .await?;
         }
 
         if session != session_snapshot && session.player_id.is_some() {

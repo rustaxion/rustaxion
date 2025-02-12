@@ -1,8 +1,9 @@
-use crate::{
-    enums::comet::{comet_gate::CometGate, MainCmd, ParaCmd},
-    types::{packet::Packet, response::Response, session::SessionData},
-};
+use crate::types::{response::Response, session::SessionData};
 
+use proto::{
+    enums::comet::{comet_gate::CometGate, MainCmd, ParaCmd},
+    packet::Packet,
+};
 mod create_character;
 mod enter_game;
 mod login_gate_verify;

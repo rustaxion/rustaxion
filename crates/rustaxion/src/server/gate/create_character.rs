@@ -1,20 +1,17 @@
 use anyhow::Context;
 use prost::Message;
+use sea_orm::{entity::*, QueryFilter};
 
 use crate::database::entities::sea_orm_active_enums::{Country, Language};
 use crate::database::entities::{player, player_character, player_theme, prelude::*};
-use crate::proto;
-use sea_orm::{entity::*, QueryFilter};
 
 use crate::database::helpers::get_player_full_data;
-use crate::enums::comet::comet_gate::CometGate;
-use crate::proto::comet_gate::{SelectUserInfo, SelectUserInfoList};
-use crate::proto::comet_scene::NotifyCharacterFullData;
-use crate::{
-    enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd},
-    proto::{comet_gate::CreateCharacter, comet_scene::CharacterFullData},
-    types::{response::Response, session::SessionData},
-};
+use crate::types::{response::Response, session::SessionData};
+
+use proto::enums::comet::{comet_gate::CometGate, comet_scene::CometScene, MainCmd, ParaCmd};
+
+use proto::comet_gate::{CreateCharacter, SelectUserInfo, SelectUserInfoList};
+use proto::comet_scene::{CharacterFullData, NotifyCharacterFullData};
 
 pub async fn handle(
     session: &mut SessionData,

@@ -1,14 +1,13 @@
 use anyhow::Context;
 use prost::Message;
 
-use crate::{
-    enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd},
-    proto::comet_scene::ReqBeginSong,
-    types::{
-        response::Response,
-        session::{NowPlaying, SessionData},
-    },
+use crate::types::{
+    response::Response,
+    session::{NowPlaying, SessionData},
 };
+
+use proto::comet_scene::ReqBeginSong;
+use proto::enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd};
 
 #[rustfmt::skip]
 pub async fn handle(session: &mut SessionData, _db: sea_orm::DatabaseConnection, body: Vec<u8>) -> anyhow::Result<Vec<Response>> {

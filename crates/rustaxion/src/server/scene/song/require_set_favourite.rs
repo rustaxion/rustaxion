@@ -1,6 +1,9 @@
+use std::sync::Arc;
+
 use anyhow::Context;
 use prost::Message;
 use sea_orm::{EntityTrait, Set};
+use tokio::sync::Mutex;
 
 use crate::{
     database::entities::{player_favourite_beatmap, prelude::PlayerFavouriteBeatmap},
@@ -11,8 +14,10 @@ use proto::comet_scene::ReqSetFavorite;
 use proto::enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd};
 
 #[rustfmt::skip]
-pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, body: Vec<u8>) -> anyhow::Result<Vec<Response>> {
+pub async fn handle(session: Arc<Mutex<SessionData>>, db: sea_orm::DatabaseConnection, body: Vec<u8>) -> anyhow::Result<Vec<Response>> {
     let req = ReqSetFavorite::decode(body.as_slice()).context("Failed to decode ReqSetFavorite.")?;
+    
+    let session = session.lock().await;
     anyhow::ensure!(session.player_id.is_some());
 
     match req.is_favorite {

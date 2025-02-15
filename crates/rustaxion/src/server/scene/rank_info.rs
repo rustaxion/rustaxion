@@ -1,5 +1,8 @@
+use std::sync::Arc;
+
 use anyhow::Context;
 use prost::Message;
+use tokio::sync::Mutex;
 
 use crate::types::{response::Response, session::SessionData};
 
@@ -7,7 +10,7 @@ use proto::comet_scene::{RankTopType, ReqRankInfo, RetRankInfo};
 use proto::enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd};
 
 #[rustfmt::skip]
-pub async fn handle(_session: &mut SessionData, _db: sea_orm::DatabaseConnection, body: Vec<u8>) -> anyhow::Result<Vec<Response>> {
+pub async fn handle(_session: Arc<Mutex<SessionData>>, _db: sea_orm::DatabaseConnection, body: Vec<u8>) -> anyhow::Result<Vec<Response>> {
     let req = ReqRankInfo::decode(body.as_slice()).context("Failed to decode ReqRankInfo.")?;
     let _rank_top_type = RankTopType::try_from(req.r#type).context("Failed to parse ReqRankInfo.RankTopType.")?;
 

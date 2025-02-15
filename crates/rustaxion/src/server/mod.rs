@@ -1,4 +1,7 @@
+use std::sync::Arc;
+
 use proto::{enums::comet::MainCmd, packet::Packet};
+use tokio::sync::Mutex;
 
 use crate::types::{response::Response, session::SessionData};
 
@@ -7,7 +10,7 @@ mod login;
 mod scene;
 
 pub async fn handle(
-    session: &mut SessionData,
+    session: Arc<Mutex<SessionData>>,
     db: sea_orm::DatabaseConnection,
     packet: Packet,
 ) -> anyhow::Result<Vec<Response>> {

@@ -1,8 +1,11 @@
+use std::sync::Arc;
+
 use anyhow::Context;
 use prost::Message;
 
 use chrono::prelude::*;
 use sea_orm::{entity::*, query::*};
+use tokio::sync::Mutex;
 
 use crate::database::entities::{daily_login, prelude::*};
 use crate::database::helpers::get_player_full_data;
@@ -14,8 +17,9 @@ use proto::comet_gate::EnterGame;
 use proto::comet_scene::{CharacterFullData, NotifyCharacterFullData};
 
 #[rustfmt::skip]
-pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, buffer: Vec<u8>) -> anyhow::Result<Vec<Response>> {
+pub async fn handle(session: Arc<Mutex<SessionData>>, db: sea_orm::DatabaseConnection, buffer: Vec<u8>) -> anyhow::Result<Vec<Response>> {
     let req = EnterGame::decode(buffer.as_slice()).context("Failed to decode EnterGame.")?;
+    let mut session = session.lock().await;
     session.player_id = Some(req.char_id as i32);
 
     //=// daily login

@@ -1,8 +1,11 @@
+use std::sync::Arc;
+
 use crate::types::{response::Response, session::SessionData};
 use proto::enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd};
+use tokio::sync::Mutex;
 
 pub async fn handle(
-    _session: &mut SessionData,
+    _session: Arc<Mutex<SessionData>>,
     _db: sea_orm::DatabaseConnection,
     body: Vec<u8>,
 ) -> anyhow::Result<Vec<Response>> {

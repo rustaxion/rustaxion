@@ -1,5 +1,8 @@
+use std::sync::Arc;
+
 use anyhow::Context;
 use prost::Message;
+use tokio::sync::Mutex;
 
 use crate::database::entities::prelude::*;
 use sea_orm::entity::*;
@@ -10,7 +13,7 @@ use proto::comet_gate::{LoginGateVerify, NotifyGameTime, SelectUserInfo, SelectU
 use proto::enums::comet::{comet_gate::CometGate, MainCmd, ParaCmd};
 
 #[rustfmt::skip]
-pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, buffer: Vec<u8>) -> anyhow::Result<Vec<Response>> {
+pub async fn handle(session: Arc<Mutex<SessionData>>, db: sea_orm::DatabaseConnection, buffer: Vec<u8>) -> anyhow::Result<Vec<Response>> {
     let req = LoginGateVerify::decode(buffer.as_slice()).context("Failed to decode LoginGateVerify.")?;
     let mut responses = Vec::<Response>::with_capacity(2);
 
@@ -22,7 +25,10 @@ pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, 
     });
 
     let account = Account::find_by_id(req.acc_id).one(&db).await?;
+    
+    let mut session = session.lock().await;
     session.account_id = account.clone().map(|x| x.id);
+    
     anyhow::ensure!(account.is_some());
 
     let user = account.unwrap();

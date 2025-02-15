@@ -1,8 +1,11 @@
+use std::sync::Arc;
+
 use crate::types::{response::Response, session::SessionData};
 use proto::{
     enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd},
     packet::Packet,
 };
+use tokio::sync::Mutex;
 
 mod change_language;
 mod event;
@@ -13,7 +16,7 @@ mod song;
 
 #[rustfmt::skip]
 pub async fn handle(
-    session: &mut SessionData,
+    session: Arc<Mutex<SessionData>>,
     db: sea_orm::DatabaseConnection,
     Packet {
         main_cmd,

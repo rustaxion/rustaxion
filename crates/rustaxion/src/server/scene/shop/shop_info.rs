@@ -1,5 +1,8 @@
+use std::sync::Arc;
+
 use prost::Message;
 use sea_orm::EntityTrait;
+use tokio::sync::Mutex;
 
 use crate::{
     database::entities::{prelude::*, sea_orm_active_enums::ShopItemType},
@@ -10,7 +13,7 @@ use proto::comet_scene::{RetShopInfo, ShopRecommend};
 use proto::enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd};
 
 #[rustfmt::skip]
-pub async fn handle(_session: &mut SessionData, db: sea_orm::DatabaseConnection, _body: Vec<u8>) -> anyhow::Result<Vec<Response>> {
+pub async fn handle(_session: Arc<Mutex<SessionData>>, db: sea_orm::DatabaseConnection, _body: Vec<u8>) -> anyhow::Result<Vec<Response>> {
     let shop_items = ShopItem::find().all(&db).await?;
 
     let character_list = shop_items.iter().filter(|x| x.item_type == ShopItemType::Character).map(|x| x.into_proto()).collect::<Vec<_>>();

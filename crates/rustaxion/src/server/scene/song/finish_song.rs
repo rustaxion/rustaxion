@@ -1,9 +1,12 @@
+use std::sync::Arc;
+
 use anyhow::Context;
 use prost::Message;
 use sea_orm::{
     ActiveModelTrait, ColumnTrait, EntityTrait, ModelTrait, PaginatorTrait, QueryFilter, Related,
     Set, Unchanged,
 };
+use tokio::sync::Mutex;
 
 use crate::{
     database::{
@@ -23,13 +26,14 @@ use proto::enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd};
 
 // TODO: Use sea-ql transactions, to prevent incomplete updates
 pub async fn handle(
-    session: &mut SessionData,
+    session: Arc<Mutex<SessionData>>,
     db: sea_orm::DatabaseConnection,
     body: Vec<u8>,
 ) -> anyhow::Result<Vec<Response>> {
     let now = chrono::Utc::now().fixed_offset();
     let req = ReqFinishSong::decode(body.as_slice()).context("Failed to decode ReqFinishSong.")?;
 
+    let mut session = session.lock().await;
     anyhow::ensure!(session.now_playing.is_some());
     let now_playing = session.now_playing.as_ref().unwrap().clone();
     let song_data = req.data;

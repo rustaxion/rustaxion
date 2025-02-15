@@ -1,5 +1,8 @@
+use std::sync::Arc;
+
 use prost::Message;
 use sea_orm::{entity::*, query::*};
+use tokio::sync::Mutex;
 
 use crate::{
     database::entities::{daily_login, prelude::*},
@@ -13,8 +16,10 @@ use proto::comet_scene::{
 use proto::enums::comet::{comet_scene::CometScene, MainCmd, ParaCmd};
 
 #[rustfmt::skip]
-pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, _body: Vec<u8>) -> anyhow::Result<Vec<Response>> {
+pub async fn handle(session: Arc<Mutex<SessionData>>, db: sea_orm::DatabaseConnection, _body: Vec<u8>) -> anyhow::Result<Vec<Response>> {
     // let req = ReqEventInfo::decode(body.as_slice()).context("Failed to decode ReqEventInfo.")?;
+    
+    let session = session.lock().await;
     anyhow::ensure!(session.player_id.is_some());
 
     let daily = DailyLogin::find().filter(

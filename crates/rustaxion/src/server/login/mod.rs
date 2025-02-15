@@ -1,16 +1,19 @@
+use std::sync::Arc;
+
 use crate::types::{response::Response, session::SessionData};
 
 use proto::{
     enums::comet::{comet_login::CometLogin, MainCmd, ParaCmd},
     packet::Packet,
 };
+use tokio::sync::Mutex;
 
 mod game_version;
 mod third_party_login;
 
 #[rustfmt::skip]
 pub async fn handle(
-    session: &mut SessionData,
+    session: Arc<Mutex<SessionData>>,
     db: sea_orm::DatabaseConnection,
     Packet {
         main_cmd,

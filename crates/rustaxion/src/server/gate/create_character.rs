@@ -1,6 +1,9 @@
+use std::sync::Arc;
+
 use anyhow::Context;
 use prost::Message;
 use sea_orm::{entity::*, QueryFilter};
+use tokio::sync::Mutex;
 
 use crate::database::entities::sea_orm_active_enums::{Country, Language};
 use crate::database::entities::{player, player_character, player_theme, prelude::*};
@@ -14,10 +17,11 @@ use proto::comet_gate::{CreateCharacter, SelectUserInfo, SelectUserInfoList};
 use proto::comet_scene::{CharacterFullData, NotifyCharacterFullData};
 
 pub async fn handle(
-    session: &mut SessionData,
+    session: Arc<Mutex<SessionData>>,
     db: sea_orm::DatabaseConnection,
     buffer: Vec<u8>,
 ) -> anyhow::Result<Vec<Response>> {
+    let session = session.lock().await;
     anyhow::ensure!(session.account_id.is_some());
 
     let req =

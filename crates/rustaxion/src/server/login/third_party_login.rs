@@ -1,7 +1,9 @@
 use std::env;
+use std::sync::Arc;
 
 use anyhow::Context;
 use prost::Message;
+use tokio::sync::Mutex;
 
 use crate::database::entities::{account, prelude::*};
 use sea_orm::{entity::*, query::*};
@@ -12,7 +14,7 @@ use proto::comet_login::{GatewayServerData, ReqThirdLogin, RetThirdLogin};
 use proto::enums::comet::{comet_login::CometLogin, MainCmd, ParaCmd};
 
 #[rustfmt::skip]
-pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, buffer: Vec<u8>) -> anyhow::Result<Vec<Response>> {
+pub async fn handle(session: Arc<Mutex<SessionData>>, db: sea_orm::DatabaseConnection, buffer: Vec<u8>) -> anyhow::Result<Vec<Response>> {
     let req = ReqThirdLogin::decode(buffer.as_slice()).context("Failed to decode ReqThirdLogin.")?;
     let token = format!("{:x}", md5::compute(req.clone().open_id + "6031"));
 
@@ -30,6 +32,8 @@ pub async fn handle(session: &mut SessionData, db: sea_orm::DatabaseConnection, 
 
     anyhow::ensure!(acc_id.is_some());
     let acc_id = acc_id.unwrap();
+    
+    let mut session = session.lock().await;
     session.account_id = Some(acc_id);
 
     let gate_ip = env::var("APP_HOST").unwrap();

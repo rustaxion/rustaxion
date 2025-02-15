@@ -47,6 +47,7 @@ static mut CONNECTIONS: ConnectionKeeper = ConnectionKeeper {
     Gateway: None,
 };
 
+#[allow(static_mut_refs)]
 impl SocketTag {
     pub fn connection(&self) -> Option<&Connection> {
         match self {
@@ -67,6 +68,7 @@ impl SocketTag {
     }
 }
 
+#[allow(static_mut_refs)]
 fn get_runtime() -> &'static Arc<Runtime> {
     unsafe {
         if RUNTIME.is_none() {
@@ -116,7 +118,8 @@ pub extern "C" fn contectServer(
     debug!("Connecting to server: {}", server_url);
 
     let runtime = get_runtime().clone();
-    runtime.spawn(async move {
+    let mut success = false;
+    runtime.block_on(async move {
         match connect_async(&server_url).await {
             Ok((ws_stream, _)) => {
                 info!("WebSocket connection established for tag: {:?}", tag);
@@ -147,6 +150,8 @@ pub extern "C" fn contectServer(
                     receiver,
                     write,
                 }));
+
+                success = true;
             }
             Err(err) => {
                 error!("Failed to connect to server: {}", err);
@@ -154,7 +159,7 @@ pub extern "C" fn contectServer(
         }
     });
 
-    true
+    success
 }
 
 #[no_mangle]
@@ -175,16 +180,15 @@ pub extern "C" fn sendCmd(
     msg_content: *const u8,
     size: i32,
 ) -> i32 {
-    if msg_content.is_null() || size <= 0 {
-        error!("Invalid message content or size");
+    if msg_content.is_null() || size < 0 {
+        error!(
+            "Invalid message content or size, {:?}, {:?}, {:?}, {:?}, {:?}",
+            tag, main_cmd, para_cmd, msg_content, size
+        );
         return -1;
     }
 
     let data: &[u8] = unsafe { std::slice::from_raw_parts(msg_content, size as usize) };
-    debug!(
-        "Sending command: {:?}, {}, {}, {:?}",
-        tag, main_cmd, para_cmd, data
-    );
 
     let pkg_len = (PACKET_HEADER_SIZE + size as usize) as i32;
     let main_cmd = MainCmd::try_from(main_cmd as i8).unwrap();
@@ -197,6 +201,11 @@ pub extern "C" fn sendCmd(
         data_len: size as u16,
         data: data.to_vec(),
     };
+
+    debug!(
+        "Sending command: {:?}, {:?}, {:?}, {:?}",
+        tag, main_cmd, para_cmd, data
+    );
 
     let encoded = packet.encode().unwrap();
 
@@ -256,7 +265,6 @@ pub extern "C" fn parseCmd(
                 }
             }
         } else {
-            debug!("No message available in queue");
             return 0;
         }
     } else {

@@ -37,7 +37,7 @@ pub struct ConnectionKeeper {
 
 pub struct Connection {
     sender: Sender<Message>,
-    receiver: Mutex<Receiver<Message>>, // Mutex protects access to the Receiver
+    receiver: Mutex<Receiver<Message>>,
     write: Arc<RwLock<SplitSink<WebSocketStream<MaybeTlsStream<TcpStream>>, Message>>>,
 }
 
@@ -125,7 +125,6 @@ pub extern "C" fn contectServer(
                 info!("WebSocket connection established for tag: {:?}", tag);
 
                 let (write, read) = ws_stream.split();
-
                 let write = Arc::new(RwLock::new(write));
 
                 // Setup channel for message passing
@@ -139,7 +138,12 @@ pub extern "C" fn contectServer(
                         if let Ok(msg) = message {
                             tx_clone.send(msg).await.unwrap_or_else(|_| {
                                 error!("Failed to enqueue incoming message");
+                                tag.set_connection(None);
                             });
+                        } else {
+                            let err = message.unwrap_err();
+                            error!("Failed to read incoming message: {}", err);
+                            tag.set_connection(None);
                         }
                     })
                     .await;
@@ -164,6 +168,17 @@ pub extern "C" fn contectServer(
 
 #[no_mangle]
 pub extern "C" fn disconnectServer(tag: SocketTag) {
+    if let Some(conn) = tag.connection() {
+        let runtime = get_runtime().clone();
+        let writer = conn.write.clone();
+        runtime.block_on(async move {
+            writer
+                .write()
+                .await
+                .send(tungstenite::Message::Close(None))
+                .await;
+        });
+    }
     tag.set_connection(None);
 }
 

@@ -124,6 +124,10 @@ async fn process(
             }
         }
 
+        if msg.is_close() {
+            break;
+        }
+
         if !msg.is_binary() {
             eprintln!("Received a non-binary message: {:?}", msg);
             continue;

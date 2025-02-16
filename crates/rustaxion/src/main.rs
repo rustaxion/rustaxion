@@ -98,7 +98,7 @@ async fn process(
 ) -> anyhow::Result<()> {
     use futures_util::sink::SinkExt;
 
-    let ws = tokio_tungstenite::accept_async(stream).await.unwrap();
+    let ws = tokio_tungstenite::accept_async(stream).await?;
     let (mut write, mut read) = ws.split();
 
     let session = Arc::new(Mutex::new(SessionData::new()));
@@ -108,6 +108,7 @@ async fn process(
         let msg: tungstenite::Message;
         select! {
             _ = cancellation_token.cancelled() => {
+                write.send(tungstenite::Message::Close(None)).await?;
                 break;
             }
 
@@ -120,7 +121,7 @@ async fn process(
                     break;
                 }
 
-                msg = next.unwrap();
+                msg = next?;
             }
         }
 
@@ -136,22 +137,17 @@ async fn process(
         let bytes = msg.into_data();
         let request = Packet::decode(&mut BytesMut::from_iter(bytes.iter()));
 
-        let packet = request
-            .context("Failed to parse an incoming packet.")
-            .unwrap();
+        let packet = request.context("Failed to parse an incoming packet.")?;
         eprintln!("-> {:?}::{:?}", packet.main_cmd, packet.para_cmd);
 
-        let responses = server::handle(session.clone(), db.clone(), packet)
-            .await
-            .unwrap();
+        let responses = server::handle(session.clone(), db.clone(), packet).await?;
 
         for resp in responses {
             let packet = Into::<Packet>::into(resp);
             eprintln!("<- {:?}::{:?}", packet.main_cmd, packet.para_cmd);
             write
                 .send(tungstenite::Message::binary(packet.encode().unwrap()))
-                .await
-                .unwrap();
+                .await?;
         }
 
         let session = session.lock().await.clone();

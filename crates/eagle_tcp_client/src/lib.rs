@@ -274,6 +274,18 @@ pub extern "C" fn parseCmd(
 
                     return packet.data_len as i32;
                 }
+
+                Message::Text(text) => {
+                    error!("Received text message: {:?}", text);
+                    return -1;
+                }
+
+                Message::Close(_) => {
+                    error!("Connection closed by server");
+                    tag.set_connection(None);
+                    return -1;
+                }
+
                 _ => {
                     error!("Unsupported message type");
                     return -1;

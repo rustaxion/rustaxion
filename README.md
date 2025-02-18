@@ -7,6 +7,15 @@ A WIP reverse engineered implementation of [音灵 INVAXION](https://store.steam
 
 If you are looking for a working solution, try out my [server emulator](https://github.com/rustaxion/old-server-emulator) implemented as a client-side mod for the game.
 
+## Community
+
+I've created a discord server that you can hop on to share ideas or play with others!
+
+<a href="https://discord.gg/kGQwzKNRpz" target="_blank">
+    <img src="https://discord.com/api/guilds/1341538524469526604/widget.png?style=banner1" alt="Discord Banner 1"/>
+</a>
+
+
 <!-- progress-start -->
 ## Progress
 

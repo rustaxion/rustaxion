@@ -12,7 +12,7 @@ If you are looking for a working solution, try out my [server emulator](https://
 I've created a discord server that you can hop on to share ideas or play with others!
 
 <a href="https://discord.gg/kGQwzKNRpz" target="_blank">
-    <img src="https://discord.com/api/guilds/1341538524469526604/widget.png?style=banner1" alt="discord widget"/>
+    <img src="https://discord.com/api/guilds/1341538524469526604/widget.png?style=shield" alt="discord widget"/>
 </a>
 
 

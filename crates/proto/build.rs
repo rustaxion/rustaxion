@@ -4,10 +4,9 @@ use std::{cmp::Ordering, fmt::Write, fs};
 
 extern crate anyhow;
 extern crate prost_build;
-extern crate protobuf_src;
 
 fn main() {
-    std::env::set_var("PROTOC", protobuf_src::protoc());
+    // Use the system-installed protoc instead of building from source.
 
     let proto = prost_build::compile_protos(
         &[

@@ -36,6 +36,7 @@ pub struct Model {
     pub pre_rank_param: i32,
     pub pre_rank4k_param: i32,
     pub pre_rank6k_param: i32,
+    pub guide_step: i32,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

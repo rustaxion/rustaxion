@@ -3,11 +3,11 @@ use std::collections::HashMap;
 use crate::database::entities::{player, prelude::*, shop_item};
 
 use proto::{self, comet_scene::*};
-use sea_orm::{entity::*, DatabaseConnection, QueryFilter};
+use sea_orm::{entity::*, query::*, DatabaseConnection};
 
 use super::entities::{
-    player_beatmap, player_character, player_favourite_beatmap, player_theme, score,
-    sea_orm_active_enums,
+    friend, player_beatmap, player_character, player_favourite_beatmap, player_item, player_theme,
+    score, sea_orm_active_enums,
 };
 
 pub async fn get_announcements(_db: &DatabaseConnection) -> anyhow::Result<AnnouncementData> {
@@ -136,15 +136,58 @@ pub async fn get_player_char_list(
 
 #[rustfmt::skip]
 pub async fn get_player_social_data(
-    _player_id: i32,
-    _db: &DatabaseConnection
+    player_id: i32,
+    db: &DatabaseConnection
 ) -> anyhow::Result<SocialData> {
-    // TODO: Populate this using data from the database.
+    let accepted = Friend::find()
+        .filter(friend::Column::PlayerId.eq(player_id))
+        .filter(friend::Column::Status.eq(sea_orm_active_enums::FriendStatus::Accepted))
+        .all(db).await?;
 
-    Ok(SocialData {
-        friend_list: vec![],
-        request_list: vec![],
-    })
+    let mut friend_list = Vec::new();
+    for row in &accepted {
+        if let Some(p) = Player::find_by_id(row.friend_id).one(db).await? {
+            friend_list.push(player_to_friend_base_info(&p));
+        }
+    }
+
+    let pending = Friend::find()
+        .filter(friend::Column::FriendId.eq(player_id))
+        .filter(friend::Column::Status.eq(sea_orm_active_enums::FriendStatus::Pending))
+        .all(db).await?;
+
+    let mut request_list = Vec::new();
+    for row in &pending {
+        if let Some(p) = Player::find_by_id(row.player_id).one(db).await? {
+            request_list.push(player_to_friend_base_info(&p));
+        }
+    }
+
+    Ok(SocialData { friend_list, request_list })
+}
+
+fn player_to_friend_base_info(p: &player::Model) -> FriendBaseInfo {
+    FriendBaseInfo {
+        char_id: p.id as u64,
+        char_name: p.name.clone(),
+        is_online: 0,
+        level: p.level,
+        head_id: p.head_id,
+        pre_rank_id: p.pre_rank,
+        country: p.country.into_proto() as i32,
+        pre_rank_id4_k: p.pre_rank4k,
+        pre_rank_id6_k: p.pre_rank6k,
+        title_id: p.title_id,
+    }
+}
+
+#[rustfmt::skip]
+pub async fn get_player_item_list(
+    player_id: i32,
+    db: &DatabaseConnection
+) -> anyhow::Result<Vec<ItemData>> {
+    let items = PlayerItem::find().filter(player_item::Column::PlayerId.eq(player_id)).all(db).await?;
+    Ok(items.iter().map(|x| ItemData { r#type: x.item_type, count: x.count, id: x.item_id }).collect())
 }
 
 #[rustfmt::skip]
@@ -235,7 +278,7 @@ pub async fn get_player_full_data(
     let song_list = get_player_song_list(player_id, db).await?;
     let char_list = get_player_char_list(player_id, db).await?;
     let social_data = get_player_social_data(player_id, db).await?;
-    let item_list = vec![];
+    let item_list = get_player_item_list(player_id, db).await?;
     let theme_list = get_player_theme_list(player_id, db).await?;
     let vip_info = get_player_vip_info(player_id, db).await?;
     let experience_list = vec![];
@@ -281,7 +324,7 @@ impl player::Model {
             level: self.level,
             cur_exp: self.current_exp,
             max_exp: self.maximum_exp,
-            guide_step: 7,
+            guide_step: self.guide_step,
             cur_character_id: self.selected_character_id,
             cur_theme_id: self.selected_theme_id,
             online_time: 0,

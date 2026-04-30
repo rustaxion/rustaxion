@@ -84,3 +84,11 @@ pub enum ShopItemType {
     #[sea_orm(string_value = "theme")]
     Theme,
 }
+#[derive(Debug, Clone, PartialEq, Eq, EnumIter, DeriveActiveEnum)]
+#[sea_orm(rs_type = "String", db_type = "Enum", enum_name = "friend_status")]
+pub enum FriendStatus {
+    #[sea_orm(string_value = "pending")]
+    Pending,
+    #[sea_orm(string_value = "accepted")]
+    Accepted,
+}

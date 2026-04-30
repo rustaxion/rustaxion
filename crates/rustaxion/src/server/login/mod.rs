@@ -8,7 +8,15 @@ use proto::{
 };
 use tokio::sync::Mutex;
 
+mod announcement;
+mod bind_account;
+mod bili_login;
+mod find_password;
 mod game_version;
+mod login_account;
+mod quick_login;
+mod quick_token;
+mod reg_account;
 mod third_party_login;
 
 #[rustfmt::skip]
@@ -28,16 +36,16 @@ pub async fn handle(
     };
 
     match para_cmd {
-        CometLogin::RequestRegAccount => todo!(),
-        CometLogin::RequestLoginAccount => todo!(),
-        CometLogin::RequestFindPassword => todo!(),
-        CometLogin::RequestQuickToken => todo!(),
-        CometLogin::RequestQuickLogin => todo!(),
+        CometLogin::RequestRegAccount => reg_account::handle(session, db, data).await,
+        CometLogin::RequestLoginAccount => login_account::handle(session, db, data).await,
+        CometLogin::RequestFindPassword => find_password::handle(session, db, data).await,
+        CometLogin::RequestQuickToken => quick_token::handle(session, db, data).await,
+        CometLogin::RequestQuickLogin => quick_login::handle(session, db, data).await,
         CometLogin::RequestThirdLogin => third_party_login::handle(session, db, data).await,
-        CometLogin::RequestBindAccount => todo!(),
-        CometLogin::RequestAnnouncement => todo!(),
+        CometLogin::RequestBindAccount => bind_account::handle(session, db, data).await,
+        CometLogin::RequestAnnouncement => announcement::handle(session, db, data).await,
         CometLogin::RequestGameVersion => game_version::handle(session, db, data).await,
-        CometLogin::RequestBiliLogin => todo!(),
+        CometLogin::RequestBiliLogin => bili_login::handle(session, db, data).await,
 
         // NOTE(arjix): When given a client-side param, what should we do?
         _ => unreachable!()

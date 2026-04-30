@@ -9,6 +9,10 @@ pub struct Model {
     pub id: i32,
     pub steam_id: String,
     pub token: String,
+    pub account_name: Option<String>,
+    pub mail: Option<String>,
+    pub password_hash: Option<String>,
+    pub is_guest: bool,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

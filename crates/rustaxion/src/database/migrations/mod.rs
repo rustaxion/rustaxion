@@ -12,6 +12,11 @@ mod m009_beatmap;
 mod m010_player_beatmap;
 mod m011_player_favourite_beatmap;
 mod m012_score;
+mod m013_account_credentials;
+mod m014_player_guide_step;
+mod m015_friend;
+mod m016_mail;
+mod m017_player_item;
 
 pub struct Migrator;
 
@@ -32,6 +37,11 @@ impl MigratorTrait for Migrator {
             Box::new(m010_player_beatmap::Migration),
             Box::new(m011_player_favourite_beatmap::Migration),
             Box::new(m012_score::Migration),
+            Box::new(m013_account_credentials::Migration),
+            Box::new(m014_player_guide_step::Migration),
+            Box::new(m015_friend::Migration),
+            Box::new(m016_mail::Migration),
+            Box::new(m017_player_item::Migration),
         ]
     }
 }
